@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 from flask import Flask, g, jsonify
-from flask.ext.script import Manager
+from flask.ext.script import Manager,Server
 from api.app import create_app
-from api.models import db, User
+from api.models import db, Usuario
 
 manager = Manager(create_app)
-
+manager.add_command("runserver", Server(host='0.0.0.0'))
 
 @manager.command
 def createdb():
@@ -24,11 +24,19 @@ def adduser(username):
         import sys
         sys.exit('Error: passwords do not match.')
     db.create_all()
-    user = User(username=username, password=password)
+    user = Usuario(username=username, password=password)
     db.session.add(user)
     db.session.commit()
     print('User {0} was registered successfully.'.format(username))
 
+@manager.command
+def addadmin():
+    """Register admin user."""
+    db.create_all()
+    user = Usuario(name="admin",email="admin@admin",username="teste", password="teste")
+    db.session.add(user)
+    db.session.commit()
+    print('User {0} was registered successfully.'.format("teste"))    
 
 @manager.command
 def test():

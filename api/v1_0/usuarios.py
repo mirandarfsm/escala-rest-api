@@ -6,13 +6,12 @@ from . import api
 
 @api.route('/usuarios/', methods=['GET'])
 def get_usuarios():
-    return jsonify({'urls': [usuario.get_url() for usuario in Usuario.query.all()]})
+    return jsonify({'usuarios': [usuario.to_json() for usuario in Usuario.query.all()]})
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
 def get_usuario(id):
     usuario = Usuario.query.get_or_404(id)
     return jsonify(usuario.to_json())
-
 
 @api.route('/usuarios/<int:id>/escala/', methods=['GET'])
 def get_usuario_escala(id):
@@ -29,7 +28,6 @@ def get_usuario_afastamento(id):
     usuario = Usuario.query.get_or_404(id)
     return jsonify({'urls': [afastamento.get_url() for afastamento in usuario.afastamentos]})
 
-
 @api.route('/usuarios/', methods=['POST'])
 def new_usuario():
     usuario = Usuario().from_json(request.json)
@@ -40,7 +38,6 @@ def new_usuario():
     reponse.headers['Location'] = usuario.get_url()
     return reponse
 
-
 @api.route('/usuarios/<int:id>', methods=['PUT'])
 def edit_usuario(id):
     usuario = Usuario.query.get_or_404(id)
@@ -48,7 +45,6 @@ def edit_usuario(id):
     db.session.add(usuario)
     db.session.commit()
     return jsonify({})
-
 
 @api.route('/usuarios/<int:id>', methods=['DELETE'])
 def delete_usuario(id):

@@ -2,10 +2,11 @@ from flask import request,jsonify
 from ..models import db, Escala
 from ..decorators import json, paginate, etag
 from . import api
+from ..services import gerar_lista_militares_escalados 
 
 @api.route('/escalas/', methods=['GET'])
 def get_escalas():
-    return jsonify({'urls': [escala.get_url() for escala in Escala.query.all()]})
+    return jsonify({'escalas': [escala.to_json() for escala in Escala.query.all()]})
 
 @api.route('/escalas/<int:id>', methods=['GET'])
 def get_escala(id):
@@ -15,7 +16,7 @@ def get_escala(id):
 @api.route('/escalas/<int:id>/usuario/', methods=['GET'])
 def get_escala_usuario(id):
     escala = Escala.query.get_or_404(id)
-    return jsonify({'urls': [usuario.get_url() for usuario in escala.usuario.all()]})
+    return jsonify({'usuarios': [usuario.to_json() for usuario in escala.usuarios.all()]})
 
 @api.route('/escalas/<int:id>/servico/', methods=['GET'])
 def get_escala_servico(id):
@@ -27,6 +28,11 @@ def get_escala_afastamento(id):
     escala = Escala.query.get_or_404(id)
     return jsonify({'urls': [afastamento.get_url() for afastamento in escala.afastamentos.all()]})
 
+@api.route('/escalas/<int:id>/generate/', methods=['GET'])
+def new_service_generate(id):
+    escala = Escala.query.get_or_404(id)
+    gerar_lista_militares_escalados(escala)
+    return jsonify({})
 
 @api.route('/escalas/', methods=['POST'])
 def new_escala():
@@ -38,7 +44,6 @@ def new_escala():
     reponse.headers['Location'] = escala.get_url()
     return reponse
 
-
 @api.route('/escalas/<int:id>', methods=['PUT'])
 def edit_escala(id):
     escala = Escala.query.get_or_404(id)
@@ -46,7 +51,6 @@ def edit_escala(id):
     db.session.add(escala)
     db.session.commit()
     return jsonify({})
-
 
 @api.route('/escalas/<int:id>', methods=['DELETE'])
 def delete_escala(id):

@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache" />
+	
+	<!-- Latest compiled and minified CSS -->
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
+	<!-- Optional theme -->
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">-->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+	<!-- Latest compiled and minified JavaScript -->
+	<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+	<script src="https://code.angularjs.org/1.4.7/angular-route.js"></script> https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.map-->
+	
+	<!-- CSS -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+	
+
+</head>
+
+<body ng-app="Escalante">
+	
+	<header></header>
+	
+	
+	<div class="container-fluid">
+		<div class="row">
+			<sidebar></sidebar>
+			<!-- BODY -->
+			<div class="col-md-10">
+		     	<div ng-view=""></div>
+			</div>
+			<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+		</div>
+	</div>
+
+	<!-- JS -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/angular.js"></script>
+	<script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+	<script src="js/angular-route.js"></script>
+	<script src="js/satellizer.js"></script>
+
+	<!-- SCRIPTS -->
+	<script src="app.js"></script>
+	<!--DIRECTIVES-->
+	<script src="scripts/directives/header/header.js"></script>
+	<script src="scripts/directives/sidebar/sidebar.js"></script>
+	<!--CONTROLLER -->
+	<script src="scripts/controller/login.js"></script>
+	<script src="scripts/controller/users.js"></script>
+	<script src="scripts/controller/escala.js"></script>
+	<!-- FACTORY -->
+	<script src="scripts/factories/users.js"></script>
+	<script src="scripts/factories/escala.js"></script>
+	<script src="scripts/factories/auth.js"></script>
+</body>
+</html>

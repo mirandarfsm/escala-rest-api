@@ -438,17 +438,17 @@ class TestAPI(unittest.TestCase):
         self.assertTrue(len(json['urls']) == 0)
     
     #Ignored
-    def rate_limits(self):
+    def test_rate_limits(self):
         self.app.config['USE_RATE_LIMITS'] = True
 
-        rv, json = self.client.get('/api/v1.0/registrations/')
+        rv, json = self.client.get('/api/v1.0/servicos/')
         self.assertTrue(rv.status_code == 200)
         self.assertTrue('X-RateLimit-Remaining' in rv.headers)
         self.assertTrue('X-RateLimit-Limit' in rv.headers)
         self.assertTrue('X-RateLimit-Reset' in rv.headers)
         self.assertTrue(int(rv.headers['X-RateLimit-Limit']) == int(rv.headers['X-RateLimit-Remaining']) + 1)
         while int(rv.headers['X-RateLimit-Remaining']) > 0:
-            rv, json = self.client.get('/api/v1.0/registrations/')
+            rv, json = self.client.get('/api/v1.0/servicos/')
         self.assertTrue(rv.status_code == 429)
     
     #Ignored

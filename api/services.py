@@ -1,83 +1,25 @@
 
-#from models import TipoServico
+from models import db,TipoServico,Servico,Usuario
 import datetime
 import calendar
 
-class TipoServico:
-    PRETO = 1
-    VERMELHO = 2
-    ROXA = 3
+#dateutil
+def get_next_month(date):
+    month = date.month+1
+    year = date.year
+    day = date.day
+    if month > 12:
+        month = month%12
+        year += 1
+    return datetime.date(year, month, day)
 
-class Afastamento(object):
+def get_first_last_mounth_day(year=datetime.date.today().year,month=datetime.date.today().month):
+    first_day,last_day = calendar.monthrange(year,month)
+    return (datetime.date(year,month,first_day),datetime.date(year,month,last_day))
 
-    def __init__(self,motivo,start_date,end_date):
-        self.start_date = start_date
-        self.end_date = end_date
-        self.motivo = motivo
-
-    def __repr__(self):
-        return repr((self.motivo,str(self.start_date),str(self.end_date)))
-
-class Milico(object):
-
-    def __init__(self,nome,antiguidade,servicos,afastamentos):
-        self.nome = nome
-        self.antiguidade = antiguidade
-        self.servicos = servicos
-        self.afastamentos = afastamentos
-
-    def __repr__(self):
-        return repr((self.nome,self.antiguidade,len(self.servicos)))
-
-    def vermelhas(self):
-        return [servico for servico in self.servicos if servico.tipo == TipoServico.VERMELHO]
-
-    def pretas(self):
-        return [servico for servico in self.servicos if servico.tipo == TipoServico.PRETO]
-    
-    def roxas(self):
-        return [servico for servico in self.servicos if servico.tipo == TipoServico.ROXA]
-
-    def by_vermelha_key(milico):
-        servicos = milico.vermelhas()
-        total = 0
-        if len(servicos) > 0:
-            total += reduce(lambda x,y: x*y*3,map(lambda x: x.date.year * x.date.month * x.date.day*3,servicos))
-        total += milico.antiguidade
-        return total
-        
-    def by_preta_key(milico):
-        servicos = milico.pretas()
-        total = 0
-        if len(servicos) > 0:
-            total += reduce(lambda x,y: x*y*3,map(lambda x: x.date.year * x.date.month * x.date.day*3,servicos))
-        total += milico.antiguidade
-        return total
-     
-    def by_roxa_key(milico):
-        servicos = milico.roxas()
-        total = 0
-        if len(servicos) > 0:
-            total += reduce(lambda x,y: x*y*3,map(lambda x: x.date.year * x.date.month * x.date.day*3,servicos))
-        total += milico.antiguidade
-        return total
-
-class Servico(object):
-    def __init__(self,date,tipo):
-        self.date = date
-        self.tipo = tipo
-
-    def __repr__(self):
-        return repr((self.tipo,str(self.date)))
-
-    def __cmp__(self,other):
-        return self.date.__cmp__(other.date)
-
-def get_last_mounth_day(year=datetime.date.today().year,month=datetime.date.today().month):
-    last_day = calendar.monthrange(year,month)[1]
-    return datetime.date(year,month,last_day)
-
-def gerar_lista_servico(end_date,feriados,roxas,start_date=datetime.date.today()):
+def gerar_lista_servico(end_date,escala,start_date=datetime.date.today()):
+    feriados = escala.feriados
+    roxas = escala.roxas
     d = start_date
     delta = datetime.timedelta(days=1)
     weekend = set([5,6])
@@ -88,50 +30,53 @@ def gerar_lista_servico(end_date,feriados,roxas,start_date=datetime.date.today()
             tipo =  TipoServico.VERMELHO
         if d in roxas:
             tipo = TipoServico.ROXA
-        servicos.append(Servico(d,tipo))
+        servicos.append(Servico(data=d,tipo=tipo,escala_id=escala.id))
         d += delta
     return servicos
 
 def is_descanso(milico,date):
-    if len(milico.servicos) == 0:
-        return False
-    last_service = milico.servicos[-1].date
-    descanso = last_service + datetime.timedelta(days=2)
-    if last_service <= date <= descanso:
-        return True
+    for servico in milico.servicos:
+        descanso_start = servico.data - datetime.timedelta(days=2)
+        descanso_end = servico.data + datetime.timedelta(days=2)
+        if descanso_start <= date <= descanso_end:
+            return True
     return False
 
 def is_afastado(milico,date):
     for afastamento in milico.afastamentos:
-        if afastamento.start_date <= date <= afastamento.end_date:
+        if afastamento.data_inicio <= date <= afastamento.data_fim:
             return True     
     return False
 
-def get_next_military(milicos,servico,escala=None):
+def get_next_military(milicos,servico):
     if servico.tipo == TipoServico.VERMELHO:
-        key = Milico.by_vermelha_key
+        key = Usuario.by_vermelha_key
     if servico.tipo == TipoServico.PRETO:
-        key = Milico.by_preta_key
+        key = Usuario.by_preta_key
     if servico.tipo == TipoServico.ROXA:
-        key = Milico.by_roxa_key
-
+        key = Usuario.by_roxa_key
+    print key
     milicos_sorted = sorted(milicos,key=key)
+    print milicos_sorted
     for milico in milicos_sorted:
-        if not is_afastado(milico,servico.date):
-            if not is_descanso(milico,servico.date):
+        if not is_afastado(milico,servico.data):
+            if not is_descanso(milico,servico.data):
                 return milico
-    raise Exception("Nao existe militares para serem escalados na data: "+ str(servico.date))
+    raise Exception("Nao existe militares para serem escalados na data: "+ str(servico.data))
 
-def gerar_lista_militares_escalados(milicos):
-    start_date = datetime.date(2015,12,01)
-    last_date = get_last_mounth_day(2015,12)
-    servicos = gerar_lista_servico(last_date,[],[],start_date)
-
+def gerar_lista_militares_escalados(escala):
+    milicos = escala.usuarios
+    today = get_next_month(datetime.date.today())
+    start_date,last_date = get_first_last_mounth_day(today.year,today.month)
+    servicos = gerar_lista_servico(last_date,escala,start_date)
     for servico in servicos:
         milico = get_next_military(milicos,servico)
         milico.servicos.append(servico)
-    return milicos
+        db.session.add(milico)
+        db.session.commit()
+    return milico
 
+'''
 def milicos_to_string(milicos):
     text = "--------------------------------------------------------------\n"
     soma = 0
@@ -144,6 +89,7 @@ def milicos_to_string(milicos):
         vermelhas += len(milico.vermelhas())
         roxas += len(milico.roxas())
         text += "nome: %s\n" % milico.nome
+        text += "escalas: %s\n" % milico.escalas
         text += "servicos preta: %s\n" % len(milico.pretas())
         text += "servicos vermelha: %s\n" % len(milico.vermelhas())
         text += "servicos roxa: %s\n" % len(milico.roxas())
@@ -155,27 +101,59 @@ def milicos_to_string(milicos):
     text += "Soma total pretas %s\n" %pretas
     text += "Soma total vermelhas %s\n" %vermelhas
     text += "Soma total roxas %s\n" %roxas
-
     return text
 
-milicos = [
-            Milico('renato',1,[],[]),
-            Milico('robson',2,[],[]),
-            Milico('souza',3,[],[]),
-            Milico('fernando',4,[],[]), 
-            Milico('augusto',5,[],[]), 
-            Milico('miranda',6,[],[]), 
-            Milico('santos',7,[],[]),
-            Milico('lopes',8,[],[]), 
-            Milico('silva',9,[],[]), 
-            Milico('paula',10,[],[]), 
-            Milico('ornelas',11,[],[]), 
-            Milico('oliveira',12,[],[]), 
-            Milico('sardela',13,[],[]),
-            Milico('duda',14,[],[]),
-            Milico('pai',15,[],[Afastamento("junta",datetime.date.today(),datetime.date.today() + datetime.timedelta(days=10))])
+ccasj = Escala("admin")
+brejau = Escala("brejau")
+
+renato = Milico('renato',1,[],[],[ccasj,brejau])
+robson = Milico('robson',2,[],[],[ccasj,brejau])
+souza = Milico('souza',3,[],[],[ccasj,brejau])
+fernando = Milico('fernando',4,[],[],[ccasj,brejau])
+augusto = Milico('augusto',5,[],[],[ccasj,brejau])
+miranda = Milico('miranda',6,[],[],[ccasj,brejau]) 
+santos = Milico('santos',7,[],[],[ccasj,brejau])
+lopes = Milico('lopes',8,[],[],[ccasj,brejau]) 
+silva = Milico('silva',9,[],[],[ccasj,brejau]) 
+paula = Milico('paula',10,[],[],[ccasj,brejau]) 
+ornelas = Milico('ornelas',11,[],[],[ccasj,brejau]) 
+oliveira = Milico('oliveira',12,[],[],[ccasj,brejau]) 
+sardela = Milico('sardela',13,[],[],[ccasj,brejau])
+duda = Milico('duda',14,[],[],[ccasj,brejau])
+pai = Milico('pai',15,[],[Afastamento("junta",datetime.date.today(),datetime.date.today() + datetime.timedelta(days=10))],[ccasj,brejau])
+milicos = [ 
+            renato,
+            robson,
+            souza,
+            fernando,
+            augusto,
+            miranda,
+            santos,
+            lopes,
+            silva,
+            paula,
+            ornelas,
+            oliveira, 
+            sardela,
+            duda,
+            pai
+        ]
+milicos2 = [ 
+            renato,
+            robson,
+            souza,
+            fernando,
+            augusto,
+            paula,
+            ornelas,
+            oliveira, 
+            sardela,
+            duda,
+            pai
         ]
 
-escalados = gerar_lista_militares_escalados(milicos)
 
-print milicos_to_string(escalados)
+gerar_lista_militares_escalados(milicos,ccasj)
+gerar_lista_militares_escalados(milicos2,brejau)
+print milicos_to_string(milicos)
+'''

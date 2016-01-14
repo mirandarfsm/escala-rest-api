@@ -9,10 +9,15 @@ from .errors import ValidationError
 
 db = SQLAlchemy()
 
+def string2date(string):
+    return datetime.strptime(string, '%Y-%m-%d').date()
+
+def date2string(date):
+    return date.strftime('%Y-%m-%d')
 
 class TipoServico(object):
-    PRETA = 1
-    VERMELHA = 2
+    PRETO = 1
+    VERMELHO = 2
     ROXA = 3
 
 class Servico(db.Model):
@@ -28,11 +33,13 @@ class Servico(db.Model):
         self.data = data
         self.tipo = tipo
         self.usuario_id = usuario_id
+        self.escala_id = escala_id
         if usuario_id:
             self.usuario = Usuario.query.get_or_404(usuario_id)
-        self.escala_id = escala_id
         if escala_id:
             self.escala = Escala.query.get_or_404(escala_id)
+    def __repr__(self):
+        return repr((date2string(self.data),self.tipo,self.escala))
 
     def get_url(self):
         return url_for('api.get_servico', id=self.id, _external=True)
@@ -42,7 +49,7 @@ class Servico(db.Model):
             'url': self.get_url(),
             'usuario': url_for('api.get_usuario', id=self.usuario_id,_external=True),
             'escala': url_for('api.get_escala', id=self.escala_id,_external=True),
-            'data': self.data.strftime('%Y-%m-%d'),
+            'data': date2string(self.data),
             'tipo': self.tipo
         }
 
@@ -58,7 +65,7 @@ class Servico(db.Model):
         except (KeyError, NotFound):
             raise ValidationError('Invalid escala URL')
         try:
-            date = datetime.strptime(json['data'], '%Y-%m-%d').date()
+            date = string2date(json['data'])
             self.data = date 
         except KeyError:
             raise ValidationError('Invalid data: '+json['data'])
@@ -80,20 +87,25 @@ class Usuario(db.Model):
     email = db.Column(db.String(50))
     saram = db.Column(db.Integer)
     data_promocao = db.Column(db.Date, default=datetime.utcnow)
+    username = db.Column(db.String(64), index=True)
+    password_hash = db.Column(db.String(128))
     afastamentos = db.relationship('Afastamento',cascade="all, delete-orphan")
     servicos = db.relationship('Servico',backref=db.backref('usuario', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
     escalas = db.relationship('Escala', secondary=usuario_escala,lazy='dynamic')
+
 
     def get_url(self):
         return url_for('api.get_usuario', id=self.id, _external=True)
 
     def to_json(self):
         return {
+            'id': self.id,
             'url': self.get_url(),
             'name': self.name,
             'email': self.email,
             'saram': self.saram,
-            'data_promocao': self.data_promocao.strftime('%Y-%m-%d'),
+            'username': self.username,
+            'data_promocao': date2string(self.data_promocao),
             'escalas': url_for('api.get_usuario_escala',id=self.id, _external=True),
             'afastamentos': url_for('api.get_usuario_afastamento',id=self.id, _external=True),
             'servicos': url_for('api.get_usuario_servico',id=self.id, _external=True)
@@ -101,11 +113,13 @@ class Usuario(db.Model):
 
     def from_json(self, json):
         try:
-            date = datetime.strptime(json['data_promocao'], '%Y-%m-%d').date()
+            date = string2date(json['data_promocao'])
             self.data_promocao = date
         except KeyError as e:
             raise ValidationError('Invalid date: '+ e.args[0])
         try:
+            self.username = json['username']
+            self.password = json['username'] 
             self.name = json['name']
             self.email = json['email']
             self.saram = json['saram']
@@ -113,6 +127,65 @@ class Usuario(db.Model):
             raise ValidationError('Invalid usuario: missing ' + e.args[0])
         return self
 
+    def __repr__(self):
+        return repr((self.name,self.saram,self.antiguidade,self.servicos.all()))
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        print self.username,self.password_hash
+        return check_password_hash(self.password_hash, password)
+
+    def generate_auth_token(self, expires_in=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expires_in)
+        return s.dumps({'id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return None
+        return Usuario.query.get(data['id'])
+
+    @property
+    def antiguidade(self):
+        return int(self.data_promocao.year/self.data_promocao.month/self.data_promocao.day)
+
+    def vermelhas(self):
+        return [servico for servico in self.servicos.all() if servico.tipo == TipoServico.VERMELHO]
+
+    def pretas(self):
+        return [servico for servico in self.servicos.all() if servico.tipo == TipoServico.PRETO]
+    
+    def roxas(self):
+        return [servico for servico in self.servicos.all() if servico.tipo == TipoServico.ROXA]
+
+    def by_vermelha_key(milico):
+        servicos = milico.vermelhas()
+        return milico.hash_service(servicos)
+        
+    def by_preta_key(milico):
+        servicos = milico.pretas()
+        return milico.hash_service(servicos)
+     
+    def by_roxa_key(milico):
+        servicos = milico.roxas()
+        return milico.hash_service(servicos)
+        
+    def hash_service(milico,servicos):
+        total = 0
+        if len(servicos) > 0:
+            total += reduce(lambda x,y: x*y*3,map(lambda x: x.data.year * x.data.month * x.data.day*3,servicos))
+        total += milico.antiguidade
+        return total
 
 class Escala(db.Model):
     __tablename__ = 'escala'
@@ -120,23 +193,36 @@ class Escala(db.Model):
     name = db.Column(db.String(50), index=True)
     servicos = db.relationship('Servico',backref=db.backref('escala', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
     usuarios = db.relationship('Usuario',secondary=usuario_escala,lazy='dynamic')
+    feriados = []
+    roxas = []
 
+    def __repr__(self):
+        return repr((self.name))
+    
     def get_url(self):
         return url_for('api.get_escala', id=self.id, _external=True)
 
     def to_json(self):
         return {
+            'id': self.id,
             'url': self.get_url(),
             'name': self.name,
-            'usuarios': [usuario.get_url for usuario in self.usuarios],
-            'servicos': url_for('api.get_escala_servico',id=self.id, _external=True)
+            'usuarios_url': url_for('api.get_escala_usuario',id=self.id, _external=True),
+            'servicos_url': url_for('api.get_escala_servico',id=self.id, _external=True)
         }
 
     def from_json(self, json):
+        if json['usuarios']:
+            try:
+                for usuario in json['usuarios']:
+                    usuario_id = args_from_url(usuario['url'], 'api.get_usuario')['id']
+                    self.usuarios.append(Usuario.query.get_or_404(usuario_id))
+            except (KeyError, NotFound) as e:
+                raise ValidationError('Invalid escala: missing ' + e.args[0])    
         try:
             self.name = json['name']
         except KeyError as e:
-            raise ValidationError('Invalid class: missing ' + e.args[0])
+            raise ValidationError('Invalid escala: missing ' + e.args[0])
         return self
 
 
@@ -165,8 +251,8 @@ class Afastamento(db.Model):
             'url': self.get_url(),
             'usuario': url_for('api.get_usuario', id=self.usuario_id, _external=True), 
             'motivo': self.motivo,
-            'data_inicio': self.data_inicio.strftime('%Y-%m-%d'),
-            'data_fim': self.data_fim.strftime('%Y-%m-%d')
+            'data_inicio': date2string(self.data_inicio),
+            'data_fim': date2string(self.data_fim)
         }
 
     def from_json(self, json):
@@ -176,12 +262,12 @@ class Afastamento(db.Model):
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario URL')
         try:
-            dt_inicio = datetime.strptime(json['data_inicio'], '%Y-%m-%d').date()
+            dt_inicio = string2date(json['data_inicio'])
             self.data_inicio = dt_inicio
         except KeyError as e:
             raise ValidationError('Invalid data_inicio: '+ e.args[0])
         try:
-            dt_fim = datetime.strptime(json['data_fim'], '%Y-%m-%d').date()
+            dt_fim = string2date(json['data_fim'])
             self.data_fim = dt_fim
         except KeyError as e:
             raise ValidationError('Invalid data_fim: '+ e.args[0])
@@ -191,34 +277,4 @@ class Afastamento(db.Model):
             raise ValidationError('Invalid afastamento: missing ' + e.args[0])
         return self
 
-
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True)
-    password_hash = db.Column(db.String(128))
-
-    @property
-    def password(self):
-        raise AttributeError('password is not a readable attribute')
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def generate_auth_token(self, expires_in=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expires_in)
-        return s.dumps({'id': self.id}).decode('utf-8')
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except:
-            return None
-        return User.query.get(data['id'])
 

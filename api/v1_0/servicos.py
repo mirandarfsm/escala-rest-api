@@ -30,6 +30,14 @@ def edit_servico(id):
     db.session.commit()
     return jsonify({})
 
+@api.route('/servicos/', methods=['DELETE'])
+def delete_all_servico():
+    servicos = Servico.query.all()
+    for servico in servicos:
+        db.session.delete(servico)
+    db.session.commit()
+    return jsonify({})
+
 @api.route('/servicos/<int:id>/', methods=['DELETE'])
 def delete_servico(id):
     servico = Servico.query.get_or_404(id)

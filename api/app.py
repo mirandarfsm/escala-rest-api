@@ -4,12 +4,16 @@ from .models import db
 
 
 def create_app(config_module=None):
-    app = Flask(__name__)
+    app = Flask(__name__,static_url_path="")
     app.config.from_object(config_module or
                            os.environ.get('FLASK_CONFIG') or
                            'config')
 
     db.init_app(app)
+
+    @app.route('/')
+    def root():
+        return app.send_static_file('index.html')
 
     from api.v1_0 import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1.0')

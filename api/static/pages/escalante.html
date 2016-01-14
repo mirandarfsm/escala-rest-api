@@ -1,0 +1,41 @@
+<uib-alert ng-show="alert" type="{{alert.type}}" close="closeAlert()">{{alert.msg}}</uib-alert>
+<h3>Escalante</h3>
+<hr/>
+<div ng-show="user">
+	<form role="form">
+		<div class="form-group">
+		 	<label>Data:</label>
+			<input class="form-control" type="text" ng-model="date" name="name" ></input>
+      <button type="submit" ng-click="addDate()" class="btn btn-default">Add</button>
+		</div>
+    <div ng-repeat="date in dates">
+      <input type="text">{{ date }}</input>
+    </div>
+		<button type="submit" ng-click="saveDate()" class="btn btn-default">Submit</button>
+	</form>
+</div>
+<!--
+<div ng-show="!user">
+	{{status}}
+	<a class="btn btn-default" ng-click="newUser()" role="button">Novo Usuário</a>
+	<table class="table table-hover">
+	    <thead>
+		    <tr>
+		        <th data-field="name" data-sortable="true">Name</th>
+		        <th data-field="price" data-sortable="true">Email</th>
+		        <th data-field="operate">Editar</th>
+		        <th data-field="operate">Remover</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="user in users">
+		    	<td>{{ user.name }}</td>
+		    	<td>{{ user.email }}</td>
+		    	<td>{{ user.switchboards[0] }}</td>
+		    	<td><a class="edit ml10" ng-click="editeUser($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td><a class="remove ml10" ng-click="deleteUser($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
+		    </tr>
+	    </tbody>
+	</table>
+</div>
+-->
