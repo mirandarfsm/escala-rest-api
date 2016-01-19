@@ -1,10 +1,22 @@
-app.controller('LoginCtrl',function($rootScope, $scope, $http, $location,$window) {
+app.controller('LoginCtrl',function($rootScope, $scope, $http, $location,$window,AuthenticationService) {
   var self = this;
   $scope.message = '';
   $scope.login = function() {
-    delete $window.sessionStorage.token;
+    //delete $window.sessionStorage.token;
     var username = self.username;
     var password = self.password;
+    
+    AuthenticationService.login(username,password);
+    
+      .success(function(usuario){
+        console.log(data);
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(usuario.token+':');
+        $location.path('/');
+      });
+
+    
+    //console.log($rootScope.user);
+    /*
     var headers = username ? {Authorization: "Basic " + btoa(username + ":" + password)} : {};
     $http.get('/auth/request-token', {headers : headers})
       .success(function(data, status, headers, config) {
@@ -23,5 +35,6 @@ app.controller('LoginCtrl',function($rootScope, $scope, $http, $location,$window
         $scope.message = 'Error: Invalid user or password';
         $location.path("/login");
       });
+    */
   };
 });

@@ -11,7 +11,7 @@ app.controller('HeaderCtrl',function($scope,$window,$location,$rootScope){
 		return $window.sessionStorage.token;
 	};
 	
-	$scope.usuario = JSON.parse($window.sessionStorage.usuario); 
+	//$scope.usuario = JSON.parse($window.sessionStorage.usuario); 
 	$scope.logout = function () {
 	    $scope.welcome = '';
 	    $scope.message = '';

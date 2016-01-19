@@ -11,7 +11,8 @@ app.config(function($routeProvider) {
   .when('/login',{
     templateUrl: 'pages/login.html',
     controller: 'LoginCtrl',
-    controllerAs: 'loginCtrl'
+    controllerAs: 'loginCtrl',
+    allowAnonymous: true
   })
   .when('/cadastro-usuario', {
     templateUrl: 'pages/cadastro-usuario.html',
@@ -28,5 +29,18 @@ app.config(function($routeProvider) {
     controller: 'AssociacaoEscalaCtrl',
     controllerAs: 'associacaoEscalaCtrl'
   })
-  .otherwise('/');
+  .otherwise({ redirectTo: '/login' });
+});
+
+app.run(function ($rootScope, $location, $http,AuthenticationService) {
+
+  if (AuthenticationService.isLogged) {
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(AuthenticationService.getToken+':');
+  }
+
+  $rootScope.$on('$locationChangeStart', function (event, next, current) {
+    if ($location.path() !== '/login' && !AuthenticationService.isLogged) {
+      $location.path('/login');
+    };
+  });
 });
