@@ -1,4 +1,3 @@
-
 /*app.factory('authInterceptor', function ($rootScope, $q, $window) {
   return {
     request: function (config) {
@@ -35,14 +34,15 @@ app.factory('AuthenticationService', function ($http, $rootScope, $timeout) {
   };
   
   service.login = function (username, password) {
-
     var headers = {Authorization: "Basic " + btoa(username + ":" + password)};
-    $http.get('/auth/request-token', {headers : headers})
+    return $http.get('/auth/request-token', {headers : headers})
       .success(function(data){
         usuario = data.usuario;
         usuario.token = data.token;
         $rootScope.usuario = usuario;
         return usuario;
+      }).error(function(error){
+        console.log('Error Login');
       });
   };
 
@@ -52,7 +52,7 @@ app.factory('AuthenticationService', function ($http, $rootScope, $timeout) {
   }
 
   service.isLogged = function(){
-    return usuario;
+    return !!usuario;
   };
 
   return service;

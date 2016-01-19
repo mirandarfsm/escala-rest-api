@@ -34,12 +34,12 @@ app.config(function($routeProvider) {
 
 app.run(function ($rootScope, $location, $http,AuthenticationService) {
 
-  if (AuthenticationService.isLogged) {
+  if (AuthenticationService.isLogged()) {
     $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(AuthenticationService.getToken+':');
   }
 
   $rootScope.$on('$locationChangeStart', function (event, next, current) {
-    if ($location.path() !== '/login' && !AuthenticationService.isLogged) {
+    if ($location.path() !== '/login' && !AuthenticationService.isLogged()) {
       $location.path('/login');
     };
   });

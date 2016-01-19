@@ -6,5 +6,6 @@ app.directive("sidebar",function(){
     	};
 });
 
-app.controller('SidebarCtrl',function(){
+app.controller('SidebarCtrl',function($scope,AuthenticationService){
+	$scope.isAuthenticated = AuthenticationService.isLogged()
 });

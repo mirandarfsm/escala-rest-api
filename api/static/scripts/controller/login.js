@@ -2,18 +2,17 @@ app.controller('LoginCtrl',function($rootScope, $scope, $http, $location,$window
   var self = this;
   $scope.message = '';
   $scope.login = function() {
-    //delete $window.sessionStorage.token;
     var username = self.username;
     var password = self.password;
     
-    AuthenticationService.login(username,password);
-    
+    AuthenticationService.login(username,password)
       .success(function(usuario){
-        console.log(data);
+        console.log(usuario);
         $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(usuario.token+':');
         $location.path('/');
-      });
-
+    }).error(function(error){
+      console.log('401 Unauthorized!');  
+    });
     
     //console.log($rootScope.user);
     /*
