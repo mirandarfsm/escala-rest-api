@@ -36,7 +36,7 @@
 	<header></header>
 	
 	
-	<div class="container-fluid">
+	<div class="container-fluid" ng-show="isAuthenticated">
 		<div class="row">
 			<sidebar></sidebar>
 			<!-- BODY -->
@@ -46,6 +46,14 @@
 			<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 		</div>
 	</div>
+	<div class="jumbotron" ng-hide="isAuthenticated">
+      <div class="container">
+        <div class="col-xs-offset-2 col-xs-8">
+          <div ng-view="" ng-hide="isAuthenticated"></div>
+        </div>
+      </div>
+    </div>
+	
 
 	<!-- JS -->
 	<script src="js/jquery.min.js"></script>

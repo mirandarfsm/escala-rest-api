@@ -6,18 +6,15 @@ app.directive("header",function(){
     	};
 });
 
-app.controller('HeaderCtrl',function($scope,$window,$location,$rootScope){
+app.controller('HeaderCtrl',function($scope,$location,$rootScope,AuthenticationService){
+	/*
 	$scope.isAuthenticated = function(){
 		return $window.sessionStorage.token;
 	};
-	
+	*/
 	//$scope.usuario = JSON.parse($window.sessionStorage.usuario); 
 	$scope.logout = function () {
-	    $scope.welcome = '';
-	    $scope.message = '';
-	    $scope.isAuthenticated = false;
-	    //$rootScope.authenticated = false;
-	    delete $window.sessionStorage.token;
+		AuthenticationService.logout();
 	    $location.path({redirectTo: "/login"});
   	};
 });

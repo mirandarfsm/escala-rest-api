@@ -7,5 +7,5 @@ app.directive("sidebar",function(){
 });
 
 app.controller('SidebarCtrl',function($scope,AuthenticationService){
-	$scope.isAuthenticated = AuthenticationService.isLogged()
+	//$scope.isAuthenticated = AuthenticationService.isLogged()
 });

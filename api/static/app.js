@@ -39,6 +39,7 @@ app.run(function ($rootScope, $location, $http,AuthenticationService) {
   }
 
   $rootScope.$on('$locationChangeStart', function (event, next, current) {
+     $rootScope.isAuthenticated = AuthenticationService.isLogged();
     if ($location.path() !== '/login' && !AuthenticationService.isLogged()) {
       $location.path('/login');
     };
