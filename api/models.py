@@ -84,7 +84,10 @@ class Usuario(db.Model):
     __tablename__ = 'usuario'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), index=True)
+    nome_guerra = db.Column(db.String(50))
     email = db.Column(db.String(50))
+    especialidade = db.Column(db.String(100))
+    posto = db.Column(db.String(25))
     saram = db.Column(db.Integer)
     data_promocao = db.Column(db.Date, default=datetime.utcnow)
     username = db.Column(db.String(64), index=True)
@@ -102,7 +105,10 @@ class Usuario(db.Model):
             'id': self.id,
             'url': self.get_url(),
             'name': self.name,
+            'nome_guerra': self.nome_guerra,
             'email': self.email,
+            'especialidade': self.especialidade,
+            'posto': self.posto,
             'saram': self.saram,
             'username': self.username,
             'data_promocao': date2string(self.data_promocao),
@@ -119,9 +125,12 @@ class Usuario(db.Model):
             raise ValidationError('Invalid date: '+ e.args[0])
         try:
             self.username = json['username']
-            self.password = json['username'] 
+            self.password = json['username']
+            self.nome_guerra = json['nome_guerra']
             self.name = json['name']
             self.email = json['email']
+            self.especialidade = json['especialidade']
+            self.posto = json['posto']
             self.saram = json['saram']
         except KeyError as e:
             raise ValidationError('Invalid usuario: missing ' + e.args[0])
@@ -207,6 +216,7 @@ class Escala(db.Model):
             'id': self.id,
             'url': self.get_url(),
             'name': self.name,
+            'usuarios': [usuario.to_json() for usuario in self.usuarios.all()],
             'usuarios_url': url_for('api.get_escala_usuario',id=self.id, _external=True),
             'servicos_url': url_for('api.get_escala_servico',id=self.id, _external=True)
         }
@@ -215,6 +225,7 @@ class Escala(db.Model):
         if json['usuarios']:
             try:
                 for usuario in json['usuarios']:
+                    print usuario
                     usuario_id = args_from_url(usuario['url'], 'api.get_usuario')['id']
                     self.usuarios.append(Usuario.query.get_or_404(usuario_id))
             except (KeyError, NotFound) as e:
@@ -233,6 +244,7 @@ class Afastamento(db.Model):
     data_inicio = db.Column(db.Date)
     data_fim = db.Column(db.Date)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    ativo = db.Column(db.Boolean,default=False)
 
     def __init__(self,motivo=None,data_inicio=None,data_fim=None,id=None,usuario_id=None):
         self.id = id 

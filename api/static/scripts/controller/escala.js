@@ -1,7 +1,18 @@
-app.controller('CadastroEscalaCtrl', ['escalaFactory', function (escalaFactory) {
+app.controller('CadastroEscalaCtrl', ['escalaFactory', 'userFactory', function (escalaFactory,userFactory) {
     var self = this;
 
     getEscala();
+    getUsers();
+    
+    function getUsers() {
+        userFactory.getUsers()
+            .success(function (data, status, headers, config) {
+                self.usuarios = data.usuarios;
+            })
+            .error(function (error) {
+                self.alert = {'msg':'Unable to load user: ' + error.message, 'type': 'danger'};
+            });
+    };
     
     function getEscala(){
         escalaFactory.getEscalas()

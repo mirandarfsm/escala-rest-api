@@ -23,6 +23,18 @@
 				<a ng-click="cadastroEscalaCtrl.removerRoxa($index)">-</a>
 		 	</div>
 		</div>
+		<div class="form-group" >
+			<label>Militares:</label>
+			<ui-select multiple="" ng-model="cadastroEscalaCtrl.escala.usuarios" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
+				<ui-select-match placeholder="Selecione Militares...">{{$item.nome_guerra}} {{$item.posto}} {{$item.especialidade}}</ui-select-match>
+				<ui-select-choices repeat="usuario in cadastroEscalaCtrl.usuarios">
+					<div ng-bind-html="usuario.nome_guerra "></div>
+					<small>
+						{{usuario.posto}} {{usuario.especialidade}}
+					</small>
+				</ui-select-choices>
+			</ui-select>
+		</div>
 		<button type="submit" ng-click="cadastroEscalaCtrl.salvarEscala(cadastroEscalaCtrl.escala)" class="btn btn-default">Submit</button>
 		<a class="btn btn-default" ng-click="cadastroEscalaCtrl.cancelar()" role="button">Cancel</a>
 	</form>

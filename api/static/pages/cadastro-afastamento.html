@@ -1,0 +1,53 @@
+<uib-alert ng-show="alert" type="{{cadastroAfastamentoCtrl.alert.type}}" close="closeAlert()">{{cadastroAfastamentoCtrl.alert.msg}}</uib-alert>
+<h3>Cadastro de Afastamentos</h3>
+<hr/>
+<div ng-show="cadastroAfastamentoCtrl.afastamento">
+	<form role="form">
+		<div class="form-group">
+		 	<label>Nome:</label>
+			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.afastamento.usuario.name" name="name" ></input>
+		</div>
+		<div class="form-group">
+		 	<label>Motivo:</label>
+			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.afastamento.motivo" name="motivo" ></input>
+		</div>
+		
+		<div class="form-group" >
+	 		<label>Data Início:</label>
+			<input class="form-control" type="date" ng-model="cadastroAfastamentoCtrl.afastamento.data_inicio" name="data_inicio"></input>
+		</div>
+		<div class="form-group" >
+	 		<label>Data Termino:</label>
+			<input class="form-control" type="date" ng-model="cadastroAfastamentoCtrl.afastamento.data_fim" name="data_fim"></input>
+		</div>
+		<div class="form-group">
+		 	<label>Observações:</label>
+			<textarea class="form-control" ng-model="cadastroEscalaCtrl.afastamento.motivo" name="motivo"></textarea>
+		</div>
+		<button type="submit" ng-click="cadastroAfastamentoCtrl.salvarAfastamento(cadastroAfastamentoCtrl.afastamento)" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" ng-click="cadastroAfastamentoCtrl.cancelar()" role="button">Cancel</a>
+	</form>
+</div>
+
+<div ng-show="!cadastroAfastamentoCtrl.afastamento">
+	{{cadastroAfastamentoCtrl.status}}
+	<a class="btn btn-default" ng-click="cadastroAfastamentoCtrl.novaEscala()" role="button">Novo Afastamento</a>
+	<table class="table table-hover">
+	    <thead>
+		    <tr>
+		        <th data-field="name" data-sortable="true">Motivo</th>
+				<th data-field="name" data-sortable="true">Data Início</th>
+				<th data-field="name" data-sortable="true">Data Término</th>
+		        <th data-field="operate">Editar</th>
+		        <th data-field="operate">Remover</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="afastamento in cadastroAfastamentoCtrl.afastamentos">
+		    	<td>{{ afastamento.motivo}}</td>
+		    	<td><a class="edit ml10" ng-click="cadastroAfastamentoCtrl.editarAfastamento($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td><a class="remove ml10" ng-click="cadastroAfastamentoCtrl.deletarAfastamento($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
+		    </tr>
+	    </tbody>
+	</table>
+</div>

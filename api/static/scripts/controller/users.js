@@ -27,6 +27,7 @@ app.controller('CadastroUsuarioCtrl', ['$filter','userFactory', function ($filte
 
     self.editeUser = function(index){
         self.user = self.users[index];
+        self.user.data_promocao = new Date(self.user.data_promocao)
     };
 
     self.saveUser = function(user){

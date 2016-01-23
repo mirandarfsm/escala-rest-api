@@ -1,12 +1,12 @@
-var app = angular.module("Escalante",['ngRoute','ui.bootstrap']);
+var app = angular.module("Escalante",['ngRoute','ui.bootstrap','ngSanitize','ui.select']);
 
 app.config(function($routeProvider) {
   
   $routeProvider
   .when("/", {
-    templateUrl: 'pages/teste.html'
-    //controller: 'TesteCtrl',
-    //controllerAs: 'teste'
+    templateUrl: 'pages/teste.html',
+    controller: 'TesteCtrl',
+    controllerAs: 'ctrl'
   })
   .when('/login',{
     templateUrl: 'pages/login.html',
@@ -24,12 +24,22 @@ app.config(function($routeProvider) {
     controller: 'CadastroEscalaCtrl',
     controllerAs: 'cadastroEscalaCtrl'
   })
+  .when('/cadastro-servico', {
+    templateUrl: 'pages/cadastro-servico.html',
+    controller: 'CadastroServicoCtrl',
+    controllerAs: 'cadastroServicoCtrl'
+  })
+  .when('/cadastro-afastamento', {
+    templateUrl: 'pages/cadastro-afastamento.html',
+    controller: 'CadastroAfastamentoCtrl',
+    controllerAs: 'cadastroAfastamentoCtrl'
+  })
   .when('/associacao-escala', {
     templateUrl: 'pages/associacao-escala.html',
     controller: 'AssociacaoEscalaCtrl',
     controllerAs: 'associacaoEscalaCtrl'
   })
-  .otherwise({ redirectTo: '/login' });
+  .otherwise({ redirectTo: '/' });
 });
 
 app.run(function ($rootScope, $location, $http,AuthenticationService) {
