@@ -5,11 +5,11 @@
 	<form role="form">
 		<div class="form-group">
 		 	<label>Nome:</label>
-			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.afastamento.usuario.name" name="name" ></input>
+			<label>{{cadastroAfastamentoCtrl.afastamento.usuario.nome_guerra}}</label>
 		</div>
 		<div class="form-group">
 		 	<label>Motivo:</label>
-			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.afastamento.motivo" name="motivo" ></input>
+			<input class="form-control" type="text" ng-model="cadastroAfastamentoCtrl.afastamento.motivo" name="motivo" ></input>
 		</div>
 		
 		<div class="form-group" >
@@ -22,7 +22,7 @@
 		</div>
 		<div class="form-group">
 		 	<label>Observações:</label>
-			<textarea class="form-control" ng-model="cadastroEscalaCtrl.afastamento.motivo" name="motivo"></textarea>
+			<textarea class="form-control" ng-model="cadastroAfastamentoCtrl.afastamento.observacao" name="motivo"></textarea>
 		</div>
 		<button type="submit" ng-click="cadastroAfastamentoCtrl.salvarAfastamento(cadastroAfastamentoCtrl.afastamento)" class="btn btn-default">Submit</button>
 		<a class="btn btn-default" ng-click="cadastroAfastamentoCtrl.cancelar()" role="button">Cancel</a>
@@ -31,7 +31,7 @@
 
 <div ng-show="!cadastroAfastamentoCtrl.afastamento">
 	{{cadastroAfastamentoCtrl.status}}
-	<a class="btn btn-default" ng-click="cadastroAfastamentoCtrl.novaEscala()" role="button">Novo Afastamento</a>
+	<a class="btn btn-default" ng-click="cadastroAfastamentoCtrl.novoAfastamento()" role="button">Novo Afastamento</a>
 	<table class="table table-hover">
 	    <thead>
 		    <tr>

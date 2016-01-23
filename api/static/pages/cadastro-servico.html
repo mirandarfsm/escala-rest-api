@@ -4,7 +4,7 @@
 	<form role="form">
 		<div class="form-group">
             
-		 	<label>Escala:{{cadastroServicoCtrl.escala.name}}</label>
+		 	<label>Escala:</label>
             <ui-select ng-model="cadastroServicoCtrl.escala" theme="bootstrap">
                 <ui-select-match placeholder="Selecione uma Escala...">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices repeat="escala in (cadastroServicoCtrl.escalas| filter: $select.search)">

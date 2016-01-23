@@ -34,6 +34,11 @@ app.config(function($routeProvider) {
     controller: 'CadastroAfastamentoCtrl',
     controllerAs: 'cadastroAfastamentoCtrl'
   })
+  .when('/troca-servico', {
+    templateUrl: 'pages/troca-servico.html',
+    controller: 'TrocaServicoCtrl',
+    controllerAs: 'trocaServicoCtrl'
+  })
   .when('/associacao-escala', {
     templateUrl: 'pages/associacao-escala.html',
     controller: 'AssociacaoEscalaCtrl',

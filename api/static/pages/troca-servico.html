@@ -1,0 +1,51 @@
+<uib-alert ng-show="alert" type="{{trocaServicoCtrl.alert.type}}" close="closeAlert()">{{trocaServicoCtrl.alert.msg}}</uib-alert>
+<h3>Troca de Servico</h3>
+<hr/>
+<div ng-show="trocaServicoCtrl.servico">
+	<form role="form">
+		<div class="form-group">
+		 	<label>Nome:</label>
+			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.afastamento.usuario.name" name="name" ></input>
+		</div>
+		<div class="form-group">
+		 	<label>Motivo:</label>
+			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.afastamento.motivo" name="motivo" ></input>
+		</div>
+		
+		<div class="form-group" >
+	 		<label>Data Início:</label>
+			<input class="form-control" type="date" ng-model="cadastroAfastamentoCtrl.afastamento.data_inicio" name="data_inicio"></input>
+		</div>
+		<div class="form-group" >
+	 		<label>Data Termino:</label>
+			<input class="form-control" type="date" ng-model="cadastroAfastamentoCtrl.afastamento.data_fim" name="data_fim"></input>
+		</div>
+		<div class="form-group">
+		 	<label>Observações:</label>
+			<textarea class="form-control" ng-model="cadastroEscalaCtrl.afastamento.motivo" name="motivo"></textarea>
+		</div>
+		<button type="submit" ng-click="cadastroAfastamentoCtrl.salvarAfastamento(cadastroAfastamentoCtrl.afastamento)" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" ng-click="cadastroAfastamentoCtrl.cancelar()" role="button">Cancel</a>
+	</form>
+</div>
+
+<div ng-show="!trocaServicoCtrl.servico">
+	{{trocaServicoCtrl.status}}
+	<a class="btn btn-default" ng-click="trocaServicoCtrl.novaEscala()" role="button">Novo Servico</a>
+	<table class="table table-hover">
+	    <thead>
+		    <tr>
+		        <th data-field="name" data-sortable="true">Data</th>
+				<th data-field="name" data-sortable="true">Tipo</th>
+		        <th data-field="operate">Solicitar Troca</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="servico in trocaServicoCtrl.servicos">
+		    	<td>{{ servico.data | date }}</td>
+                <td>{{ trocaServicoCtrl.tipos[servico.tipo] }}</td>
+		    	<td><a class="edit ml10" ng-click="trocaServicoCtrl.solicitarTroca($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+		    </tr>
+	    </tbody>
+	</table>
+</div>

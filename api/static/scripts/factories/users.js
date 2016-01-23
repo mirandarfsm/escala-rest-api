@@ -22,7 +22,10 @@ app.factory('userFactory', ['$http', function($http) {
     userFactory.deleteUser = function (id) {
         return $http.delete(urlBase + id);
     };
-
+    
+    userFactory.getServices = function (id) {
+        return $http.get(urlBase + '/' + id + '/servico/');
+    };
     /*userFactory.getOrders = function (id) {
         return $http.get(urlBase + '/' + id + '/orders');
     };

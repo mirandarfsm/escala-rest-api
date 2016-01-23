@@ -1,4 +1,10 @@
-app.controller("CadastroAfastamentoCtrl", function(){
+app.controller("CadastroAfastamentoCtrl", function(AuthenticationService){
     var self = this;
-    this.afastamento = undefined;
+    self.novoAfastamento = function(){
+        self.afastamento = {};
+        self.afastamento.usuario = AuthenticationService.getUsuario();
+    }
+    self.cancelar = function(){
+        self.afastamento = undefined; 
+    }
 });
