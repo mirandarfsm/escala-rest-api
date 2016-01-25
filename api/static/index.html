@@ -34,17 +34,19 @@
 
 <body ng-app="Escalante">
 	
-	<header></header>
 	
 	
-	<div class="container-fluid" ng-show="isAuthenticated">
-		<div class="row">
-			<sidebar></sidebar>
-			<!-- BODY -->
-			<div class="col-md-10">
-		     	<div ng-view=""></div>
+	<div ng-show="isAuthenticated">
+		<header></header>
+		<div class="container-fluid">
+			<div class="row">
+				<sidebar></sidebar>
+				<!-- BODY -->
+				<div class="col-md-10">
+			     	<div ng-view=""></div>
+				</div>
+				<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 			</div>
-			<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 		</div>
 	</div>
 	<div class="jumbotron" ng-hide="isAuthenticated">
