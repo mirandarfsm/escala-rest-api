@@ -24,7 +24,11 @@ app.factory('userFactory', ['$http', function($http) {
     };
     
     userFactory.getServices = function (id) {
-        return $http.get(urlBase + '/' + id + '/servico/');
+        return $http.get(urlBase  + id + '/servico/');
+    };
+
+    userFactory.getAfastamentos = function (id) {
+        return $http.get(urlBase + id + '/afastamento/');
     };
     /*userFactory.getOrders = function (id) {
         return $http.get(urlBase + '/' + id + '/orders');

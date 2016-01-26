@@ -8,8 +8,6 @@ app.controller('LoginCtrl',function($rootScope, $scope, $http, $location,$window
     AuthenticationService.login(username,password)
       .success(function(){
         $location.path('/');
-    }).error(function(error){
-      console.log('401 Unauthorized!');  
     });
   };
 });

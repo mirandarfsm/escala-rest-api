@@ -80,7 +80,7 @@ def paginate(max_per_page=10):
                                     per_page=per_page, _external=True,
                                     **kwargs)
             return jsonify({
-                'urls': [item.get_url() for item in p.items],
+                'urls': [item.to_json() for item in p.items],
                 'meta': pages
             })
         return wrapped

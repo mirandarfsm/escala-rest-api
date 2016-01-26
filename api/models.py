@@ -264,7 +264,8 @@ class Afastamento(db.Model):
             'usuario': url_for('api.get_usuario', id=self.usuario_id, _external=True), 
             'motivo': self.motivo,
             'data_inicio': date2string(self.data_inicio),
-            'data_fim': date2string(self.data_fim)
+            'data_fim': date2string(self.data_fim),
+            'ativo': self.ativo
         }
 
     def from_json(self, json):

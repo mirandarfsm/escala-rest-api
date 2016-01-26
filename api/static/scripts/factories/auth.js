@@ -18,9 +18,8 @@ app.factory('AuthenticationService', function ($http, $rootScope, $timeout) {
         usuario = data.usuario;
         usuario.token = data.token;
         $rootScope.usuario = usuario;
+        $timeout(service.logout, 3600000);
         return usuario;
-      }).error(function(error){
-        console.log('Error Login');
       });
   };
 
