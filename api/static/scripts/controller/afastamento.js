@@ -2,7 +2,7 @@ app.controller("CadastroAfastamentoCtrl", function(AuthenticationService,userFac
     var self = this;
     var user = AuthenticationService.getUsuario();
     getAfastamentos(user);
-    
+    //new Date().getTime();
     self.novo = function(){
         self.afastamento = {};
         self.afastamento.usuario = user;
@@ -18,6 +18,7 @@ app.controller("CadastroAfastamentoCtrl", function(AuthenticationService,userFac
 
     self.salvar = function(afastamento){
     	console.log(afastamento);
+        //$filter('date')(new Date(user.data_promocao), 'yyyy-MM-dd');
     	if(afastamento['id']){
     		self.atualizar(afastamento);
     	}else{

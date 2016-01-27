@@ -11,6 +11,7 @@ db = SQLAlchemy()
 
 def string2date(string):
     return datetime.strptime(string, '%Y-%m-%d').date()
+    #datetime.datetime.fromtimestamp(your_timestamp / 1e3)
 
 def date2string(date):
     return date.strftime('%Y-%m-%d')
@@ -270,7 +271,7 @@ class Afastamento(db.Model):
 
     def from_json(self, json):
         try:
-            self.usuario_id = args_from_url(json['usuario'], 'api.get_usuario')['id']
+            self.usuario_id = args_from_url(json['usuario']['url'], 'api.get_usuario')['id']
             self.usuario = Usuario.query.get_or_404(self.usuario_id)
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario URL')
