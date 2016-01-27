@@ -1,48 +1,48 @@
 <uib-alert ng-show="alert" type="{{cadastroUsuarioCtrl.alert.type}}" close="closeAlert()">{{cadastroUsuarioCtrl.alert.msg}}</uib-alert>
 <h3>Cadastro de Usuário</h3>
 <hr/>
-<div ng-show="cadastroUsuarioCtrl.user">
+<div ng-show="cadastroUsuarioCtrl.usuario">
 	<form role="form">
 		<div class="form-group">
 		 	<label>Nome:</label>
-			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.user.name" name="name" ></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.name" name="name" ></input>
 		</div>
 		<div class="form-group">
 		 	<label>Nome de Guerra:</label>
-			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.user.nome_guerra" name="name" ></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.nome_guerra" name="name" ></input>
 		</div>
 		<div class="form-group">
 		 	<label>Email:</label>
-			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.user.email" name="email" ></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.email" name="email" ></input>
 		</div>
 		<div class="form-group">
 		 	<label>Login:</label>
-			<input class="form-control" type="username" ng-model="cadastroUsuarioCtrl.user.username" name="username"></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.username" name="username"></input>
 		</div>
 		<div class="form-group">
 		 	<label>Saram:</label>
-			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.user.saram" name="saram"></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.saram" name="saram"></input>
 		</div>
 		<div class="form-group">
 		 	<label>Posto:</label>
-			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.user.posto" name="posto"></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.posto" name="posto"></input>
 		</div>
 		<div class="form-group">
 		 	<label>Especialidade:</label>
-			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.user.especialidade" name="especialidade"></input>
+			<input class="form-control" type="text" ng-model="cadastroUsuarioCtrl.usuario.especialidade" name="especialidade"></input>
 		</div>
 		<div class="form-group">
 		 	<label>Data Promação:</label>
-			<input class="form-control" type="date" ng-model="cadastroUsuarioCtrl.user.data_promocao" placeholder="yyyy-MM-dd" name="data_promocao"></input>
+			<input class="form-control" type="date" ng-model="cadastroUsuarioCtrl.data_promocao" placeholder="yyyy-MM-dd" name="data_promocao"></input>
 		</div>
-		<button type="submit" ng-click="cadastroUsuarioCtrl.saveUser(cadastroUsuarioCtrl.user)" class="btn btn-default">Submit</button>
-		<a class="btn btn-default" ng-click="cadastroUsuarioCtrl.cancel()" role="button">Cancel</a>
+		<button type="submit" ng-click="cadastroUsuarioCtrl.salvar()" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" ng-click="cadastroUsuarioCtrl.cancelar()" role="button">Cancel</a>
 	</form>
 </div>
 
-<div ng-show="!cadastroUsuarioCtrl.user">
+<div ng-show="!cadastroUsuarioCtrl.usuario">
 	{{cadastroUsuarioCtrl.status}}
-	<a class="btn btn-default" ng-click="cadastroUsuarioCtrl.newUser()" role="button">Novo Usuário</a>
+	<a class="btn btn-default" ng-click="cadastroUsuarioCtrl.novo()" role="button">Novo Usuário</a>
 	<table class="table table-hover">
 	    <thead>
 		    <tr>
@@ -55,13 +55,13 @@
 		    </tr>
 	    </thead>
 	    <tbody>
-		    <tr ng-repeat="user in cadastroUsuarioCtrl.users">
-		    	<td>{{user.posto}}</td>
-				<td>{{user.especialidade}}</td>
-				<td>{{ user.nome_guerra }} </td>
-		    	<td>{{ user.email }}</td>
-		    	<td><a class="edit ml10" ng-click="cadastroUsuarioCtrl.editeUser($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
-				<td><a class="remove ml10" ng-click="cadastroUsuarioCtrl.deleteUser($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
+		    <tr ng-repeat="usuario in cadastroUsuarioCtrl.usuarios">
+		    	<td>{{usuario.posto}}</td>
+				<td>{{usuario.especialidade}}</td>
+				<td>{{ usuario.nome_guerra }} </td>
+		    	<td>{{ usuario.email }}</td>
+		    	<td><a class="edit ml10" ng-click="cadastroUsuarioCtrl.editar($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td><a class="remove ml10" ng-click="cadastroUsuarioCtrl.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>

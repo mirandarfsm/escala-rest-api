@@ -1,38 +1,14 @@
-app.controller('CadastroEscalaCtrl', ['escalaFactory', 'userFactory', function (escalaFactory,userFactory) {
+app.controller('CadastroEscalaCtrl', function (escalaFactory,userFactory) {
     var self = this;
 
-    getEscala();
-    getUsers();
-    
-    function getUsers() {
-        userFactory.getUsers()
-            .success(function (data, status, headers, config) {
-                self.usuarios = data.usuarios;
-            })
-            .error(function (error) {
-                self.alert = {'msg':'Unable to load user: ' + error.message, 'type': 'danger'};
-            });
-    };
-    
-    function getEscala(){
-        escalaFactory.getEscalas()
-            .success(function (data, status, headers, config) {
-                self.escalas = data.escalas;
-            })
-            .error(function (error) {
-                self.alert = {'msg':'Unable to load escalas: ' + error.message, 'type': 'danger'};
-            });
-    };
+    getEscalas();
+    getUsuarios();
 
-    self.closeAlert = function(){
-        self.alert = undefined;
-    };
-
-    self.novaEscala = function(){
+    self.novo = function(){
         self.escala = {};
     };
 
-    self.editarEscala = function(index){
+    self.editar = function(index){
         self.escala = self.escalas[index];
     };
 
@@ -62,118 +38,44 @@ app.controller('CadastroEscalaCtrl', ['escalaFactory', 'userFactory', function (
         self.escala.roxas.splice(index,1);
     };
 
-    self.salvarEscala = function(escala){
-      console.log(escala);
-      //escala.data_promocao = $filter('date')(new Date(user.data_promocao), 'yyyy-MM-dd');
-      if(escala['id']){
-        self.atualizarEscala(escala);
+    self.salvar = function(){
+      if(self.escala.id){
+        self.atualizar(self.escala);
       }else{
-        self.inserirEscala(escala);
+        self.inserir(self.escala);
       }
     };
-/*
-    self.salvarEscala = function(user){
-        user.data_promocao = $filter('date')(new Date(user.data_promocao), 'yyyy-MM-dd');
-        if(user['id']){
-            $scope.updateUser(user);
-        }else{
-            $scope.insertUser(user);
-        }
-    };
-*/
-    self.atualizarEscala = function (object) {
-       escalaFactory.updateEscala(object)
-          .success(function () {
-              self.alert = {'msg':'Updated Escala! Refreshing user list.', 'type': 'success'};
-              self.escala = undefined 
-          })
-          .error(function (error) {
-              self.alert = { 'msg':'Unable to update escala: ' + error.message, 'type': 'danger'};
-          });
-    };
 
-    self.inserirEscala = function (escala) {
-        escalaFactory.insertEscala(escala)
-            .success(function () {
-                getEscala();
-                self.alert = {'msg':'Inserted Escala! Refreshing user list.','type':'success'};
-                self.escala = undefined           
-            }).
-            error(function(error) {
-                self.alert = {'msg':'Unable to insert escala: ' + error.message, 'type': 'danger'};
-            });
-    };
-
-    self.deletarEscala = function (index) {
-        var escala = self.escalas[index]
-        escalaFactory.deleteEscala(escala.id)
-        .success(function () {
-            self.alert = {'msg':'Deleted User! Refreshing escala list.', 'type': 'success'};   
-            self.escalas.splice(index,1);
-            //$scope.orders = null;
-        })
-        .error(function (error) {
-            self.alert = { 'msg':'Unable to delete escala: ' + error.message, 'type': 'danger'};
+    self.inserir = function (escala) {
+        escalaFactory.insertEscala(escala).success(function () {
+            getEscalas();
+            self.escala = undefined           
         });
     };
 
-
-}]);
-
-app.controller('AssociacaoEscalaCtrl', ['escalaFactory','userFactory', function (escalaFactory,userFactory) {
-    var self = this;
-    getEscala();
-    getUsers();
-    function getEscala(){
-        escalaFactory.getEscalas()
-            .success(function (data, status, headers, config) {
-                self.escalas = data.escalas;
-            })
-            .error(function (error) {
-                self.alert = {'msg':'Unable to load escalas: ' + error.message, 'type': 'danger'};
-            });
-    };
-    
-    self.editarEscala = function(index){
-        self.escala = self.escalas[index];
-        escalaFactory.getUsuarios(self.escala.id)
-            .success(function (data, status, headers, config) {
-                self.escala.usuarios = data.usuarios;
-            })
-            .error(function (error) {
-                self.alert = {'msg':'Unable to load user: ' + error.message, 'type': 'danger'};
-            });
-    };
-    
-    function getUsers() {
-        userFactory.getUsers()
-            .success(function (data, status, headers, config) {
-                self.usuarios = data.usuarios;
-            })
-            .error(function (error) {
-                self.alert = {'msg':'Unable to load user: ' + error.message, 'type': 'danger'};
-            });
-    };
-    
-    self.cancelar = function(){
-        self.escala = undefined;
-    } ;
-    
-    self.adicionarUsuario = function(usuario){
-        self.escala.usuarios = usuario;
-    };
-    self.salvar = function(escala){
-        //console.log(escala);
-        self.atualizarEscala(escala);
-    }
-    self.atualizarEscala = function (object) {
-       escalaFactory.updateEscala(object)
-          .success(function () {
-              self.alert = {'msg':'Updated Escala! Refreshing user list.', 'type': 'success'};
+    self.atualizar = function (escala) {
+       escalaFactory.updateEscala(object).success(function () {
               self.escala = undefined 
-          })
-          .error(function (error) {
-              self.alert = { 'msg':'Unable to update escala: ' + error.message, 'type': 'danger'};
           });
     };
-}]);
+
+    self.deletar = function (index) {
+        var escala = self.escalas[index]
+        escalaFactory.deleteEscala(escala.id).success(function () {
+            self.escalas.splice(index,1);
+        });
+    };
+
+    function getUsuarios() {
+        userFactory.getAll().success(function (data) {
+            self.usuarios = data.usuarios;
+        });
+    };
+
+    function getEscalas(){
+        escalaFactory.getEscalas().success(function (data) {
+            self.escalas = data.escalas;
+        });
+    };
+
+});

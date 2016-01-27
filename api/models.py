@@ -1,4 +1,5 @@
 from datetime import datetime,date
+import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import NotFound
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -9,12 +10,12 @@ from .errors import ValidationError
 
 db = SQLAlchemy()
 
-def string2date(string):
-    return datetime.strptime(string, '%Y-%m-%d').date()
+def timestamp2date(timestamp):
+    return datetime.fromtimestamp(timestamp/1e3)
     #datetime.datetime.fromtimestamp(your_timestamp / 1e3)
 
-def date2string(date):
-    return date.strftime('%Y-%m-%d')
+def date2timestamp(date):
+    return time.mktime(date.timetuple())*1e3
 
 class TipoServico(object):
     PRETO = 1
@@ -50,7 +51,7 @@ class Servico(db.Model):
             'url': self.get_url(),
             'usuario': url_for('api.get_usuario', id=self.usuario_id,_external=True),
             'escala': url_for('api.get_escala', id=self.escala_id,_external=True),
-            'data': date2string(self.data),
+            'data': date2timestamp(self.data),
             'tipo': self.tipo
         }
 
@@ -66,7 +67,7 @@ class Servico(db.Model):
         except (KeyError, NotFound):
             raise ValidationError('Invalid escala URL')
         try:
-            date = string2date(json['data'])
+            date = timestamp2date(json['data'])
             self.data = date 
         except KeyError:
             raise ValidationError('Invalid data: '+json['data'])
@@ -112,7 +113,7 @@ class Usuario(db.Model):
             'posto': self.posto,
             'saram': self.saram,
             'username': self.username,
-            'data_promocao': date2string(self.data_promocao),
+            'data_promocao': date2timestamp(self.data_promocao),
             'escalas': url_for('api.get_usuario_escala',id=self.id, _external=True),
             'afastamentos': url_for('api.get_usuario_afastamento',id=self.id, _external=True),
             'servicos': url_for('api.get_usuario_servico',id=self.id, _external=True)
@@ -120,7 +121,7 @@ class Usuario(db.Model):
 
     def from_json(self, json):
         try:
-            date = string2date(json['data_promocao'])
+            date = timestamp2date(json['data_promocao'])
             self.data_promocao = date
         except KeyError as e:
             raise ValidationError('Invalid date: '+ e.args[0])
@@ -264,8 +265,8 @@ class Afastamento(db.Model):
             'url': self.get_url(),
             'usuario': url_for('api.get_usuario', id=self.usuario_id, _external=True), 
             'motivo': self.motivo,
-            'data_inicio': date2string(self.data_inicio),
-            'data_fim': date2string(self.data_fim),
+            'data_inicio': date2timestamp(self.data_inicio),
+            'data_fim': date2timestamp(self.data_fim),
             'ativo': self.ativo
         }
 
@@ -276,12 +277,12 @@ class Afastamento(db.Model):
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario URL')
         try:
-            dt_inicio = string2date(json['data_inicio'])
+            dt_inicio = timestamp2date(json['data_inicio'])
             self.data_inicio = dt_inicio
         except KeyError as e:
             raise ValidationError('Invalid data_inicio: '+ e.args[0])
         try:
-            dt_fim = string2date(json['data_fim'])
+            dt_fim = timestamp2date(json['data_fim'])
             self.data_fim = dt_fim
         except KeyError as e:
             raise ValidationError('Invalid data_fim: '+ e.args[0])

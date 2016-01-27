@@ -35,14 +35,14 @@
 				</ui-select-choices>
 			</ui-select>
 		</div>
-		<button type="submit" ng-click="cadastroEscalaCtrl.salvarEscala(cadastroEscalaCtrl.escala)" class="btn btn-default">Submit</button>
+		<button type="submit" ng-click="cadastroEscalaCtrl.salvar()" class="btn btn-default">Submit</button>
 		<a class="btn btn-default" ng-click="cadastroEscalaCtrl.cancelar()" role="button">Cancel</a>
 	</form>
 </div>
 
 <div ng-show="!cadastroEscalaCtrl.escala">
 	{{cadastroEscalaCtrl.status}}
-	<a class="btn btn-default" ng-click="cadastroEscalaCtrl.novaEscala()" role="button">Novo Escala</a>
+	<a class="btn btn-default" ng-click="cadastroEscalaCtrl.novo()" role="button">Novo Escala</a>
 	<table class="table table-hover">
 	    <thead>
 		    <tr>
@@ -54,8 +54,8 @@
 	    <tbody>
 		    <tr ng-repeat="escala in cadastroEscalaCtrl.escalas">
 		    	<td>{{ escala.name }}</td>
-		    	<td><a class="edit ml10" ng-click="cadastroEscalaCtrl.editarEscala($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
-				<td><a class="remove ml10" ng-click="cadastroEscalaCtrl.deletarEscala($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
+		    	<td><a class="edit ml10" ng-click="cadastroEscalaCtrl.editar($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td><a class="remove ml10" ng-click="cadastroEscalaCtrl.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>

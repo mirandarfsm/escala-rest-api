@@ -26,7 +26,7 @@ def get_usuario_servico(id):
 @api.route('/usuarios/<int:id>/afastamento/', methods=['GET'])
 def get_usuario_afastamento(id):
     usuario = Usuario.query.get_or_404(id)
-    return jsonify({'urls': [afastamento.get_url() for afastamento in usuario.afastamentos]})
+    return jsonify({'afastamentos': [afastamento.to_json() for afastamento in usuario.afastamentos]})
 
 @api.route('/usuarios/', methods=['POST'])
 def new_usuario():
