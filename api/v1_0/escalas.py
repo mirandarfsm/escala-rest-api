@@ -31,8 +31,8 @@ def get_escala_afastamento(id):
 @api.route('/escalas/<int:id>/generate/', methods=['GET'])
 def new_service_generate(id):
     escala = Escala.query.get_or_404(id)
-    gerar_lista_militares_escalados(escala)
-    return jsonify({})
+    usuarios = gerar_lista_militares_escalados(escala)
+    return jsonify({'usuarios': [usuario.to_json() for usuario in usuarios]})
 
 @api.route('/escalas/', methods=['POST'])
 def new_escala():

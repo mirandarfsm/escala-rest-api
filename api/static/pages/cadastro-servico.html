@@ -14,13 +14,13 @@
 		</div>
 		<div class="form-group">
 		 	<label>Data Inicio:</label>
-			<input class="form-control" type="date" ng-model="cadastroServicoCtrl.escala.data_inicio" placeholder="yyyy-MM-dd" name="data_inicio"></input>
+			<input class="form-control" type="date" ng-model="cadastroServicoCtrl.data_inicio" placeholder="yyyy-MM-dd" name="data_inicio"></input>
 		</div>
         <div class="form-group">
 		 	<label>Data Fim:</label>
-			<input class="form-control" type="date" ng-model="cadastroServicoCtrl.escala.data_fim" placeholder="yyyy-MM-dd" name="data_fim"></input>
+			<input class="form-control" type="date" ng-model="cadastroServicoCtrl.data_fim" placeholder="yyyy-MM-dd" name="data_fim"></input>
 		</div>
-		<button type="submit" ng-click="cadastroServicoCtrl.gerarServico(cadastroServicoCtrl.escala)" class="btn btn-default">Submit</button>
-		<a class="btn btn-default" ng-click="cadastroServicoCtrl.cancel()" role="button">Cancel</a>
+		<button type="submit" ng-click="cadastroServicoCtrl.gerar()" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" ng-click="cadastroServicoCtrl.cancelar()" role="button">Cancel</a>
 	</form>
 </div>

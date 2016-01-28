@@ -15,7 +15,8 @@ def get_next_month(date):
 
 def get_first_last_mounth_day(year=datetime.date.today().year,month=datetime.date.today().month):
     first_day,last_day = calendar.monthrange(year,month)
-    return (datetime.date(year,month,first_day),datetime.date(year,month,last_day))
+    print("Dates: (%s,%s)"%(first_day,last_day))
+    return (datetime.date(year,month,1),datetime.date(year,month,last_day))
 
 def gerar_lista_servico(end_date,escala,start_date=datetime.date.today()):
     feriados = escala.feriados
@@ -66,15 +67,15 @@ def get_next_military(milicos,servico):
 
 def gerar_lista_militares_escalados(escala):
     milicos = escala.usuarios
-    today = get_next_month(datetime.date.today())
-    start_date,last_date = get_first_last_mounth_day(today.year,today.month)
+    date = get_next_month(datetime.date.today())
+    start_date,last_date = get_first_last_mounth_day(date.year,date.month)
     servicos = gerar_lista_servico(last_date,escala,start_date)
     for servico in servicos:
         milico = get_next_military(milicos,servico)
         milico.servicos.append(servico)
         db.session.add(milico)
         db.session.commit()
-    return milico
+    return milicos
 
 '''
 def milicos_to_string(milicos):

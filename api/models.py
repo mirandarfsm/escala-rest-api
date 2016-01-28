@@ -41,16 +41,19 @@ class Servico(db.Model):
         if escala_id:
             self.escala = Escala.query.get_or_404(escala_id)
     def __repr__(self):
-        return repr((date2string(self.data),self.tipo,self.escala))
+        return repr((date2timestamp(self.data),self.tipo,self.escala))
 
     def get_url(self):
         return url_for('api.get_servico', id=self.id, _external=True)
 
     def to_json(self):
+        print (self.usuario)
         return {
             'url': self.get_url(),
-            'usuario': url_for('api.get_usuario', id=self.usuario_id,_external=True),
-            'escala': url_for('api.get_escala', id=self.escala_id,_external=True),
+            'usuario': self.usuario.to_json() if self.usuario else None,
+            #'usuario_url': url_for('api.get_usuario', id=self.usuario_id,_external=True),
+            'escala': self.escala.to_json() if self.escala else None,
+            #'escala_url': url_for('api.get_escala', id=self.escala_id,_external=True),
             'data': date2timestamp(self.data),
             'tipo': self.tipo
         }

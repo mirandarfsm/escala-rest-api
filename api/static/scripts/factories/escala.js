@@ -24,13 +24,12 @@ app.factory('escalaFactory', ['$http', function($http) {
     };
     
     escalaFactory.getUsuarios = function (id) {
-        return $http.get(urlBase + id + '/usuario');
+        return $http.get(urlBase + id + '/usuario/');
     };
-
-    /*userFactory.getOrders = function (id) {
-        return $http.get(urlBase + '/' + id + '/orders');
+    
+    escalaFactory.generateServices = function(id){
+        return $http.get(urlBase + id + '/generate/');
     };
-    */
 
     return escalaFactory;
 }]);

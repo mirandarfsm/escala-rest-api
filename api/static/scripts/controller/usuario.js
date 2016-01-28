@@ -16,9 +16,9 @@ app.controller('CadastroUsuarioCtrl',function (userFactory) {
     };
 
     self.salvar = function(){
-        self.usuario.data_promocao = new Date(self.data_promocao).getTime(); 
+        self.usuario.data_promocao = new Date(self.data_promocao).getTime();
+        self.data_promocao = undefined;
         //$filter('date')(new Date(user.data_promocao), 'yyyy-MM-dd');
-        console.log(self.usuario)
         if(self.usuario.id){
             self.atualizar(self.usuario);
         }else{

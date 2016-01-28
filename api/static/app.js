@@ -39,10 +39,10 @@ app.config(function($routeProvider) {
     controller: 'TrocaServicoCtrl',
     controllerAs: 'trocaServicoCtrl'
   })
-  .when('/associacao-escala', {
-    templateUrl: 'pages/associacao-escala.html',
-    controller: 'AssociacaoEscalaCtrl',
-    controllerAs: 'associacaoEscalaCtrl'
+  .when('/servicos', {
+    templateUrl: 'pages/servico-lista.html',
+    controller: 'ServicosCrtl',
+    controllerAs: 'servicosCtrl'
   })
   .otherwise({ redirectTo: '/' });
 });

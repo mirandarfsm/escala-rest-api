@@ -1,7 +1,7 @@
-<uib-alert ng-show="alert" type="{{trocaServicoCtrl.alert.type}}" close="closeAlert()">{{trocaServicoCtrl.alert.msg}}</uib-alert>
-<h3>Troca de Servico</h3>
+<uib-alert ng-show="alert" type="{{servicosCtrl.alert.type}}" close="closeAlert()">{{servicosCtrl.alert.msg}}</uib-alert>
+<h3>Servicos</h3>
 <hr/>
-<div ng-show="trocaServicoCtrl.servico">
+<div ng-show="servicosCtrl.servico">
 	<form role="form">
 		<div class="form-group">
 		 	<label>Nome:</label>
@@ -29,22 +29,26 @@
 	</form>
 </div>
 
-<div ng-show="!trocaServicoCtrl.servico">
+<div ng-show="!servicosCtrl.servico">
 	{{trocaServicoCtrl.status}}
-	<a class="btn btn-default" ng-click="trocaServicoCtrl.novaTroca()" role="button">Novo Servico</a>
+	<a class="btn btn-default" ng-click="servicosCtrl.novaTroca()" role="button">Novo Servico</a>
 	<table class="table table-hover">
 	    <thead>
 		    <tr>
+				<th data-field="name" data-sortable="true">Usuário</th>
+				<th data-field="name" data-sortable="true">Escala</th>
 		        <th data-field="name" data-sortable="true">Data</th>
 				<th data-field="name" data-sortable="true">Tipo</th>
 		        <th data-field="operate">Solicitar Troca</th>
 		    </tr>
 	    </thead>
 	    <tbody>
-		    <tr ng-repeat="servico in trocaServicoCtrl.servicos">
+		    <tr ng-repeat="servico in servicosCtrl.servicos">
+				<td>{{ servico.usuario.nome_guerra }}</td>
+				<td>{{ servico.escala.name }}</td>
 		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ trocaServicoCtrl.tipos[servico.tipo] }}</td>
-		    	<td><a class="edit ml10" ng-click="trocaServicoCtrl.solicitarTroca($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                <td>{{ servicosCtrl.tipos[servico.tipo] }}</td>
+		    	<td><a class="edit ml10" ng-click="servicosCtrl.solicitarTroca($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>

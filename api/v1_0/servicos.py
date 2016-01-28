@@ -5,7 +5,7 @@ from . import api
 
 @api.route('/servicos/', methods=['GET'])
 def get_servicos():
-    return jsonify({'urls': [servico.get_url() for servico in Servico.query.all()]})
+    return jsonify({'servicos': [servico.to_json() for servico in Servico.query.all()]})
 
 @api.route('/servicos/<int:id>/', methods=['GET'])
 def get_servico(id):

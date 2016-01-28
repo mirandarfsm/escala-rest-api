@@ -21,7 +21,7 @@ def get_usuario_escala(id):
 @api.route('/usuarios/<int:id>/servico/', methods=['GET'])
 def get_usuario_servico(id):
     usuario = Usuario.query.get_or_404(id)
-    return jsonify({'urls': [servico.get_url() for servico in usuario.servicos.all()]})
+    return jsonify({'servicos': [servico.to_json() for servico in usuario.servicos.all()]})
 
 @api.route('/usuarios/<int:id>/afastamento/', methods=['GET'])
 def get_usuario_afastamento(id):

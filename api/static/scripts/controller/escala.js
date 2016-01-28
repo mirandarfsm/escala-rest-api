@@ -54,7 +54,7 @@ app.controller('CadastroEscalaCtrl', function (escalaFactory,userFactory) {
     };
 
     self.atualizar = function (escala) {
-       escalaFactory.updateEscala(object).success(function () {
+       escalaFactory.updateEscala(escala).success(function () {
               self.escala = undefined 
           });
     };
