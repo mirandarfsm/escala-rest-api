@@ -47,7 +47,7 @@ class Servico(db.Model):
         return url_for('api.get_servico', id=self.id, _external=True)
 
     def to_json(self):
-        print (self.usuario)
+        #print (self.usuario)
         return {
             'url': self.get_url(),
             'usuario': self.usuario.to_json() if self.usuario else None,
@@ -206,7 +206,7 @@ class Escala(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), index=True)
     servicos = db.relationship('Servico',backref=db.backref('escala', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
-    usuarios = db.relationship('Usuario',secondary=usuario_escala,lazy='dynamic')
+    usuarios = db.relationship('Usuario',secondary=usuario_escala,lazy='dynamic',cascade='save-update')
     feriados = []
     roxas = []
 
@@ -229,10 +229,8 @@ class Escala(db.Model):
     def from_json(self, json):
         if json['usuarios']:
             try:
-                for usuario in json['usuarios']:
-                    print usuario
-                    usuario_id = args_from_url(usuario['url'], 'api.get_usuario')['id']
-                    self.usuarios.append(Usuario.query.get_or_404(usuario_id))
+                #print usuario
+                self.usuarios = [Usuario.query.get_or_404(args_from_url(usuario['url'], 'api.get_usuario')['id']) for usuario in json['usuarios']]
             except (KeyError, NotFound) as e:
                 raise ValidationError('Invalid escala: missing ' + e.args[0])    
         try:

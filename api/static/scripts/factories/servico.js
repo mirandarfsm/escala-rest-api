@@ -19,6 +19,10 @@ app.factory('servicoFactory', ['$http', function($http) {
         return $http.put(urlBase + obj.id, obj)
     };
 
+    service.deleteAll = function () {
+        return $http.delete(urlBase);
+    };
+    
     service.delete = function (id) {
         return $http.delete(urlBase + id);
     };
@@ -27,10 +31,7 @@ app.factory('servicoFactory', ['$http', function($http) {
         return $http.get(urlBase + id + '/usuario');
     };
 
-    /*userFactory.getOrders = function (id) {
-        return $http.get(urlBase + '/' + id + '/orders');
-    };
-    */
+
 
     return service;
 }]);

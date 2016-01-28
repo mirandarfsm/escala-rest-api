@@ -48,10 +48,15 @@ app.controller("ServicosCrtl",function(servicoFactory){
     getServicos();
     
     self.tipos = ["",'Preta','Vermelha','Roxa'];
+
+    self.deletarTodos = function(){
+        servicoFactory.deleteAll().success(function(data){
+            self.servicos = undefined;
+        });
+    }
     
     function getServicos(){
         servicoFactory.getAll().success(function (data) {
-                console.log(data);
                 self.servicos = data.servicos;
            }).error(function (error) {
                console.log(error);
