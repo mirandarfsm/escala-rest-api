@@ -3,23 +3,23 @@ app.factory('escalaFactory', ['$http', function($http) {
     var urlBase = '/api/v1.0/escalas/';
     var escalaFactory = {};
 
-    escalaFactory.getEscalas = function () {
+    escalaFactory.getAll = function () {
         return $http.get(urlBase);
     };
 
-    escalaFactory.getEscala = function (id) {
+    escalaFactory.get = function (id) {
         return $http.get(urlBase + id);
     };
 
-    escalaFactory.insertEscala = function (obj) {
+    escalaFactory.insert = function (obj) {
         return $http.post(urlBase, obj);
     };
 
-    escalaFactory.updateEscala = function (obj) {
+    escalaFactory.update = function (obj) {
         return $http.put(urlBase + obj.id, obj)
     };
 
-    escalaFactory.deleteEscala = function (id) {
+    escalaFactory.delete = function (id) {
         return $http.delete(urlBase + id);
     };
     

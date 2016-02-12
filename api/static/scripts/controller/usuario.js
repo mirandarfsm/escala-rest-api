@@ -2,43 +2,6 @@ app.controller('CadastroUsuarioCtrl',function (userFactory) {
     var self = this;
     getUsuarios();
 
-    self.novo = function(){
-        self.usuario = {}
-    };
-
-    self.cancelar = function(){
-        self.usuario = undefined; 
-    }
-
-    self.editar = function(index){
-        self.usuario = self.usuarios[index];
-        self.data_promocao = new Date(self.usuario.data_promocao)
-    };
-
-    self.salvar = function(){
-        self.usuario.data_promocao = new Date(self.data_promocao).getTime();
-        self.data_promocao = undefined;
-        //$filter('date')(new Date(user.data_promocao), 'yyyy-MM-dd');
-        if(self.usuario.id){
-            self.atualizar(self.usuario);
-        }else{
-            self.inserir(self.usuario);
-        }
-    };
-
-    self.atualizar = function(usuario) {
-        userFactory.update(usuario).success(function() {
-              self.usuario = undefined 
-          });
-    };
-
-    self.inserir = function(usuario) {
-        userFactory.insert(usuario).success(function() {
-                getUsuarios();
-                self.usuario = undefined           
-            });
-    };
-
     self.deletar = function(index) {
         var usuario = self.usuarios[index]
         userFactory.delete(usuario.id).success(function () {
@@ -48,10 +11,34 @@ app.controller('CadastroUsuarioCtrl',function (userFactory) {
 
     function getUsuarios() {
         userFactory.getAll().success(function (data) {
-            console.log(data);
-            self.usuarios = data.usuarios;
-        }).error(function(error){
-            console.log(error);
+            self.usuarios = data.objects;
+        });
+    };
+});
+
+app.controller('CadastroUsuarioDetailCtrl',function ($routeParams,userFactory,$location) {
+    var self = this;
+    var id = $routeParams.id;
+    userFactory.get(id).success(function(data){
+        self.usuario =  data;
+        self.data_promocao = new Date(self.usuario.data_promocao);
+    });
+    
+    self.salvar = function() {
+        self.usuario.data_promocao = new Date(self.data_promocao).getTime();
+        userFactory.update(self.usuario).success(function(){
+            $location.path('/cadastro-usuario');
+        });
+    };
+});
+
+app.controller('CadastroUsuarioNewCtrl',function ($location,userFactory) {
+    var self = this;
+    
+    self.salvar = function() {
+        self.usuario.data_promocao = new Date(self.data_promocao).getTime();
+        userFactory.insert(self.usuario).success(function() {
+            $location.path('/cadastro-usuario');
         });
     };
 });

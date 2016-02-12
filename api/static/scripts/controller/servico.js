@@ -2,7 +2,7 @@ app.controller("CadastroServicoCtrl", function(escalaFactory){
     var self = this;
     getEscala();
     function getEscala(){
-        escalaFactory.getEscalas().success(function (data) {
+        escalaFactory.getAll().success(function (data) {
             self.escalas = data.escalas;
         });
     };
@@ -26,12 +26,20 @@ app.controller("CadastroServicoCtrl", function(escalaFactory){
     
 });
 
+app.controller("CadastroServicoNewCtrl", function(escalaFactory){
+
+});
+
+app.controller("CadastroServicoDetailCtrl", function(escalaFactory){
+
+});
+
 app.controller("TrocaServicoCtrl",function(AuthenticationService,userFactory){
     var self = this;
     var usuario = AuthenticationService.getUsuario();
     getServicos(usuario);
     
-    self.tipos = ['','Preta','Vermelha','Roxa'];
+    self.tipos = ['Preta','Vermelha','Roxa'];
     
     function getServicos(usuario){
         userFactory.getServicos(usuario.id).success(function (data) {
@@ -42,12 +50,21 @@ app.controller("TrocaServicoCtrl",function(AuthenticationService,userFactory){
     };
 });
 
+
+app.controller("TrocaServicoNewCtrl",function(AuthenticationService,userFactory){
+
+});
+
+app.controller("TrocaServicoDetailCtrl",function(AuthenticationService,userFactory){
+
+});
+
 app.controller("ServicosCrtl",function(servicoFactory){
     var self = this;
     
     getServicos();
     
-    self.tipos = ["",'Preta','Vermelha','Roxa'];
+    self.tipos = ['Preta','Vermelha','Roxa'];
 
     self.deletarTodos = function(){
         servicoFactory.deleteAll().success(function(data){
@@ -57,9 +74,10 @@ app.controller("ServicosCrtl",function(servicoFactory){
     
     function getServicos(){
         servicoFactory.getAll().success(function (data) {
-                self.servicos = data.servicos;
-           }).error(function (error) {
-               console.log(error);
-           });
+            console.log(data)
+            self.servicos = data.servicos;
+        }).error(function (error) {
+            console.log(error);
+        });
     };
 });

@@ -1,0 +1,24 @@
+<uib-alert ng-show="alert" type="{{cadastroEscalaCtrl.alert.type}}" close="closeAlert()">{{cadastroEscalaCtrl.alert.msg}}</uib-alert>
+<h3>Cadastro de Escala</h3>
+<hr/>
+
+<div>
+	{{cadastroEscalaCtrl.status}}
+	<a class="btn btn-default" href="#/cadastro-escala/new" role="button">Novo Escala</a>
+	<table class="table table-hover">
+	    <thead>
+		    <tr>
+		        <th data-field="name" data-sortable="true">Name</th>
+		        <th data-field="operate">Editar</th>
+		        <th data-field="operate">Remover</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="escala in cadastroEscalaCtrl.escalas">
+		    	<td>{{ escala.name }}</td>
+		    	<td><a class="edit ml10" href="#/cadastro-escala/{{escala.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td><a class="remove ml10" ng-click="cadastroEscalaCtrl.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
+		    </tr>
+	    </tbody>
+	</table>
+</div>

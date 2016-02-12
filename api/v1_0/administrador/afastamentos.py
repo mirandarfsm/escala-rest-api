@@ -7,7 +7,7 @@ from . import api
 def get_afastamentos():
     return jsonify({'urls': [afastamento.get_url() for afastamento in Afastamento.query.all()]})
 
-@api.route('/afastamentos/<int:id>', methods=['GET'])
+@api.route('/afastamentos/<int:id>/', methods=['GET'])
 def get_afastamento(id):
     afastamento = Afastamento.query.get_or_404(id)
     return jsonify(afastamento.to_json())
@@ -22,7 +22,7 @@ def new_afastamento():
     reponse.headers['Location'] = afastamento.get_url()
     return reponse
 
-@api.route('/afastamentos/<int:id>', methods=['PUT'])
+@api.route('/afastamentos/<int:id>/', methods=['PUT'])
 def edit_afastamento(id):
     afastamento = Afastamento.query.get_or_404(id)
     afastamento.from_json(request.json)
@@ -30,7 +30,7 @@ def edit_afastamento(id):
     db.session.commit()
     return jsonify({})
 
-@api.route('/afastamentos/<int:id>', methods=['DELETE'])
+@api.route('/afastamentos/<int:id>/', methods=['DELETE'])
 def delete_afastamento(id):
     afastamento = Afastamento.query.get_or_404(id)
     db.session.delete(afastamento)

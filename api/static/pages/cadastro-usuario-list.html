@@ -1,0 +1,29 @@
+<uib-alert ng-show="alert" type="{{cadastroUsuarioCtrl.alert.type}}" close="closeAlert()">{{cadastroUsuarioCtrl.alert.msg}}</uib-alert>
+<h3>Cadastro de Usuário</h3>
+<hr/>
+<div>
+	{{cadastroUsuarioCtrl.status}}
+	<a class="btn btn-default" href="#/cadastro-usuario/new" role="button">Novo Usuário</a>
+	<table class="table table-hover">
+	    <thead>
+		    <tr>
+				<th data-field="name" data-sortable="true">Posto/Graduação</th>
+		        <th data-field="email" data-sortable="true">Especialidade</th>
+		        <th data-field="name" data-sortable="true">Nome</th>
+		        <th data-field="email" data-sortable="true">Email</th>
+		        <th data-field="operate">Editar</th>
+		        <th data-field="operate">Remover</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="usuario in cadastroUsuarioCtrl.usuarios">
+		    	<td>{{usuario.posto}}</td>
+				<td>{{usuario.especialidade}}</td>
+				<td>{{ usuario.nome_guerra }} </td>
+		    	<td>{{ usuario.email }}</td>
+		    	<td><a class="edit ml10" href="#/cadastro-usuario/{{usuario.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td><a class="remove ml10" ng-click="cadastroUsuarioCtrl.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-error"></i></a></td>
+		    </tr>
+	    </tbody>
+	</table>
+</div>

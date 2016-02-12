@@ -32,5 +32,12 @@ app.factory('AuthenticationService', function ($http, $rootScope, $timeout) {
     return !!usuario;
   };
 
+  service.isAdmin = function(){
+    if(service.isLogged()){
+      return usuario.admin;
+    }
+    return false;
+  };
+
   return service;
 });

@@ -1,0 +1,26 @@
+<h3>Cadastro de Serviço</h3>
+<hr/>
+<div>
+	<form role="form">
+		<div class="form-group">
+            
+		 	<label>Escala:</label>
+            <ui-select ng-model="cadastroServicoCtrl.escala" theme="bootstrap">
+                <ui-select-match placeholder="Selecione uma Escala...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="escala in (cadastroServicoCtrl.escalas| filter: $select.search)">
+                    <span ng-bind-html="escala.name"></span>
+                </ui-select-choices>
+            </ui-select>
+		</div>
+		<div class="form-group">
+		 	<label>Data Inicio:</label>
+			<input class="form-control" type="date" ng-model="cadastroServicoCtrl.data_inicio" placeholder="yyyy-MM-dd" name="data_inicio"></input>
+		</div>
+        <div class="form-group">
+		 	<label>Data Fim:</label>
+			<input class="form-control" type="date" ng-model="cadastroServicoCtrl.data_fim" placeholder="yyyy-MM-dd" name="data_fim"></input>
+		</div>
+		<button type="submit" ng-click="cadastroServicoCtrl.gerar()" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" ng-click="cadastroServicoCtrl.cancelar()" role="button">Cancel</a>
+	</form>
+</div>

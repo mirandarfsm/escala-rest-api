@@ -2,20 +2,27 @@ app.controller('CadastroEscalaCtrl', function (escalaFactory,userFactory) {
     var self = this;
 
     getEscalas();
+
+    self.deletar = function (index) {
+        var escala = self.escalas[index]
+        escalaFactory.delete(escala.id).success(function () {
+            self.escalas.splice(index,1);
+        });
+    };
+
+    function getEscalas(){
+        escalaFactory.getAll().success(function (data) {
+            self.escalas = data.escalas;
+        });
+    };
+
+});
+
+app.controller('CadastroEscalaNewCtrl', function ($location,escalaFactory,userFactory) {
+    var self = this;
+    
     getUsuarios();
-
-    self.novo = function(){
-        self.escala = {};
-    };
-
-    self.editar = function(index){
-        self.escala = self.escalas[index];
-    };
-
-    self.cancelar = function(){
-        self.escala = undefined;
-    } ;
-
+    
     self.adicionarFeriado = function(){
         if (!self.escala.feriados){
             self.escala.feriados = [];
@@ -37,45 +44,65 @@ app.controller('CadastroEscalaCtrl', function (escalaFactory,userFactory) {
     self.removerRoxa = function(index){
         self.escala.roxas.splice(index,1);
     };
-
-    self.salvar = function(){
-      if(self.escala.id){
-        self.atualizar(self.escala);
-      }else{
-        self.inserir(self.escala);
-      }
-    };
-
-    self.inserir = function (escala) {
-        escalaFactory.insertEscala(escala).success(function () {
-            getEscalas();
-            self.escala = undefined           
+    
+    self.salvar = function() {
+        //self.usuario.data_promocao = new Date(self.data_promocao).getTime();
+        escalaFactory.insert(self.escala).success(function() {
+            $location.path('/cadastro-escala');
         });
     };
-
-    self.atualizar = function (escala) {
-       escalaFactory.updateEscala(escala).success(function () {
-              self.escala = undefined 
-          });
-    };
-
-    self.deletar = function (index) {
-        var escala = self.escalas[index]
-        escalaFactory.deleteEscala(escala.id).success(function () {
-            self.escalas.splice(index,1);
-        });
-    };
-
+    
     function getUsuarios() {
         userFactory.getAll().success(function (data) {
-            self.usuarios = data.usuarios;
+            self.usuarios = data.objects;
         });
     };
+    
+});
 
-    function getEscalas(){
-        escalaFactory.getEscalas().success(function (data) {
-            self.escalas = data.escalas;
-        });
+app.controller('CadastroEscalaDetailCtrl', function ($routeParams,$location,escalaFactory,userFactory) {
+    var self = this
+    var id = $routeParams.id;
+    
+    getUsuarios();
+    
+    escalaFactory.get(id).success(function(data){
+        console.log(data)
+        self.escala =  data; 
+    });
+    
+    self.adicionarFeriado = function(){
+        if (!self.escala.feriados){
+            self.escala.feriados = [];
+        }
+        self.escala.feriados.push(new Date);
     };
 
+    self.adicionarRoxa = function(){
+        if (!self.escala.roxas){
+            self.escala.roxas = [];
+        }
+        self.escala.roxas.push(new Date);
+    };
+
+    self.removerFeriado = function(index){
+        self.escala.feriados.splice(index,1);
+    };
+
+    self.removerRoxa = function(index){
+        self.escala.roxas.splice(index,1);
+    };
+    
+    self.salvar = function() {
+        //self.usuario.data_promocao = new Date(self.data_promocao).getTime();
+        escalaFactory.update(self.escala).success(function(){
+            $location.path('/cadastro-escala');
+        });
+    };
+    
+     function getUsuarios() {
+        userFactory.getAll().success(function (data) {
+            self.usuarios = data.objects;
+        });
+    };
 });

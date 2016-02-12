@@ -12,15 +12,18 @@ db = SQLAlchemy()
 
 def timestamp2date(timestamp):
     return datetime.fromtimestamp(timestamp/1e3)
-    #datetime.datetime.fromtimestamp(your_timestamp / 1e3)
 
 def date2timestamp(date):
     return time.mktime(date.timetuple())*1e3
 
 class TipoServico(object):
-    PRETO = 1
-    VERMELHO = 2
-    ROXA = 3
+    PRETO = 0
+    VERMELHO = 1
+    ROXA = 2
+
+class TipoEscala(object):
+    DIARIA = 0
+    MENSAL = 1
 
 class Servico(db.Model):
     __tablename__ = 'servico'
@@ -47,13 +50,22 @@ class Servico(db.Model):
         return url_for('api.get_servico', id=self.id, _external=True)
 
     def to_json(self):
-        #print (self.usuario)
         return {
             'url': self.get_url(),
-            'usuario': self.usuario.to_json() if self.usuario else None,
+            'usuario': self.usuario.to_json_min() if self.usuario else None,
             #'usuario_url': url_for('api.get_usuario', id=self.usuario_id,_external=True),
-            'escala': self.escala.to_json() if self.escala else None,
+            'escala': self.escala.to_json_min() if self.escala else None,
             #'escala_url': url_for('api.get_escala', id=self.escala_id,_external=True),
+            'data': date2timestamp(self.data),
+            'tipo': self.tipo
+        }
+    
+    def to_json_min(self):
+        return {
+            'id': self.id,
+            'url': self.get_url(),
+            'usuario': self.usuario.to_json_min() if self.usuario else None,
+            'escala': self.escala.to_json_min() if self.escala else None,
             'data': date2timestamp(self.data),
             'tipo': self.tipo
         }
@@ -97,6 +109,7 @@ class Usuario(db.Model):
     data_promocao = db.Column(db.Date, default=datetime.utcnow)
     username = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
+    admin = db.Column(db.Boolean, default=False)
     afastamentos = db.relationship('Afastamento',cascade="all, delete-orphan")
     servicos = db.relationship('Servico',backref=db.backref('usuario', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
     escalas = db.relationship('Escala', secondary=usuario_escala,lazy='dynamic')
@@ -112,14 +125,30 @@ class Usuario(db.Model):
             'name': self.name,
             'nome_guerra': self.nome_guerra,
             'email': self.email,
+            'admin': self.admin,
             'especialidade': self.especialidade,
             'posto': self.posto,
             'saram': self.saram,
             'username': self.username,
             'data_promocao': date2timestamp(self.data_promocao),
-            'escalas': url_for('api.get_usuario_escala',id=self.id, _external=True),
-            'afastamentos': url_for('api.get_usuario_afastamento',id=self.id, _external=True),
-            'servicos': url_for('api.get_usuario_servico',id=self.id, _external=True)
+            'escalas': [escala.to_json_min() for escala in self.escalas.all()],
+            'afastamentos': [afastamento.to_json_min() for afastamento in self.afastamentos],
+            'servicos': [servico.to_json_min() for servico in self.servicos.all()]
+        }
+    
+    def to_json_min(self):
+        return {
+            'id': self.id,
+            'url': self.get_url(),
+            'name': self.name,
+            'nome_guerra': self.nome_guerra,
+            'email': self.email,
+            'admin': self.admin,
+            'especialidade': self.especialidade,
+            'posto': self.posto,
+            'saram': self.saram,
+            'username': self.username,
+            'data_promocao': date2timestamp(self.data_promocao)
         }
 
     def from_json(self, json):
@@ -137,12 +166,13 @@ class Usuario(db.Model):
             self.especialidade = json['especialidade']
             self.posto = json['posto']
             self.saram = json['saram']
+            self.admin = json['admin']
         except KeyError as e:
             raise ValidationError('Invalid usuario: missing ' + e.args[0])
         return self
 
     def __repr__(self):
-        return repr((self.name,self.saram,self.antiguidade,self.servicos.all()))
+        return repr((self.name,self.saram,self.antiguidade))
 
     @property
     def password(self):
@@ -153,7 +183,6 @@ class Usuario(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
-        print self.username,self.password_hash
         return check_password_hash(self.password_hash, password)
 
     def generate_auth_token(self, expires_in=3600):
@@ -174,16 +203,16 @@ class Usuario(db.Model):
         return int(self.data_promocao.year/self.data_promocao.month/self.data_promocao.day)
 
     def vermelhas(self):
-        return [servico for servico in self.servicos.all() if servico.tipo == TipoServico.VERMELHO]
+        return [servico for servico in self.servicos if servico.tipo == TipoServico.VERMELHO]
 
     def pretas(self):
-        return [servico for servico in self.servicos.all() if servico.tipo == TipoServico.PRETO]
+        return [servico for servico in self.servicos if servico.tipo == TipoServico.PRETO]
     
     def roxas(self):
-        return [servico for servico in self.servicos.all() if servico.tipo == TipoServico.ROXA]
+        return [servico for servico in self.servicos if servico.tipo == TipoServico.ROXA]
 
     def by_vermelha_key(milico):
-        servicos = milico.vermelhas()
+        servicos = milico.roxas()
         return milico.hash_service(servicos)
         
     def by_preta_key(milico):
@@ -191,7 +220,7 @@ class Usuario(db.Model):
         return milico.hash_service(servicos)
      
     def by_roxa_key(milico):
-        servicos = milico.roxas()
+        servicos = milico.vermelhas()
         return milico.hash_service(servicos)
         
     def hash_service(milico,servicos):
@@ -205,6 +234,7 @@ class Escala(db.Model):
     __tablename__ = 'escala'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), index=True)
+    tipo = db.Column(db.Integer,default=0)
     servicos = db.relationship('Servico',backref=db.backref('escala', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
     usuarios = db.relationship('Usuario',secondary=usuario_escala,lazy='dynamic',cascade='save-update')
     feriados = []
@@ -221,20 +251,30 @@ class Escala(db.Model):
             'id': self.id,
             'url': self.get_url(),
             'name': self.name,
+            'tipo': self.tipo,
             'usuarios': [usuario.to_json() for usuario in self.usuarios.all()],
+            'servicos': [servico.to_json_min() for servico in self.servicos.all()],
             'usuarios_url': url_for('api.get_escala_usuario',id=self.id, _external=True),
             'servicos_url': url_for('api.get_escala_servico',id=self.id, _external=True)
         }
+    
+    def to_json_min(self):
+        return {
+            'id': self.id,
+            'url': self.get_url(),
+            'name': self.name,
+            'tipo': self.tipo
+        }
 
     def from_json(self, json):
-        if json['usuarios']:
+        if 'usuarios' in json:
             try:
-                #print usuario
                 self.usuarios = [Usuario.query.get_or_404(args_from_url(usuario['url'], 'api.get_usuario')['id']) for usuario in json['usuarios']]
             except (KeyError, NotFound) as e:
                 raise ValidationError('Invalid escala: missing ' + e.args[0])    
         try:
             self.name = json['name']
+            self.tipo = json['tipo']
         except KeyError as e:
             raise ValidationError('Invalid escala: missing ' + e.args[0])
         return self
@@ -262,9 +302,20 @@ class Afastamento(db.Model):
         return url_for('api.get_afastamento', id=self.id, _external=True)
 
     def to_json(self):
-        return {    
+        return {
+            'id': self.id,
             'url': self.get_url(),
-            'usuario': url_for('api.get_usuario', id=self.usuario_id, _external=True), 
+            'usuario': self.usuario.to_json_min(),
+            'motivo': self.motivo,
+            'data_inicio': date2timestamp(self.data_inicio),
+            'data_fim': date2timestamp(self.data_fim),
+            'ativo': self.ativo
+        }
+    
+    def to_json_min(self):
+        return {
+            'id': self.id,
+            'url': self.get_url(),
             'motivo': self.motivo,
             'data_inicio': date2timestamp(self.data_inicio),
             'data_fim': date2timestamp(self.data_fim),

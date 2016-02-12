@@ -5,9 +5,8 @@ from . import api
 
 @api.route('/usuarios/', methods=['GET'])
 @etag
-@paginate()
 def get_usuarios():
-    return Usuario.query
+    return {'objects': [usuario.to_json_min() for uaurio in Usuario.query]}
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
 @etag
@@ -31,10 +30,9 @@ def get_usuario_servico(id):
 
 @api.route('/usuarios/<int:id>/afastamento/', methods=['GET'])
 @etag
-@json
 def get_usuario_afastamento(id):
     usuario = Usuario.query.get_or_404(id)
-    return {'objects': [afastamento.to_json_min() for afastamento in usuario.afastamentos]}
+    return usuario.afastamentos
 
 @api.route('/usuarios/', methods=['POST'])
 @json
