@@ -27,7 +27,6 @@ def not_found_error(e):
 def before_request():
     pass
 
-
 @api.after_request
 def after_request(response):
     if hasattr(g, 'headers'):
@@ -35,4 +34,5 @@ def after_request(response):
     return response
 
 # do this last to avoid circular dependencies
-from . import escalas,servicos,usuarios,afastamentos
+#from . import escalas,servicos,usuarios,afastamentos
+from . import usuarios

@@ -1,6 +1,6 @@
 from flask import url_for, request,jsonify
-from ..models import db, Servico
-from ..decorators import json, paginate, etag
+from ...models import db, Servico
+from ...decorators import json, paginate, etag
 from . import api
 
 @api.route('/servicos/', methods=['GET'])

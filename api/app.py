@@ -17,6 +17,9 @@ def create_app(config_module=None):
 
     from api.v1_0 import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1.0')
+    
+    from api.v1_0.administrador import api as administracao_blueprint
+    app.register_blueprint(administracao_blueprint, url_prefix='/api/v1.0/administracao')
 
     if app.config['USE_TOKEN_AUTH']:
         from api.token import token as token_blueprint

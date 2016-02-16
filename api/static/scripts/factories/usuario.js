@@ -1,39 +1,63 @@
-app.factory('userFactory', ['$http', function($http) {
+app.factory('usuarioFactory', ['$http', function($http) {
 
-    var urlBase = '/api/v1.0/usuarios/';
+    var urlBase = '/api/v1.0/usuario';
     var service = {};
 
-    service.getAll = function () {
-        return $http.get(urlBase);
+    service.get = function () {
+        return $http.get(urlBase+"/");
     };
 
-    service.get = function (id) {
-        return $http.get(urlBase + id);
+    service.update = function () {
+        return $http.put(urlBase+"/")
     };
 
-    service.insert = function (user) {
-        return $http.post(urlBase, user);
+    service.getServicos = function () {
+        return $http.get(urlBase  + '/servicos/');
     };
 
-    service.update = function (user) {
-        return $http.put(urlBase + user.id, user)
-    };
-
-    service.delete = function (id) {
-        return $http.delete(urlBase + id);
-    };
-    
-    service.getServicos = function (id) {
-        return $http.get(urlBase  + id + '/servico/');
+    service.getServicosDetail = function (id) {
+        return $http.get(urlBase  + '/servicos/' + id);
     };
 
     service.getAfastamentos = function (id) {
-        return $http.get(urlBase + id + '/afastamento/');
+        return $http.get(urlBase + '/afastamentos/');
     };
-    /*userFactory.getOrders = function (id) {
-        return $http.get(urlBase + '/' + id + '/orders');
+
+    service.getAfastamentosDetail = function (id) {
+        return $http.get(urlBase + '/afastamentos/' + id);
     };
-    */
+
+    service.getEscalas = function () {
+        return $http.get(urlBase + '/escalas/');
+    };
+
+    service.getEscalasDetail = function (id) {
+        return $http.get(urlBase + '/escalas/' + id);
+    };
+
+    service.insertAfastamento = function(afastamento){
+        return $http.post(urlBase + '/afastamentos/', afastamento);
+    };
+
+    service.updateAfastamento = function(afastamento){
+        return $http.put(urlBase + '/afastamentos/' + afastamento.id, afastamento);
+    };
+
+    service.insertTrocaServico = function(trocaServico){
+        return $http.post(urlBase + '/servico/troca/',trocaServico);
+    };
+
+    service.updateTrocaServico = function(trocaServico){
+        return $http.put(urlBase + '/servico/troca/' + trocaServico.id,trocaServico);
+    };
+
+    service.deleteAfastamento = function(id){
+        return $http.delete(urlBase + '/afastamentos/' + id);
+    };
+
+    service.deleteTrocaServico = function(id){
+        return $http.delete(urlBase + '/servico/troca/' + id);
+    };
 
     return service;
 }]);

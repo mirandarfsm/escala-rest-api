@@ -1,9 +1,9 @@
 from flask import Blueprint, g
-from ..errors import ValidationError, bad_request, not_found
-from ..auth import auth_admin
-from ..decorators import rate_limit
+from ...errors import ValidationError, bad_request, not_found
+from ...auth import auth_admin
+from ...decorators import rate_limit
 
-api = Blueprint('api', __name__)
+api = Blueprint('administracao', __name__)
 
 
 @api.errorhandler(ValidationError)

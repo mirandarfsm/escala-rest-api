@@ -1,8 +1,8 @@
 from flask import request,jsonify
-from ..models import db, Escala
-from ..decorators import json, paginate, etag
+from ...models import db, Escala
+from ...decorators import json, paginate, etag
 from . import api
-from ..services import gerar_lista_militares_escalados 
+from ...services import ServicoDiarioService,ServicoSemanalService 
 
 @api.route('/escalas/', methods=['GET'])
 def get_escalas():

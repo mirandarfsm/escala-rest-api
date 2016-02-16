@@ -34,16 +34,16 @@ app.controller("CadastroServicoDetailCtrl", function(escalaFactory){
 
 });
 
-app.controller("TrocaServicoCtrl",function(AuthenticationService,userFactory){
+app.controller("TrocaServicoCtrl",function(AuthenticationService,usuarioFactory){
     var self = this;
     var usuario = AuthenticationService.getUsuario();
-    getServicos(usuario);
+    getServicos();
     
     self.tipos = ['Preta','Vermelha','Roxa'];
     
-    function getServicos(usuario){
-        userFactory.getServicos(usuario.id).success(function (data) {
-               self.servicos = data.servicos;
+    function getServicos(){
+        usuarioFactory.getServicos().success(function (data) {
+               self.servicos = data.objects;
            }).error(function (error) {
                console.log(error);
            });
@@ -51,11 +51,11 @@ app.controller("TrocaServicoCtrl",function(AuthenticationService,userFactory){
 });
 
 
-app.controller("TrocaServicoNewCtrl",function(AuthenticationService,userFactory){
+app.controller("TrocaServicoNewCtrl",function(AuthenticationService,usuarioFactory){
 
 });
 
-app.controller("TrocaServicoDetailCtrl",function(AuthenticationService,userFactory){
+app.controller("TrocaServicoDetailCtrl",function(AuthenticationService,usuarioFactory){
 
 });
 

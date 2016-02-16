@@ -23,7 +23,7 @@ class TipoServico(object):
 
 class TipoEscala(object):
     DIARIA = 0
-    MENSAL = 1
+    SEMANAL = 1
 
 class Servico(db.Model):
     __tablename__ = 'servico'
@@ -47,15 +47,15 @@ class Servico(db.Model):
         return repr((date2timestamp(self.data),self.tipo,self.escala))
 
     def get_url(self):
-        return url_for('api.get_servico', id=self.id, _external=True)
+        return url_for('administracao.get_servico', id=self.id, _external=True)
 
     def to_json(self):
         return {
             'url': self.get_url(),
             'usuario': self.usuario.to_json_min() if self.usuario else None,
-            #'usuario_url': url_for('api.get_usuario', id=self.usuario_id,_external=True),
+            'usuario_url': url_for('administracao.get_usuario', id=self.usuario_id,_external=True),
             'escala': self.escala.to_json_min() if self.escala else None,
-            #'escala_url': url_for('api.get_escala', id=self.escala_id,_external=True),
+            'escala_url': url_for('administracao.get_escala', id=self.escala_id,_external=True),
             'data': date2timestamp(self.data),
             'tipo': self.tipo
         }
@@ -72,12 +72,12 @@ class Servico(db.Model):
 
     def from_json(self, json):
         try:
-            usuario_id = args_from_url(json['usuario'], 'api.get_usuario')['id']
+            usuario_id = args_from_url(json['usuario'], 'administracao.get_usuario')['id']
             self.usuario = Usuario.query.get_or_404(usuario_id)
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario URL')
         try:
-            escala_id = args_from_url(json['escala'], 'api.get_escala')['id']
+            escala_id = args_from_url(json['escala'], 'administracao.get_escala')['id']
             self.escala = Escala.query.get_or_404(escala_id)
         except (KeyError, NotFound):
             raise ValidationError('Invalid escala URL')
@@ -110,13 +110,13 @@ class Usuario(db.Model):
     username = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
     admin = db.Column(db.Boolean, default=False)
-    afastamentos = db.relationship('Afastamento',cascade="all, delete-orphan")
+    afastamentos = db.relationship('Afastamento',backref=db.backref('usuario', lazy='joined'),lazy='dynamic',cascade="all, delete-orphan")
     servicos = db.relationship('Servico',backref=db.backref('usuario', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
     escalas = db.relationship('Escala', secondary=usuario_escala,lazy='dynamic')
 
 
     def get_url(self):
-        return url_for('api.get_usuario', id=self.id, _external=True)
+        return url_for('administracao.get_usuario', id=self.id, _external=True)
 
     def to_json(self):
         return {
@@ -244,7 +244,7 @@ class Escala(db.Model):
         return repr((self.name))
     
     def get_url(self):
-        return url_for('api.get_escala', id=self.id, _external=True)
+        return url_for('administracao.get_escala', id=self.id, _external=True)
 
     def to_json(self):
         return {
@@ -254,8 +254,8 @@ class Escala(db.Model):
             'tipo': self.tipo,
             'usuarios': [usuario.to_json() for usuario in self.usuarios.all()],
             'servicos': [servico.to_json_min() for servico in self.servicos.all()],
-            'usuarios_url': url_for('api.get_escala_usuario',id=self.id, _external=True),
-            'servicos_url': url_for('api.get_escala_servico',id=self.id, _external=True)
+            'usuarios_url': url_for('administracao.get_escala_usuario',id=self.id, _external=True),
+            'servicos_url': url_for('administracao.get_escala_servico',id=self.id, _external=True)
         }
     
     def to_json_min(self):
@@ -269,7 +269,7 @@ class Escala(db.Model):
     def from_json(self, json):
         if 'usuarios' in json:
             try:
-                self.usuarios = [Usuario.query.get_or_404(args_from_url(usuario['url'], 'api.get_usuario')['id']) for usuario in json['usuarios']]
+                self.usuarios = [Usuario.query.get_or_404(args_from_url(usuario['url'], 'administracao.get_usuario')['id']) for usuario in json['usuarios']]
             except (KeyError, NotFound) as e:
                 raise ValidationError('Invalid escala: missing ' + e.args[0])    
         try:
@@ -299,7 +299,7 @@ class Afastamento(db.Model):
             self.usuario = Usuario.query.get_or_404(usuario_id)
 
     def get_url(self):
-        return url_for('api.get_afastamento', id=self.id, _external=True)
+        return url_for('administracao.get_afastamento', id=self.id, _external=True)
 
     def to_json(self):
         return {
@@ -324,7 +324,8 @@ class Afastamento(db.Model):
 
     def from_json(self, json):
         try:
-            self.usuario_id = args_from_url(json['usuario']['url'], 'api.get_usuario')['id']
+            print json['usuario']
+            self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
             self.usuario = Usuario.query.get_or_404(self.usuario_id)
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario URL')

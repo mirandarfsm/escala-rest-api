@@ -1,24 +1,23 @@
-app.controller("CadastroAfastamentoCtrl", function(AuthenticationService,userFactory,afastamentoFactory){
+app.controller("CadastroAfastamentoCtrl", function(usuarioFactory){
     var self = this;
-    var user = AuthenticationService.getUsuario();
-    getAfastamentos(user);
+    getAfastamentos();
 
 	self.deletar = function(index){
 		var afastamento = self.afastamentos[index];
-        afastamentoFactory.delete(afastamento.id).then(function(data){
+        usuarioFactory.deleteAfastamento(afastamento.id).then(function(data){
             self.afastamentos.splice(index,1);
         });
 	};
 
   	function getAfastamentos(user) {
-        userFactory.getAfastamentos(user.id).success(function (data) {
+        usuarioFactory.getAfastamentos().success(function (data) {
             self.afastamentos = data.objects;
         });
     };
 
 });
 
-app.controller("CadastroAfastamentoNewCtrl", function($location,AuthenticationService,afastamentoFactory){
+app.controller("CadastroAfastamentoNewCtrl", function($location,AuthenticationService,usuarioFactory){
     var self = this;
     var user = AuthenticationService.getUsuario();
     self.afastamento = {};
@@ -27,18 +26,18 @@ app.controller("CadastroAfastamentoNewCtrl", function($location,AuthenticationSe
     self.salvar = function(){
         self.afastamento.data_inicio = new Date(self.data_inicio).getTime();
     	self.afastamento.data_fim = new Date(self.data_fim).getTime();
-		afastamentoFactory.insert(self.afastamento).success(function() {
+		usuarioFactory.insertAfastamento(self.afastamento).success(function() {
             $location.path("/cadastro-afastamento");
         });
 	};
     
 });
 
-app.controller("CadastroAfastamentoDetailCtrl", function($routeParams,$location,afastamentoFactory){
+app.controller("CadastroAfastamentoDetailCtrl", function($routeParams,$location,usuarioFactory){
     var self = this;
     var id = $routeParams.id;
     
-    afastamentoFactory.get(id).success(function(data){
+    usuarioFactory.getAfastamentosDetail(id).success(function(data){
         console.log(data);
         self.afastamento =  data;
         self.data_inicio = new Date(self.afastamento.data_inicio);
@@ -48,7 +47,7 @@ app.controller("CadastroAfastamentoDetailCtrl", function($routeParams,$location,
     self.salvar = function(){
         self.afastamento.data_inicio = new Date(self.data_inicio).getTime();
     	self.afastamento.data_fim = new Date(self.data_fim).getTime();
-		afastamentoFactory.update(self.afastamento).success(function(){
+		usuarioFactory.updateAfastamento(self.afastamento).success(function(){
             $location.path("/cadastro-afastamento");
     	});	
 	};

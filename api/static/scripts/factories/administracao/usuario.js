@@ -1,4 +1,4 @@
-app.factory('administracaoUsuarioFactory', ['$http', function($http) {
+app.factory('userFactory', ['$http', function($http) {
 
     var urlBase = '/api/v1.0/administracao/usuarios/';
     var service = {};

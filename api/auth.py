@@ -27,7 +27,7 @@ def verify_password(username_or_token, password):
     if current_app.config['USE_TOKEN_AUTH']:
         # token authentication
         g.user = Usuario.verify_auth_token(username_or_token)
-        return g.user is not None
+        return g.user is not None and g.user.admin
     else:
         # username/password authentication
         g.user = Usuario.query.filter_by(username=username_or_token).first()

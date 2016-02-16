@@ -1,12 +1,13 @@
 from flask import request,jsonify
-from ..models import db, Usuario
-from ..decorators import json, paginate, etag
+from ...models import db, Usuario
+from ...decorators import json, paginate, etag
 from . import api
 
 @api.route('/usuarios/', methods=['GET'])
 @etag
+@json
 def get_usuarios():
-    return {'objects': [usuario.to_json_min() for uaurio in Usuario.query]}
+    return {'objects': [usuario.to_json_min() for usuario in Usuario.query]}
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
 @etag
@@ -30,9 +31,10 @@ def get_usuario_servico(id):
 
 @api.route('/usuarios/<int:id>/afastamento/', methods=['GET'])
 @etag
+@json
 def get_usuario_afastamento(id):
     usuario = Usuario.query.get_or_404(id)
-    return usuario.afastamentos
+    return {'objects': [afastamento.to_json_min() for afastamento in usuario.afastamentos]}
 
 @api.route('/usuarios/', methods=['POST'])
 @json

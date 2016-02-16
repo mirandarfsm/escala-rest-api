@@ -1,6 +1,5 @@
-app.controller('LoginCtrl',function($rootScope, $scope, $http, $location,$window,AuthenticationService) {
+app.controller('LoginCtrl',function($scope,$location,AuthenticationService) {
   var self = this;
-  $scope.message = '';
   $scope.login = function() {
     var username = self.username;
     var password = self.password;
