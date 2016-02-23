@@ -34,31 +34,6 @@ app.controller("CadastroServicoDetailCtrl", function(escalaFactory){
 
 });
 
-app.controller("TrocaServicoCtrl",function(AuthenticationService,usuarioFactory){
-    var self = this;
-    var usuario = AuthenticationService.getUsuario();
-    getServicos();
-    
-    self.tipos = ['Preta','Vermelha','Roxa'];
-    
-    function getServicos(){
-        usuarioFactory.getServicos().success(function (data) {
-               self.servicos = data.objects;
-           }).error(function (error) {
-               console.log(error);
-           });
-    };
-});
-
-
-app.controller("TrocaServicoNewCtrl",function(AuthenticationService,usuarioFactory){
-
-});
-
-app.controller("TrocaServicoDetailCtrl",function(AuthenticationService,usuarioFactory){
-
-});
-
 app.controller("ServicosCrtl",function(servicoFactory){
     var self = this;
     

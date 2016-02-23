@@ -32,11 +32,21 @@ def adduser(username):
 @manager.command
 def addadmin():
     """Register admin user."""
-    db.create_all()
-    user = Usuario(name="admin",email="admin@admin",username="teste", password="teste")
+    user = Usuario(name="admin",email="admin@admin",nome_guerra="admin",username="teste", password="teste",admin=True)
     db.session.add(user)
     db.session.commit()
     print('User {0} was registered successfully.'.format("teste"))    
+
+@manager.command
+def populatedb():
+    """Register admin user."""
+    users = [Usuario(name="111",nome_guerra="111" ,email="111@111",username="111", password="111"), \
+            Usuario(name="333",nome_guerra="333" ,email="333@333",username="333", password="333"), \
+            Usuario(name="222",nome_guerra="222" ,email="222@222",username="222", password="222"), \
+            Usuario(name="978",nome_guerra="978" ,email="978@978",username="978", password="978")]
+    db.session.add_all(users)
+    db.session.commit()
+    print('Users were registered successfully.') 
 
 @manager.command
 def test():

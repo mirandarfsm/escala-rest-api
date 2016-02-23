@@ -4,9 +4,10 @@ app.controller('LoginCtrl',function($scope,$location,AuthenticationService) {
     var username = self.username;
     var password = self.password;
     
-    AuthenticationService.login(username,password)
-      .success(function(){
+    AuthenticationService.login(username,password).success(function(){
         $location.path('/');
+    }).error(function(error){
+    	console.log(error);
     });
   };
 });

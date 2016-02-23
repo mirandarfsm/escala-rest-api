@@ -1,4 +1,4 @@
-from models import db,TipoServico,Servico,Usuario,TipoEscala
+from models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento
 import datetime
 import calendar
 
@@ -11,6 +11,20 @@ def get_next_month(date):
         month = month%12
         year += 1
     return datetime.date(year, month, day)
+
+def fazer_trocar_servico(troca_servico,substituto):
+    servico = troca_servico.servico
+    hash = {}
+    hash[TipoEscala.DIARIA] = ServicoDiarioService()
+    hash[TipoEscala.SEMANAL] = ServicoDiarioService()
+    if hash[servico.escala.tipo].is_descanso(substituto,servico.data) or hash[servico.escala.tipo].is_afastado(substituto,servico.data):
+        raise Exception("Militar %s nao pode assumir servico por estar de descanco ou afastado"%(substituto.nome_guerra))
+    troca_servico.substituto = substituto
+    troca_servico.data = datetime.datetime.now()
+    servico = Servico.query.get(troca_servico.servico.id)
+    servico.usuario = troca_servico.substituto
+    db.session.commit()
+
 
 class ServicoDiarioService(object):
     
@@ -44,7 +58,7 @@ class ServicoDiarioService(object):
         return False
 
     def is_afastado(self,milico,date):
-        for afastamento in milico.afastamentos:
+        for afastamento in milico.afastamentos.filter(Afastamento.ativo == True,Afastamento.data_aprovado is not None):
             if afastamento.data_inicio <= date <= afastamento.data_fim:
                 return True     
         return False

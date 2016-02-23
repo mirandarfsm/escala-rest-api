@@ -83,12 +83,37 @@ app.config(function($routeProvider) {
     controller: 'CadastroAfastamentoDetailCtrl',
     controllerAs: 'cadastroAfastamentoCtrl'
   })
-  
-  .when('/troca-servico', {
-    templateUrl: 'pages/troca-servico.html',
-    controller: 'TrocaServicoCtrl',
-    controllerAs: 'trocaServicoCtrl'
+
+  // cadastro de troca de servico
+  .when('/cadastro-troca-servico', {
+    templateUrl: 'pages/cadastro-troca-servico-list.html',
+    controller: 'CadastroTrocaServicoCtrl',
+    controllerAs: 'cadastroTrocaServicoCtrl'
   })
+  .when('/cadastro-troca-servico/new', {
+    templateUrl: 'pages/cadastro-troca-servico-form.html',
+    controller: 'CadastroTrocaServicoNewCtrl',
+    controllerAs: 'cadastroTrocaServicoCtrl'
+  })
+
+  // Gerencia de Afastamento
+  .when('/gerencia-afastamento', {
+    templateUrl: 'pages/gerencia-afastamento-list.html',
+    controller: 'GerenciaAfastamentoCtrl',
+    controllerAs: 'gerenciaAfastamentoCtrl'
+  })
+  .when('/gerencia-afastamento/:id', {
+    templateUrl: 'pages/gerencia-afastamento-form.html',
+    controller: 'GerenciaAfastamentoDetailCtrl',
+    controllerAs: 'gerenciaAfastamentoCtrl'
+  })
+
+ .when('/perfil-usuario', {
+    templateUrl: 'pages/perfil-usuario-form.html',
+    controller: 'PerfilUsuarioCtrl',
+    controllerAs: 'perfilUsuarioCtrl'
+  })
+
   .when('/servicos', {
     templateUrl: 'pages/servico-lista.html',
     controller: 'ServicosCrtl',

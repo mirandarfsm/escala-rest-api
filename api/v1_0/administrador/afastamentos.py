@@ -4,8 +4,10 @@ from ...decorators import json, paginate, etag
 from . import api
 
 @api.route('/afastamentos/', methods=['GET'])
+@etag
+@paginate()
 def get_afastamentos():
-    return jsonify({'urls': [afastamento.get_url() for afastamento in Afastamento.query.all()]})
+    return Afastamento.query
 
 @api.route('/afastamentos/<int:id>/', methods=['GET'])
 def get_afastamento(id):

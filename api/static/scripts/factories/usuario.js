@@ -35,6 +35,19 @@ app.factory('usuarioFactory', ['$http', function($http) {
         return $http.get(urlBase + '/escalas/' + id);
     };
 
+    service.getTrocaServico = function () {
+        return $http.get(urlBase + '/troca/servico/');
+    };
+
+    service.getTrocaServicoPendentes = function (id) {
+        return $http.get(urlBase + '/troca/servico/pendentes/');
+    };
+
+    service.getTrocaServicoDetail = function (id) {
+        return $http.get(urlBase + '/troca/servico/' + id);
+    };
+
+
     service.insertAfastamento = function(afastamento){
         return $http.post(urlBase + '/afastamentos/', afastamento);
     };
@@ -44,11 +57,15 @@ app.factory('usuarioFactory', ['$http', function($http) {
     };
 
     service.insertTrocaServico = function(trocaServico){
-        return $http.post(urlBase + '/servico/troca/',trocaServico);
+        return $http.post(urlBase + '/troca/servico/',trocaServico);
     };
 
     service.updateTrocaServico = function(trocaServico){
-        return $http.put(urlBase + '/servico/troca/' + trocaServico.id,trocaServico);
+        return $http.put(urlBase + '/troca/servico/' + trocaServico.id,trocaServico);
+    };
+
+    service.acceptTrocaServico = function(id){
+        return $http.put(urlBase + '/troca/servico/' + id + '/aceitar/');
     };
 
     service.deleteAfastamento = function(id){
@@ -56,7 +73,7 @@ app.factory('usuarioFactory', ['$http', function($http) {
     };
 
     service.deleteTrocaServico = function(id){
-        return $http.delete(urlBase + '/servico/troca/' + id);
+        return $http.delete(urlBase + '/troca/servico/' + id);
     };
 
     return service;

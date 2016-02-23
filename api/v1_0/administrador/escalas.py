@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from ...models import db, Escala
+from ...models import db, Escala,TipoEscala
 from ...decorators import json, paginate, etag
 from . import api
 from ...services import ServicoDiarioService,ServicoSemanalService 
@@ -31,7 +31,10 @@ def get_escala_afastamento(id):
 @api.route('/escalas/<int:id>/generate/', methods=['GET'])
 def new_service_generate(id):
     escala = Escala.query.get_or_404(id)
-    usuarios = gerar_lista_militares_escalados(escala)
+    hash = {}
+    hash[TipoEscala.DIARIA] = ServicoDiarioService().gerar_lista_militares_escalados
+    hash[TipoEscala.SEMANAL] = ServicoSemanalService().gerar_lista_militares_escalados
+    usuarios = hash[escala.tipo](escala)
     return jsonify({'usuarios': [usuario.to_json() for usuario in usuarios]})
 
 @api.route('/escalas/', methods=['POST'])

@@ -11,10 +11,14 @@ from .errors import ValidationError
 db = SQLAlchemy()
 
 def timestamp2date(timestamp):
-    return datetime.fromtimestamp(timestamp/1e3)
+    if timestamp:
+        return datetime.fromtimestamp(timestamp/1e3)
+    return timestamp
 
 def date2timestamp(date):
-    return time.mktime(date.timetuple())*1e3
+    if date:
+        return time.mktime(date.timetuple())*1e3
+    return date
 
 class TipoServico(object):
     PRETO = 0
@@ -25,6 +29,58 @@ class TipoEscala(object):
     DIARIA = 0
     SEMANAL = 1
 
+class TrocaServico(db.Model):
+    __tablename__ = 'troca_servico'
+    id = db.Column(db.Integer, primary_key=True)
+    substituido_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    substituto_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    servico_id = db.Column(db.Integer, db.ForeignKey('servico.id'))
+    data = data = db.Column(db.Date, default=datetime.utcnow)
+    motivo = db.Column(db.String(50))
+    substituido = db.relationship("Usuario", foreign_keys=[substituido_id],backref=db.backref('troca_servicos', order_by=id))
+    substituto = db.relationship("Usuario", foreign_keys=[substituto_id])
+    
+    def __repr__(self):
+        return repr((self.motivo,self.substituido,self.servico,self.substituto_id,date2timestamp(self.data)))
+    
+    def get_url(self):
+        return url_for('api.get_usuario_troca_servico', id=self.id, _external=True)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'url': self.get_url(),
+            'substituido': self.substituido.to_json_min() if self.substituido else None,
+            'substituido_url': url_for('administracao.get_usuario', id=self.substituido_id,_external=True),
+            'substituido': self.substituto.to_json_min() if self.substituto else None,
+            'substituto_url': url_for('administracao.get_usuario', id=self.substituto_id,_external=True) if self.substituto_id else None,
+            'servico': self.servico.to_json_min(),
+            'servico_url': url_for('administracao.get_servico', id=self.servico_id,_external=True),
+            'data': date2timestamp(self.data),
+            'motivo': self.motivo
+        }
+    
+    def to_json_min(self):
+        return {
+            'id': self.id,
+            'url': self.get_url(),
+            'substituido': self.substituido.to_json_min() if self.substituido else None,
+            'substituido_url': url_for('administracao.get_usuario', id=self.substituido_id,_external=True),
+            'substituto_url': url_for('administracao.get_usuario', id=self.substituto_id,_external=True)if self.substituto_id else None,
+            'servico': self.servico.to_json_min(),
+            'servico_url': url_for('administracao.get_servico', id=self.servico_id,_external=True),
+            'data': date2timestamp(self.data),
+            'motivo': self.motivo
+        }
+
+    def from_json(self, json):
+        try:
+            servico_id = args_from_url(json['servico']['url'], 'administracao.get_servico')['id']
+            self.servico = Servico.query.get_or_404(servico_id)
+        except (KeyError, NotFound):
+            raise ValidationError('Invalid servico URL')
+        return self
+
 class Servico(db.Model):
     __tablename__ = 'servico'
     id = db.Column(db.Integer, primary_key=True)
@@ -32,6 +88,7 @@ class Servico(db.Model):
     escala_id = db.Column('escala_id', db.Integer, db.ForeignKey('escala.id'))
     data = db.Column(db.Date, default=datetime.utcnow)
     tipo = db.Column(db.Integer)
+    troca_servico = db.relationship("TrocaServico", backref=db.backref("servico", uselist=False,lazy='joined'),lazy='dynamic',cascade='all, delete-orphan')
 
     def __init__(self,data=None,tipo=None,id=None,usuario_id=None,escala_id=None):
         self.id = id 
@@ -43,6 +100,7 @@ class Servico(db.Model):
             self.usuario = Usuario.query.get_or_404(usuario_id)
         if escala_id:
             self.escala = Escala.query.get_or_404(escala_id)
+            
     def __repr__(self):
         return repr((date2timestamp(self.data),self.tipo,self.escala))
 
@@ -64,7 +122,6 @@ class Servico(db.Model):
         return {
             'id': self.id,
             'url': self.get_url(),
-            'usuario': self.usuario.to_json_min() if self.usuario else None,
             'escala': self.escala.to_json_min() if self.escala else None,
             'data': date2timestamp(self.data),
             'tipo': self.tipo
@@ -287,7 +344,9 @@ class Afastamento(db.Model):
     data_inicio = db.Column(db.Date)
     data_fim = db.Column(db.Date)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    observacao = db.Column(db.String(300))
     ativo = db.Column(db.Boolean,default=False)
+    data_aprovado = db.Column(db.Date)
 
     def __init__(self,motivo=None,data_inicio=None,data_fim=None,id=None,usuario_id=None):
         self.id = id 
@@ -309,6 +368,7 @@ class Afastamento(db.Model):
             'motivo': self.motivo,
             'data_inicio': date2timestamp(self.data_inicio),
             'data_fim': date2timestamp(self.data_fim),
+            'observacao': self.observacao,
             'ativo': self.ativo
         }
     
@@ -319,12 +379,12 @@ class Afastamento(db.Model):
             'motivo': self.motivo,
             'data_inicio': date2timestamp(self.data_inicio),
             'data_fim': date2timestamp(self.data_fim),
+            'observacao': self.observacao,
             'ativo': self.ativo
         }
 
     def from_json(self, json):
         try:
-            print json['usuario']
             self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
             self.usuario = Usuario.query.get_or_404(self.usuario_id)
         except (KeyError, NotFound):
@@ -341,6 +401,7 @@ class Afastamento(db.Model):
             raise ValidationError('Invalid data_fim: '+ e.args[0])
         try:
             self.motivo = json['motivo']
+            self.observacao = json['observacao']
         except KeyError as e:
             raise ValidationError('Invalid afastamento: missing ' + e.args[0])
         return self

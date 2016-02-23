@@ -3,7 +3,7 @@ app.factory('afastamentoFactory', ['$http', function($http) {
     var urlBase = '/api/v1.0/administracao/afastamentos/';
     var service = {};
 
-    service.get = function () {
+    service.getAll = function () {
         return $http.get(urlBase);
     };
 

@@ -13,13 +13,14 @@ app.factory('AuthenticationService', function ($http, $rootScope, $timeout) {
   
   service.login = function (username, password) {
     var headers = {Authorization: "Basic " + btoa(username + ":" + password)};
-    return $http.get('/auth/request-token', {headers : headers})
-      .success(function(data){
+    return $http.get('/auth/request-token', {headers : headers}).success(function(data){
         usuario = data.usuario;
         usuario.token = data.token;
         $rootScope.usuario = usuario;
         $timeout(service.logout, 3600000);
         return usuario;
+      }).error(function(error){
+        console.log(error);
       });
   };
 

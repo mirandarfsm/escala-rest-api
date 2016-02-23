@@ -7,7 +7,7 @@ from . import api
 def get_servicos():
     return jsonify({'servicos': [servico.to_json() for servico in Servico.query.all()]})
 
-@api.route('/servicos/<int:id>/', methods=['GET'])
+@api.route('/servicos/<int:id>', methods=['GET'])
 def get_servico(id):
     servico = Servico.query.get_or_404(id)
     return jsonify(servico.to_json())
@@ -22,7 +22,7 @@ def new_servico():
     reponse.headers['Location'] = servico.get_url()
     return reponse
 
-@api.route('/servicos/<int:id>/', methods=['PUT'])
+@api.route('/servicos/<int:id>', methods=['PUT'])
 def edit_servico(id):
     servico = Servico.query.get_or_404(id)
     servico.from_json(request.json)
@@ -38,7 +38,7 @@ def delete_all_servico():
     db.session.commit()
     return jsonify({})
 
-@api.route('/servicos/<int:id>/', methods=['DELETE'])
+@api.route('/servicos/<int:id>', methods=['DELETE'])
 def delete_servico(id):
     servico = Servico.query.get_or_404(id)
     db.session.delete(servico)
