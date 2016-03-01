@@ -4,16 +4,24 @@
 		"selected_items":
 		[
 			[
+				"usuario_",
+				"usuario_id	statement"
+			],
+			[
+				"s",
+				"success"
+			],
+			[
+				"ser",
+				"servicoFactory〔argument〕"
+			],
+			[
 				"us",
 				"username"
 			],
 			[
 				"u",
 				"username"
-			],
-			[
-				"ser",
-				"servicos"
 			],
 			[
 				"has",
@@ -256,10 +264,6 @@
 				"input"
 			],
 			[
-				"s",
-				"script"
-			],
-			[
 				"ty",
 				"type	Attr"
 			],
@@ -304,87 +308,50 @@
 	"buffers":
 	[
 		{
-			"file": "api/static/app.js",
+			"file": "api/v1_0/administrador/__init__.py",
 			"settings":
 			{
-				"buffer_size": 671,
+				"buffer_size": 789,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "api/static/scripts/directives/header/header.js",
+			"file": "api/decorators.py",
 			"settings":
 			{
-				"buffer_size": 232,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "api/static/scripts/directives/sidebar/sidebar.js",
-			"settings":
-			{
-				"buffer_size": 238,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "api/static/scripts/directives/sidebar/sidebar.html",
-			"settings":
-			{
-				"buffer_size": 1102,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "api/static/scripts/directives/header/header.html",
-			"settings":
-			{
-				"buffer_size": 2258,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "api/static/index.html",
-			"settings":
-			{
-				"buffer_size": 2549,
+				"buffer_size": 5034,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "api/static/pages/login.html",
+			"file": "api/errors.py",
 			"settings":
 			{
-				"buffer_size": 1673,
-				"line_ending": "Windows"
+				"buffer_size": 1315,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "api/static/scripts/controller/login.js",
-			"settings":
-			{
-				"buffer_size": 995,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "api/token.py",
+			"file": "api/auth.py",
 			"settings":
 			{
 				"buffer_size": 757,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "config.py",
+			"settings":
+			{
+				"buffer_size": 117,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
-	"build_system_choices":
-	[
-	],
-	"build_varint": "",
 	"command_palette":
 	{
 		"height": 392.0,
-		"last_filter": "package",
 		"selected_items":
 		[
 			[
@@ -417,20 +384,47 @@
 	},
 	"expanded_folders":
 	[
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/pages",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts/controller",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/header",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/sidebar",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts/factories",
-		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/v1_0"
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/pages",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/controller",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0/administrador"
 	],
 	"file_history":
 	[
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/controller/escala.js",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0/usuarios.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0/administrador/usuarios.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0/escalas.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/auth.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0/administrador/servicos.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/models.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/token.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/services.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/config.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/app.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/pages/associacao-escala.html",
+		"/home/mirandarfsm/workspace/fatec/tg/index.html",
+		"/home/mirandarfsm/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/mirandarfsm/.config/sublime-text-3/Packages/AngularJS/AngularJS-sublime-package.sublime-settings",
+		"/home/mirandarfsm/.config/sublime-text-3/Packages/User/AngularJS-sublime-package.sublime-settings",
+		"/home/mirandarfsm/.config/sublime-text-3/Packages/AngularJS/AngularJS-completions.sublime-settings",
+		"/home/mirandarfsm/.config/sublime-text-3/Packages/AngularJS/AngularJS-js-completions.sublime-settings",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/v1_0/servicos.py",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/controller/servico.js",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/factories/servico.js",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/pages/servico-lista.html",
+		"/home/mirandarfsm/workspace/fatec/tg/Vagrantfile",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/controller/login.js",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/pages/login.html",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/index.html",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/header/header.html",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/sidebar/sidebar.html",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/sidebar/sidebar.js",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/header/header.js",
+		"/home/mirandarfsm/workspace/fatec/tg/escala-rest-api/api/static/app.js",
 		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/token.py",
 		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/auth.py",
 		"/D/Users/Robson/workspace/fatec/tg/escala-rest-api/api/static/scripts/directives/sidebar/sidebar.js",
@@ -527,42 +521,11 @@
 		"/D/Users/Robson/workspace/fatec/tg/escalante-backend/app.py",
 		"/D/Users/Robson/workspace/fatec/tg/escalante-backend/view.py",
 		"/D/Users/Robson/workspace/fatec/tg/escalante-backend/controller.py",
-		"/D/Users/Robson/workspace/fatec/tg/escalante-frontend/pages/cadastro-pessoa.html",
-		"/D/Users/Robson/workspace/fatec/tg/escalante-backend/model.py",
-		"/D/Users/Robson/Dropbox/Facul/bddd/ex_tornado",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/factories/users.js",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/pages/cadastro-pessoa.html",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/controller/users.js",
-		"/D/Users/Robson/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/D/Users/Robson/Dropbox/Facul/bddd/websocket/websocket/chat/chat.html",
-		"/D/Users/Robson/Dropbox/Facul/bddd/websocket/websocket/chat/serverchat.py",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/index.html",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/README.md",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/controller/block.js",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/services/users.js",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/Gruntfile.js",
-		"/E/bizu fatec.txt",
-		"/D/Users/Robson/Downloads/aircrack-ng-1.2-rc2-win/INSTALLING  ",
-		"/D/Users/Robson/Dropbox/Facul/GPI/entregaveis",
-		"/D/Users/Robson/Dropbox/Facul/GPI/entregaveis  ",
-		"/E/webserver-flask/README.txt",
-		"/E/webserver-flask/requirements.txt",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/pages/cadastro-afastamento.html",
-		"/D/Users/Robson/workspace/fatec/pdw/Vagrant  ",
-		"/D/Users/Robson/workspace/fatec/tg/librarian/Puppetfile  ",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/directives/sidebar/sidebar.html",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/app.js",
-		"/D/Users/Robson/workspace/fatec/tg/angular/template/app/views/form.html",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/pages/cadastro-quadro.html",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/controller/switchboard.js",
-		"/D/Users/Robson/workspace/fatec/tg/flask/teste/model.py",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/pages/cadastro-escala.html",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/controller/rota.js",
-		"/D/Users/Robson/workspace/fatec/tg/angular/test/app/scripts/controller/escalas.js"
+		"/D/Users/Robson/workspace/fatec/tg/escalante-frontend/pages/cadastro-pessoa.html"
 	],
 	"find":
 	{
-		"height": 56.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
@@ -576,6 +539,10 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"auto_complete_",
+			"auto_",
+			"print",
+			"']:\n",
 			"[]\n",
 			"PRINT",
 			")\n",
@@ -677,210 +644,90 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "api/static/app.js",
+					"file": "api/v1_0/administrador/__init__.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 671,
+						"buffer_size": 789,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								371,
-								371
+								789,
+								789
 							]
 						],
 						"settings":
 						{
 							"auto_complete": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Python/Python.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "api/static/scripts/directives/header/header.js",
+					"file": "api/decorators.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 232,
+						"buffer_size": 5034,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								226,
-								226
+								4039,
+								4039
 							]
 						],
 						"settings":
 						{
 							"auto_complete": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "api/static/scripts/directives/sidebar/sidebar.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 238,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								232,
-								232
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "api/static/scripts/directives/sidebar/sidebar.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1102,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								42,
-								42
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1350.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "api/static/scripts/directives/header/header.html",
+					"buffer": 2,
+					"file": "api/errors.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2258,
+						"buffer_size": 1315,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								41,
-								41
+								415,
+								415
 							]
 						],
 						"settings":
 						{
-							"auto_complete": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "api/static/index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2549,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1670,
-								1670
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 513.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "api/static/pages/login.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1673,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								758,
-								758
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -891,39 +738,8 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "api/static/scripts/controller/login.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 995,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								287,
-								287
-							]
-						],
-						"settings":
-						{
-							"auto_complete": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "api/token.py",
+					"buffer": 3,
+					"file": "api/auth.py",
 					"semi_transient": false,
 					"settings":
 					{
@@ -934,8 +750,39 @@
 						"selection":
 						[
 							[
-								640,
-								640
+								757,
+								757
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "config.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 117,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								92,
+								92
 							]
 						],
 						"settings":
@@ -988,7 +835,6 @@
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "",
 	"project": "escala.sublime-project",
 	"replace":
 	{
@@ -998,7 +844,6 @@
 	"select_file":
 	{
 		"height": 0.0,
-		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1007,7 +852,6 @@
 	"select_project":
 	{
 		"height": 0.0,
-		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1016,7 +860,6 @@
 	"select_symbol":
 	{
 		"height": 0.0,
-		"last_filter": "",
 		"selected_items":
 		[
 		],

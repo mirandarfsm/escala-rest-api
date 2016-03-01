@@ -1,7 +1,7 @@
 from flask import Blueprint, g
 from ...errors import ValidationError, bad_request, not_found
-from ...auth import auth_admin
-from ...decorators import rate_limit
+from ...decorators import rate_limit,admin
+from ...auth import auth
 
 api = Blueprint('administracao', __name__)
 
@@ -23,7 +23,8 @@ def not_found_error(e):
 
 @api.before_request
 @rate_limit(limit=5, per=15)
-@auth_admin.login_required
+@auth.login_required
+@admin
 def before_request():
     pass
 

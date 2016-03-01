@@ -2,7 +2,7 @@ import functools
 import hashlib
 from flask import jsonify, request, url_for, current_app, make_response, g
 from .rate_limit import RateLimit
-from .errors import too_many_requests, precondition_failed, not_modified
+from .errors import too_many_requests, precondition_failed, not_modified,forbidden
 
 
 def json(f):
@@ -101,6 +101,15 @@ def cache_control(*directives):
 
 def no_cache(f):
     return cache_control('no-cache', 'no-store', 'max-age=0')(f)
+
+def admin(f):
+    @functools.wraps(f)
+    def wrapped(*args, **kwargs):
+        if not g.user.admin:
+            return forbidden("You don't have admin's permission")
+        # invoke the wrapped function
+        return f(*args, **kwargs)
+    return wrapped
 
 
 def etag(f):
