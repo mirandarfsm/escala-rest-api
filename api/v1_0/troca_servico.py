@@ -1,6 +1,7 @@
 from flask import request,jsonify,g
 from ..models import db,Servico,Escala,TrocaServico
 from ..services import fazer_trocar_servico
+from werkzeug.exceptions import abort
 from ..decorators import json, paginate, etag
 from . import api
 
@@ -9,7 +10,7 @@ from . import api
 @paginate()
 def get_usuario_troca_servico():
     usuario = g.user
-    return{'objects': [troca_servico.to_json_min() for troca_servico in usuario.troca_servicos]}
+    return usuario.troca_servicos
 
 @api.route('/usuarios/me/troca/servico/<int:id>', methods=['GET'])
 @etag
@@ -17,7 +18,7 @@ def get_usuario_troca_servico():
 def get_usuario_troca_servico_detail(id):
     #not implemented
     usuario = g.user
-    return usuario.troca_servicos.get(id)
+    return usuario.troca_servicos.filter(Servico.id==id).first() or abort(404)
 
 @api.route('/usuarios/me/troca/servico/pendentes/',methods=['GET'])
 @etag
@@ -30,7 +31,7 @@ def get_usuario_troca_servico_pedente():
                         .filter(Escala.id.in_(escala.id for escala in usuario.escalas)) \
                         .filter(TrocaServico.substituto == None) \
                         .filter(TrocaServico.substituido != usuario)
-    return {'objects': [troca_servico.to_json_min() for troca_servico in troca_servicos]}
+    return troca_servicos
 
 @api.route('/usuarios/me/troca/servico/pendentes/<int:id>',methods=['GET'])
 @etag
@@ -41,7 +42,7 @@ def get_usuario_troca_servico_pedente_detail(id):
     troca_servico = TrocaServico.query \
                     .filter(TrocaServico.servicos.any(Servico.escala.in_(usuario.escalas))) \
                     .filter(TrocaServico.data == None) \
-                    .filter(TrocaServico.id(id)).one()
+                    .filter(TrocaServico.id(id)).first() or abort(404)
     return troca_servico
     
 @api.route('/usuarios/me/troca/servico/', methods=['POST'])
@@ -50,7 +51,6 @@ def new_troca_servico():
     usuario = g.user
     troca_servico = TrocaServico().from_json(request.json)
     troca_servico.substituido = usuario
-    print troca_servico
     db.session.add(troca_servico)
     db.session.commit()
     return {}, 201, {'Location': usuario.get_url()}
@@ -73,7 +73,7 @@ def edit_troca_servico():
 @json
 def delete_troca_servico(id):
     usuario = g.user
-    troca_servico = usuario.troca_servico.get(id)
+    troca_servico = usuario.troca_servico.filter(Servico.id==id).first() or abort(404)
     db.session.delete(troca_servico)
     db.session.commit()
     return {}

@@ -1,5 +1,4 @@
 from flask import request,g
-from sqlalchemy import exc
 from ..models import db,Afastamento
 from ..decorators import json, paginate, etag
 from werkzeug.exceptions import abort
@@ -17,10 +16,7 @@ def get_usuario_afastamento():
 @json
 def get_usuario_afastamento_detail(id):
     usuario = g.user
-    try:
-        return usuario.afastamentos.filter(Afastamento.id==id).one()
-    except exc.NoResultFound, exc.MultipleResultsFound:
-        abort(404)
+    return usuario.afastamentos.filter(Afastamento.id==id).first() or abort(404)
 
 @api.route('/usuarios/me/afastamentos/', methods=['POST'])
 @json
@@ -36,7 +32,7 @@ def new_afastamento():
 @json
 def edit_afastamento(id):
     usuario = g.user
-    afastamento = usuario.afastamentos.filter(Afastamento.id==id).one()
+    afastamento = usuario.afastamentos.filter(Afastamento.id==id).first() or abort(404)
     afastamento.from_json(request.json)
     db.session.add(afastamento)
     db.session.commit()
@@ -44,9 +40,9 @@ def edit_afastamento(id):
 
 @api.route('/usuarios/me/afastamentos/<int:id>', methods=['DELETE'])
 @json
-def delete_afastamento():
+def delete_afastamento(id):
     usuario = g.user
-    afastamento = usuario.afastamentos.filter(Afastamento.id==id).one()
+    afastamento = usuario.afastamentos.filter(Afastamento.id==id).first() or abort(404)
     db.session.delete(afastamento)
     db.session.commit()
     return {}

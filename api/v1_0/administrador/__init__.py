@@ -20,7 +20,6 @@ def bad_request_error(e):
 def not_found_error(e):
     return not_found('item not found')
 
-
 @api.before_request
 @rate_limit(limit=5, per=15)
 @auth.login_required
