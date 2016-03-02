@@ -46,7 +46,7 @@ def new_usuario():
 
 @api.route('/usuarios/<int:id>', methods=['PUT'])
 @json
-def edit_usuario(id):
+def edit_usuarios(id):
     usuario = Usuario.query.get_or_404(id)
     usuario.from_json(request.json)
     db.session.add(usuario)

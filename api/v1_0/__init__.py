@@ -35,4 +35,4 @@ def after_request(response):
 
 # do this last to avoid circular dependencies
 #from . import escalas,servicos,usuarios,afastamentos
-from . import usuarios
+from . import usuarios,escalas,afastamentos,servicos,troca_servico

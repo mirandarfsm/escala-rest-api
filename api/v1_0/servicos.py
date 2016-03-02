@@ -1,46 +1,18 @@
-from flask import url_for, request,jsonify
-from ..models import db, Servico
+from flask import request,jsonify,g
+from ..models import db,Servico
 from ..decorators import json, paginate, etag
 from . import api
 
-@api.route('/servicos/', methods=['GET'])
-def get_servicos():
-    return jsonify({'servicos': [servico.to_json() for servico in Servico.query.all()]})
+@api.route('/usuarios/me/servicos/', methods=['GET'])
+@etag
+@paginate()
+def get_usuario_servico():
+    usuario = g.user
+    return {'objects': [servico.to_json_min() for servico in usuario.servicos]}
 
-@api.route('/servicos/<int:id>/', methods=['GET'])
-def get_servico(id):
-    servico = Servico.query.get_or_404(id)
-    return jsonify(servico.to_json())
-
-@api.route('/servicos/', methods=['POST'])
-def new_servico():
-    servico = Servico().from_json(request.json)
-    db.session.add(servico)
-    db.session.commit()
-    reponse = jsonify({})
-    reponse.status_code = 201
-    reponse.headers['Location'] = servico.get_url()
-    return reponse
-
-@api.route('/servicos/<int:id>/', methods=['PUT'])
-def edit_servico(id):
-    servico = Servico.query.get_or_404(id)
-    servico.from_json(request.json)
-    db.session.add(servico)
-    db.session.commit()
-    return jsonify({})
-
-@api.route('/servicos/', methods=['DELETE'])
-def delete_all_servico():
-    servicos = Servico.query.all()
-    for servico in servicos:
-        db.session.delete(servico)
-    db.session.commit()
-    return jsonify({})
-
-@api.route('/servicos/<int:id>/', methods=['DELETE'])
-def delete_servico(id):
-    servico = Servico.query.get_or_404(id)
-    db.session.delete(servico)
-    db.session.commit()
-    return jsonify({})
+@api.route('/usuarios/me/servicos/<int:id>', methods=['GET'])
+@etag
+@json
+def get_usuario_servico_detail(id):
+    usuario = g.user
+    return usuario.servicos.get(id)
