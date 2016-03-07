@@ -37,7 +37,7 @@ class TrocaServico(db.Model):
     servico_id = db.Column(db.Integer, db.ForeignKey('servico.id'))
     data = data = db.Column(db.Date, default=datetime.utcnow)
     motivo = db.Column(db.String(50))
-    substituido = db.relationship("Usuario", foreign_keys=[substituido_id],backref=db.backref('troca_servicos',uselist=False, order_by=id,lazy='joined'),lazy='dynamic')
+    substituido = db.relationship("Usuario", foreign_keys=[substituido_id],backref=db.backref('troca_servicos',uselist=False, order_by=id,lazy='joined'))
     substituto = db.relationship("Usuario", foreign_keys=[substituto_id])
     
     def __repr__(self):
