@@ -5,7 +5,7 @@
 		.module('Escalante')
 		.factory('afastamentoService',afastamentoService);
 
-	escalaService.$inject = ['Restangular'];
+	afastamentoService.$inject = ['Restangular'];
 
 	function afastamentoService(Restangular){
 		return Restangular.service('afastamento');

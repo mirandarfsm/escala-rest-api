@@ -11,7 +11,7 @@
 		$routeProvider
 		// login
 		.when('/login',{
-			templateUrl: 'login.html',
+			templateUrl: 'app/login/login.html',
 			controller: 'LoginController',
 			controllerAs: 'vm'
 		});

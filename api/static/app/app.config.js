@@ -5,10 +5,10 @@
       .module("Escalante")
       .config(config);
   
-  config.$inject = ['Restangular'];
+  config.$inject = ['RestangularProvider'];
   
-  function config(Restangular) {
-	  Restangular.setBaseUrl('http://127.0.0.1:5000/api/v1.0/');
+  function config(RestangularProvider) {
+	  RestangularProvider.setBaseUrl('http://127.0.0.1:5000/api/v1.0/');
   }
     
 })();

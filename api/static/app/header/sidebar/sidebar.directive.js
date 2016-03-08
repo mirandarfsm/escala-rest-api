@@ -7,14 +7,14 @@
 
 	function sidebar(){
 		return {
-	        templateUrl:'sidebar-directive.html',
+	        templateUrl:'app/header/sidebar/sidebar.directive.html',
 	        restrict: 'E',
 	        controller: SidebarController,
 	        controllerAs: 'vm' 
 	    };
 	}
 
-	function SidebarController($scope,AuthenticationService){
+	function SidebarController($scope,autenticacaoService){
 		//$scope.isAuthenticated = AuthenticationService.isLogged()
 	}
 

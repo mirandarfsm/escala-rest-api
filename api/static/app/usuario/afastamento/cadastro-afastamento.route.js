@@ -35,11 +35,11 @@
 		  });
 	}
 	
-	function afastamentoGetList(USER_LOGGED,usuarioService) {
+	function afastamentoGetList(autenticacaoService) {
         return usuarioService.one(USER_LOGGED).getList('afastamentos');
     }
 
-    function afastamentoGetOne(USER_LOGGED,afastamentoService,$routeParams){
+    function afastamentoGetOne(autenticacaoService,$routeParams){
     	return usuarioService.one(USER_LOGGED).one('afastamentos',$routeParams.id);
     }
 })();

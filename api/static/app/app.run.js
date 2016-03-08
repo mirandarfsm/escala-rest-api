@@ -5,18 +5,18 @@
     .module('Escalante')
     .run(run);
   
-  run.$inject = ['$rootScope','$location','$http','AuthenticationService'];
+  run.$inject = ['$rootScope','$location','$http','autenticacaoService'];
 
-  function run($rootScope, $location, $http,AuthenticationService) {
+  function run($rootScope, $location, $http,autenticacaoService) {
     $rootScope.$on('$locationChangeStart',locationChangeStart); 
     
     function locationChangeStart(event, next, current) {
-      if (AuthenticationService.isLogged()) {
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(AuthenticationService.getToken()+':');
+      if (autenticacaoService.isLogged()) {
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa(autenticacaoService.getToken()+':');
       }
-      $rootScope.isAuthenticated = AuthenticationService.isLogged();
-      $rootScope.isAdmin = AuthenticationService.isAdmin();
-      if ($location.path() !== '/login' && !AuthenticationService.isLogged()) {
+      $rootScope.isAuthenticated = autenticacaoService.isLogged();
+      $rootScope.isAdmin = autenticacaoService.isAdmin();
+      if ($location.path() !== '/login' && !autenticacaoService.isLogged()) {
         $location.path('/login');
       };
     }

@@ -3,15 +3,17 @@
 
 	angular
 		.module('Escalante')
-		.controller('LoginController',LoginController
-				
-	function LoginController($scope,$location,AuthenticationService) {
+		.controller('LoginController',LoginController);
+	
+	LoginController.$inject = ['$scope','$location','autenticacaoService'];
+	
+	function LoginController($scope,$location,autenticacaoService) {
 	  var vm = this;
 	  
 	  vm.login = login;
 	  
 	  function login() {
-	    AuthenticationService.login(vm.username,vm.password).success(function(){
+		  autenticacaoService.login(vm.username,vm.password).success(function(){
 	        $location.path('/');
 	    }).error(function(error){
 	    	console.log(error);
