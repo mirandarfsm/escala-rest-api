@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('Escala')
+		.module('Escalante')
 		.controller('CadastroAfastamentoDetailController',CadastroAfastamentoDetailController); 
 	
 	CadastroAfastamentoDetailController.$inject = ['USER_LOGGED','afastamentoGetOne','usuarioService','$location'];

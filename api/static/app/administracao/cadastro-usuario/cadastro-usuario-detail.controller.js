@@ -6,12 +6,12 @@
 
     CadastroUsuarioDetailController.$inject = ['usuarioGetOne','usuarioService'];
 
-    function (usuarioService,$location) {
+    function CadastroUsuarioDetailController(usuarioService,$location) {
         var vm = this;
 
         vm.usuario = usuarioGetOne;
 
-        vm.salvar = salvar
+        vm.salvar = salvar;
 
         function salvar() {
             self.usuario.data_promocao = new Date(vm.data_promocao).getTime();

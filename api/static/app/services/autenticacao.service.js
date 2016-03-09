@@ -5,9 +5,9 @@
 		.module('Escalante')
 		.factory('autenticacaoService',autenticacaoService);
 
-	autenticacaoService.$inject = ['Restangular'];
+	autenticacaoService.$inject = ['Restangular','$http','$rootScope','$timeout'];
 
-	function autenticacaoService(Restangular){
+	function autenticacaoService(Restangular,$http,$rootScope,$timeout){
 
 		var usuario = undefined;
 
@@ -23,6 +23,7 @@
 		};
 
 		function login(username, password) {
+			console.log(username);
 	    	var headers = {Authorization: "Basic " + btoa(username + ":" + password)};
 	    	return $http.get('/auth/request-token', {headers : headers}).success(function(data){
 		        usuario = data.usuario;
