@@ -8,7 +8,7 @@
 	function config($routeProvider){
 		$routeProvider 
 		.when('/perfil-usuario', {
-		    templateUrl: 'perfil-usuario-form.html',
+		    templateUrl: 'app/usuario/perfil/perfil-usuario-form.html',
 		    controller: 'PerfilUsuarioController',
 		    controllerAs: 'vm'
 		});

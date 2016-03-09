@@ -3,13 +3,13 @@ from ..models import db, Usuario
 from ..decorators import json, paginate, etag
 from . import api
 
-@api.route('/usuarios/me', methods=['GET'])
+@api.route('/usuarios/me/', methods=['GET'])
 @etag
 @json
 def get_usuario_detail():
     return g.user
 
-@api.route('/usuarios/me', methods=['PUT'])
+@api.route('/usuarios/me/', methods=['PUT'])
 @json
 def edit_usuario():
     usuario = g.user

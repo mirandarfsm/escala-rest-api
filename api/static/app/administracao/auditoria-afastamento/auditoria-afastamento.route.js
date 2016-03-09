@@ -11,7 +11,7 @@
 		$routeProvider
 		// auditoria de Afastamento
 		.when('/auditoria-afastamento', {
-		    templateUrl: 'auditoria-afastamento-list.html',
+		    templateUrl: 'app/administracao/auditoria-afastamento/auditoria-afastamento-list.html',
 		    controller: 'AuditoriaAfastamentoController',
 		    controllerAs: 'vm',
 		    resolve:{
@@ -19,7 +19,7 @@
 		    }
 		  })
 		  .when('/auditoria-afastamento/:id', {
-		    templateUrl: 'auditoria-afastamento-form.html',
+		    templateUrl: 'app/administracao/auditoria-afastamento/auditoria-afastamento-form.html',
 		    controller: 'AuditoriaAfastamentoDetailController',
 		    controllerAs: 'vm',
 		    resolve: {

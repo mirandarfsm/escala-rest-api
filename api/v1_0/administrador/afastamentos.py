@@ -10,31 +10,32 @@ def get_afastamentos():
     return Afastamento.query
 
 @api.route('/afastamentos/<int:id>/', methods=['GET'])
+@etag
+@json
 def get_afastamento(id):
-    afastamento = Afastamento.query.get_or_404(id)
-    return jsonify(afastamento.to_json())
+    return Afastamento.query.get_or_404(id)
 
 @api.route('/afastamentos/', methods=['POST'])
+@json
 def new_afastamento():
     afastamento = Afastamento().from_json(request.json)
     db.session.add(afastamento)
     db.session.commit()
-    reponse = jsonify({})
-    reponse.status_code = 201
-    reponse.headers['Location'] = afastamento.get_url()
-    return reponse
+    return {}, 201, {'Location': afastamento.get_url()}
 
 @api.route('/afastamentos/<int:id>/', methods=['PUT'])
+@json
 def edit_afastamento(id):
     afastamento = Afastamento.query.get_or_404(id)
     afastamento.from_json(request.json)
     db.session.add(afastamento)
     db.session.commit()
-    return jsonify({})
+    return {}
 
 @api.route('/afastamentos/<int:id>/', methods=['DELETE'])
+@json
 def delete_afastamento(id):
     afastamento = Afastamento.query.get_or_404(id)
     db.session.delete(afastamento)
     db.session.commit()
-    return jsonify({})
+    return {}

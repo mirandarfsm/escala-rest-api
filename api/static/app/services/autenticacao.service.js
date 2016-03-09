@@ -23,7 +23,6 @@
 		};
 
 		function login(username, password) {
-			console.log(username);
 	    	var headers = {Authorization: "Basic " + btoa(username + ":" + password)};
 	    	return $http.get('/auth/request-token', {headers : headers}).success(function(data){
 		        usuario = data.usuario;
@@ -35,7 +34,7 @@
 	  	}
 
 		function get(){
-			return Restangular.service('usuario').one('me');
+			return Restangular.service('usuarios').one('me');
 		}
 
 		function getUsuario(){

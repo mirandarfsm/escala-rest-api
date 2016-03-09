@@ -10,7 +10,7 @@
 	function config($routeProvider){
 		$routeProvider
 		.when('/cadastro-afastamento', {
-		    templateUrl: 'cadastro-afastamento-list.html',
+		    templateUrl: 'app/usuario/afastamento/cadastro-afastamento-list.html',
 		    controller: 'CadastroAfastamentoController',
 		    controllerAs: 'vm',
 		    resolve: {
@@ -18,7 +18,7 @@
 		    }
 		  })
 		  .when('/cadastro-afastamento/new', {
-		    templateUrl: 'cadastro-afastamento-form.html',
+		    templateUrl: 'app/usuario/afastamento/cadastro-afastamento-form.html',
 		    controller: 'CadastroAfastamentoNewController',
 		    controllerAs: 'vm',
 		    resolve: {
@@ -26,7 +26,7 @@
 		    }
 		  })
 		  .when('/cadastro-afastamento/:id', {
-		    templateUrl: 'cadastro-afastamento-form.html',
+		    templateUrl: 'app/usuario/afastamento/cadastro-afastamento-form.html',
 		    controller: 'CadastroAfastamentoDetailController',
 		    controllerAs: 'vm',
 		    resolve:{
@@ -35,11 +35,11 @@
 		  });
 	}
 	
-	function afastamentoGetList(autenticacaoService) {
+	function afastamentoGetList(usuarioService,USER_LOGGED) {
         return usuarioService.one(USER_LOGGED).getList('afastamentos');
     }
 
-    function afastamentoGetOne(autenticacaoService,$routeParams){
+    function afastamentoGetOne(usuarioService,USER_LOGGED,$routeParams){
     	return usuarioService.one(USER_LOGGED).one('afastamentos',$routeParams.id);
     }
 })();

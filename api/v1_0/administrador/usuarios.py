@@ -7,7 +7,7 @@ from . import api
 @etag
 @paginate()
 def get_usuarios():
-    return {'objects': [usuario.to_json_min() for usuario in Usuario.query]}
+    return Usuario.query
 
 @api.route('/usuarios/<int:id>', methods=['GET'])
 @etag

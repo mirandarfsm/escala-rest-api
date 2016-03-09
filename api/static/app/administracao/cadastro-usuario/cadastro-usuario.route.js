@@ -11,24 +11,24 @@
 		$routeProvider
 		// cadastro de usuario
 		.when('/cadastro-usuario', {
-			templateUrl: 'cadastro-usuario-list.html',
-			controller: 'CadastroUsuarioCtrl',
+			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-list.html',
+			controller: 'CadastroUsuarioController',
 			controllerAs: 'vm',
 			resolve: {
 				usuarioGetList: usuarioGetList
 			}
 		})
 		.when('/cadastro-usuario/new', {
-			templateUrl: 'cadastro-usuario-form.html',
-			controller: 'CadastroUsuarioNewCtrl',
+			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-form.html',
+			controller: 'CadastroUsuarioNewController',
 			controllerAs: 'vm',
 			resolve: {
 				usuarioGetOne: undefined
 			}
 		})
 		.when('/cadastro-usuario/:id', {
-			templateUrl: 'cadastro-usuario-form.html',
-			controller: 'CadastroUsuarioDetailCtrl',
+			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-form.html',
+			controller: 'CadastroUsuarioDetailController',
 			controllerAs: 'vm',
 			resolve: {
 				usuarioGetOne: usuarioGetOne

@@ -8,7 +8,7 @@
 	afastamentoService.$inject = ['Restangular'];
 
 	function afastamentoService(Restangular){
-		return Restangular.service('afastamento');
+		return Restangular.service('afastamentos');
 	}
 
 })();
