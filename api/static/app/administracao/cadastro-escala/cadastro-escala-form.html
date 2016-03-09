@@ -4,44 +4,44 @@
 	<form role="form">
 		<div class="form-group">
 		 	<label>Nome:</label>
-			<input class="form-control" type="text" ng-model="cadastroEscalaCtrl.escala.name" name="name" ></input>
+			<input class="form-control" type="text" ng-model="vm.escala.name" name="name" ></input>
 		</div>
 		<div class="form-group">
 			<label>Tipo:</label>
 			<div class="radio-inline">
 			 	<label>
-					<input type="radio" ng-model="cadastroEscalaCtrl.escala.tipo" name="tipo" value="0" checked></input>
+					<input type="radio" ng-model="vm.escala.tipo" name="tipo" value="0" checked></input>
 					Diario
 				</label>
 			</div>
 			<div class="radio-inline">
 				<label>
-					<input type="radio" ng-model="cadastroEscalaCtrl.escala.tipo" name="tipo" value="1"></input>
+					<input type="radio" ng-model="vml.escala.tipo" name="tipo" value="1"></input>
 					Semanal
 				</label>
 			</div>
 		</div>
 		<div class="form-group" >
 	 		<label>Feriado:</label>
-			<a ng-click="cadastroEscalaCtrl.adicionarFeriado()">+</a>
-	 		<div ng-repeat="feriado in cadastroEscalaCtrl.escala.feriados">
+			<a ng-click="vm.adicionarFeriado()">+</a>
+	 		<div ng-repeat="feriado in vm.escala.feriados">
 				<input class="form-control" type="date" ng-model="feriado" name="feriado"></input>
-				<a ng-click="cadastroEscalaCtrl.removerFeriado($index)">-</a>
+				<a ng-click="vm.removerFeriado($index)">-</a>
 			</div>
 		</div>
 		<div class="form-group" >
 		 	<label>Roxa:</label>
-			<a ng-click="cadastroEscalaCtrl.adicionarRoxa()">+</a>
-		 	<div ng-repeat="roxa in cadastroEscalaCtrl.escala.roxas">
+			<a ng-click="vm.adicionarRoxa()">+</a>
+		 	<div ng-repeat="roxa in vm.escala.roxas">
 				<input class="form-control" type="date" ng-model="roxa" name="roxa"></input>
-				<a ng-click="cadastroEscalaCtrl.removerRoxa($index)">-</a>
+				<a ng-click="vm.removerRoxa($index)">-</a>
 		 	</div>
 		</div>
 		<div class="form-group" >
 			<label>Militares:</label>
-			<ui-select multiple="" ng-model="cadastroEscalaCtrl.escala.usuarios" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
+			<ui-select multiple="" ng-model="vm.escala.usuarios" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
 				<ui-select-match placeholder="Selecione Militares...">{{$item.nome_guerra}} {{$item.posto}} {{$item.especialidade}}</ui-select-match>
-				<ui-select-choices repeat="usuario in cadastroEscalaCtrl.usuarios">
+				<ui-select-choices repeat="usuario in vm.usuarios">
 					<div ng-bind-html="usuario.nome_guerra "></div>
 					<small>
 						{{usuario.posto}} {{usuario.especialidade}}
@@ -49,7 +49,7 @@
 				</ui-select-choices>
 			</ui-select>
 		</div>
-		<button type="submit" ng-click="cadastroEscalaCtrl.salvar()" class="btn btn-default">Submit</button>
+		<button type="submit" ng-click="vm.salvar()" class="btn btn-default">Submit</button>
 		<a class="btn btn-default" href="#/cadastro-escala" role="button">Cancel</a>
 	</form>
 </div>

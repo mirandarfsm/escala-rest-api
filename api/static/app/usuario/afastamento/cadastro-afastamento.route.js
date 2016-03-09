@@ -19,10 +19,10 @@
 		  })
 		  .when('/cadastro-afastamento/new', {
 		    templateUrl: 'app/usuario/afastamento/cadastro-afastamento-form.html',
-		    controller: 'CadastroAfastamentoNewController',
+		    controller: 'CadastroAfastamentoDetailController',
 		    controllerAs: 'vm',
 		    resolve: {
-		    	afastamentoGetOne: undefined
+		    	afastamentoGetOne: afastamentoGetOne
 		    }
 		  })
 		  .when('/cadastro-afastamento/:id', {

@@ -20,10 +20,10 @@
 		})
 		.when('/cadastro-usuario/new', {
 			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-form.html',
-			controller: 'CadastroUsuarioNewController',
+			controller: 'CadastroUsuarioDetailController',
 			controllerAs: 'vm',
 			resolve: {
-				usuarioGetOne: undefined
+				usuarioGetOne: usuarioGetOne
 			}
 		})
 		.when('/cadastro-usuario/:id', {

@@ -23,7 +23,7 @@
 		  controller: 'CadastroEscalaDetailController',
 		  controllerAs: 'vm',
 		  resolve:{
-		  	escalaGetOne:undefined,
+			escalaGetOne:escalaGetOne,
 		  	usuarioGetList:usuarioGetList
 		  }
 		})

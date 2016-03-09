@@ -8,6 +8,10 @@
   TesteController.$inject = ['$scope'];
   
   function TesteController($scope) {
+	  var vm = this;
+	  
+
+	  
 	  $scope.multipleDemo = {};
 	  $scope.multipleDemo.selectedPeople = [];
 	  $scope.people = [

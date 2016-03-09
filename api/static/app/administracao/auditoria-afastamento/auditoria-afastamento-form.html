@@ -5,26 +5,26 @@
 	<form role="form">
 		<div class="form-group">
 		 	<label>Nome:</label>
-			<p>{{gerenciaAfastamentoCtrl.afastamento.usuario.nome_guerra}}</p>
+			<p>{{vm.afastamento.usuario.nome_guerra}}</p>
 		</div>
 		<div class="form-group">
 		 	<label>Motivo:</label>
-		 	<p>{{gerenciaAfastamentoCtrl.afastamento.motivo}}</p>
+		 	<p>{{vm.afastamento.motivo}}</p>
 		</div>
 		<div class="form-group" >
 	 		<label>Data Início:</label>
-			<p>{{gerenciaAfastamentoCtrl.afastamento.data_inicio | date}}</p>
+			<p>{{vm.afastamento.data_inicio | date}}</p>
 		</div>
 		<div class="form-group" >
 	 		<label>Data Termino:</label>
-			<p>{{gerenciaAfastamentoCtrl.afastamento.data_fim | date}}</p>
+			<p>{{vm.afastamento.data_fim | date}}</p>
 		</div>
 		<div class="form-group">
 		 	<label>Observações:</label>
-			<p>{{gerenciaAfastamentoCtrl.afastamento.observacao}}</p>
+			<p>{{vm.afastamento.observacao}}</p>
 		</div>
-		<button type="submit" ng-click="cadastroAfastamentoCtrl.aceitar()" class="btn btn-default btn-success">Aceitar</button>
-		<button type="submit" ng-click="cadastroAfastamentoCtrl.rejeitar()" class="btn btn-default btn-danger">Rejeitar</button>
+		<button type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Aceitar</button>
+		<button type="submit" ng-click="vm.rejeitar()" class="btn btn-default btn-danger">Rejeitar</button>
 		<a class="btn btn-default" href="#/gerencia-afastamento" role="button">Cancel</a>
 	</form>
 </div>

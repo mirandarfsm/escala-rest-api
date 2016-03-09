@@ -8,10 +8,10 @@
     CadastroEscalaDetailController.$inject = ['escalaGetOne','$location','escalaService','usuarioGetList'];
 
     function CadastroEscalaDetailController(escalaGetOne,$location,escalaService,usuarioGetList) {
-        var vm = this
-        
-        vm.usuarios = usuarioGetList.objects;
-        vm.escala = escalaGetOne.escala;
+        var vm = this;
+
+        vm.usuarios = usuarioGetList;
+        vm.escala = escalaGetOne;
         
         vm.adicionarFeriado = adicionarFeriado;
         vm.adicionarRoxa = adicionarRoxa;

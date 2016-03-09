@@ -5,25 +5,25 @@
 	<form role="form">
 		<div class="form-group">
 		 	<label>Nome:</label>
-			<label>{{cadastroAfastamentoCtrl.afastamento.usuario.nome_guerra}}</label>
+			<label>{{vm.afastamento.usuario.nome_guerra}}</label>
 		</div>
 		<div class="form-group">
 		 	<label>Motivo:</label>
-			<input class="form-control" type="text" ng-model="cadastroAfastamentoCtrl.afastamento.motivo" name="motivo" ></input>
+			<input class="form-control" type="text" ng-model="vm.afastamento.motivo" name="motivo" ></input>
 		</div>
 		<div class="form-group" >
 	 		<label>Data Início:</label>
-			<input class="form-control" type="date" ng-model="cadastroAfastamentoCtrl.data_inicio" name="data_inicio" placeholder="dd/MM/yyyy" ></input>
+			<input class="form-control" type="date" ng-model="vm.data_inicio" name="data_inicio" placeholder="dd/MM/yyyy" ></input>
 		</div>
 		<div class="form-group" >
 	 		<label>Data Termino:</label>
-			<input class="form-control" type="date" ng-model="cadastroAfastamentoCtrl.data_fim" name="data_fim" placeholder="dd/MM/yyyy"></input>
+			<input class="form-control" type="date" ng-model="vm.data_fim" name="data_fim" placeholder="dd/MM/yyyy"></input>
 		</div>
 		<div class="form-group">
 		 	<label>Observações:</label>
-			<textarea class="form-control" ng-model="cadastroAfastamentoCtrl.afastamento.observacao" name="motivo"></textarea>
+			<textarea class="form-control" ng-model="vm.afastamento.observacao" name="motivo"></textarea>
 		</div>
-		<button type="submit" ng-click="cadastroAfastamentoCtrl.salvar()" class="btn btn-default">Submit</button>
+		<button type="submit" ng-click="vm.salvar()" class="btn btn-default">Submit</button>
 		<a class="btn btn-default" href="#/cadastro-afastamento" role="button">Cancel</a>
 	</form>
 </div>

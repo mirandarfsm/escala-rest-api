@@ -5,13 +5,13 @@
 		.module('Escalante')
 		.controller('LoginController',LoginController);
 	
-	LoginController.$inject = ['$scope','$location','autenticacaoService'];
+	LoginController.$inject = ['$location','autenticacaoService'];
 	
-	function LoginController($scope,$location,autenticacaoService) {
+	function LoginController($location,autenticacaoService) {
 	  var vm = this;
 	  
 	  vm.login = login;
-	  
+	  	  
 	  function login() {
 		  autenticacaoService.login(vm.username,vm.password).success(function(){
 	        $location.path('/');

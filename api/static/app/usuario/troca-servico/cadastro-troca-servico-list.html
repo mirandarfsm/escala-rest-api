@@ -1,15 +1,15 @@
-<uib-alert ng-show="alert" type="{{cadastroTrocaServicoCtrl.alert.type}}" close="closeAlert()">{{cadastroTrocaServicoCtrl.alert.msg}}</uib-alert>
+<uib-alert ng-show="alert" type="{{vm.alert.type}}" close="closeAlert()">{{vm.alert.msg}}</uib-alert>
 <h3>Troca de Servico</h3>
 <hr/>
 <div>
-	{{cadastroTrocaServicoCtrl.status}}
+	{{vm.status}}
 	<a class="btn btn-default" href="#/cadastro-troca-servico/new" role="button">Nova Troca de Servico</a>
 	<div class="checkbox-inline">
     <label>
-      <input type="checkbox" ng-model="cadastroTrocaServicoCtrl.minhasTrocas"> Minhas Trocas
+      <input type="checkbox" ng-model="vm.minhasTrocas"> Minhas Trocas
     </label>
   </div>
-	<table class="table table-hover" ng-show="cadastroTrocaServicoCtrl.minhasTrocas">
+	<table class="table table-hover" ng-show="vm.minhasTrocas">
 	    <thead>
 		    <tr>
 		        <th data-field="name" data-sortable="true">Data</th>
@@ -19,15 +19,18 @@
 		    </tr>
 	    </thead>
 	    <tbody>
-		    <tr ng-repeat="trocaServico in cadastroTrocaServicoCtrl.trocaServicos">
+		    <tr ng-repeat="trocaServico in vm.trocaServicos">
                 <td>{{ trocaServico.servico.data | date: 'dd/MM/yyyy' }}</td>
 		    	<td>{{ trocaServico.servico.escala.name }}</td>
-                <td>{{ cadastroTrocaServicoCtrl.tipos[trocaServico.servico.tipo] }}</td>
-		    	<td><a class="remove ml10" ng-click="cadastroTrocaServicoCtrl.deletar($index)" title="Delete"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
+                <td>{{ vm.tipos[trocaServico.servico.tipo] }}</td>
+		    	<td><a class="remove ml10" ng-click="vm.deletar($index)" title="Delete">
+		    			<i class="glyphicon glyphicon-remove text-danger"></i>
+		    		</a>
+		    	</td>
 		    </tr>
 	    </tbody>
 	</table>
-	<table class="table table-hover" ng-show="!cadastroTrocaServicoCtrl.minhasTrocas">
+	<table class="table table-hover" ng-show="!vm.minhasTrocas">
 	    <thead>
 		    <tr>
 		        <th data-field="name" data-sortable="true">Data</th>
@@ -37,11 +40,14 @@
 		    </tr>
 	    </thead>
 	    <tbody>
-		    <tr ng-repeat="trocaServico in cadastroTrocaServicoCtrl.trocaServicosPendentes">
+		    <tr ng-repeat="trocaServico in vm.trocaServicosPendentes">
                 <td>{{ trocaServico.servico.data | date: 'dd/MM/yyyy' }}</td>
 		    	<td>{{ trocaServico.servico.escala.name }}</td>
-                <td>{{ cadastroTrocaServicoCtrl.tipos[trocaServico.servico.tipo] }}</td>
-		    	<td><a class="edit ml10" ng-click="cadastroTrocaServicoCtrl.aceitar($index)" title="Edit"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
+                <td>{{ vm.tipos[trocaServico.servico.tipo] }}</td>
+		    	<td><a class="edit ml10" ng-click="vm.aceitar($index)" title="Edit">
+		    			<i class="glyphicon glyphicon-ok text-success"></i>
+		    		</a>
+		    	</td>
 		    </tr>
 	    </tbody>
 	</table>

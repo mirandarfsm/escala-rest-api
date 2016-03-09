@@ -9,8 +9,8 @@
     function CadastroUsuarioController(usuarioGetList,usuarioService) {
         var vm = this;
         
-        vm.usuarios = usuarioGetList.objects;
-    
+        vm.usuarios = usuarioGetList;
+        
         vm.deletar = deletar;
 
         function deletar(index) {

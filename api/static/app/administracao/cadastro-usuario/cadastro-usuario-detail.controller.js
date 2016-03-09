@@ -4,9 +4,9 @@
         .module('Escalante')
         .controller('CadastroUsuarioDetailController',CadastroUsuarioDetailController);
 
-    CadastroUsuarioDetailController.$inject = ['usuarioGetOne','usuarioService'];
+    CadastroUsuarioDetailController.$inject = ['usuarioGetOne','usuarioService','$location'];
 
-    function CadastroUsuarioDetailController(usuarioService,$location) {
+    function CadastroUsuarioDetailController(usuarioGetOne,usuarioService,$location) {
         var vm = this;
 
         vm.usuario = usuarioGetOne;

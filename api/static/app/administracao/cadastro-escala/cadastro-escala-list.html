@@ -2,7 +2,7 @@
 <h3>Cadastro de Escala</h3>
 <hr/>
 <div>
-	{{cadastroEscalaCtrl.status}}
+	{{vm.status}}
 	<a class="btn btn-default" href="#/cadastro-escala/new" role="button">Novo Escala</a>
 	<table class="table table-hover">
 	    <thead>
@@ -13,10 +13,10 @@
 		    </tr>
 	    </thead>
 	    <tbody>
-		    <tr ng-repeat="escala in cadastroEscalaCtrl.escalas">
+		    <tr ng-repeat="escala in vm.escalas">
 		    	<td>{{ escala.name }}</td>
 		    	<td><a class="edit ml10" href="#/cadastro-escala/{{escala.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
-				<td><a class="remove ml10" ng-click="cadastroEscalaCtrl.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
+				<td><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>
