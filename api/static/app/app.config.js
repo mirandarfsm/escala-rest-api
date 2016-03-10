@@ -9,6 +9,7 @@
   
   function config(RestangularProvider) {
 	  RestangularProvider.setBaseUrl('http://127.0.0.1:5000/api/v1.0/');
+	  RestangularProvider.setRequestSuffix('/');
 	  
 	  RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
           var extractedData;

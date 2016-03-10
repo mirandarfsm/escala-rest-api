@@ -10,7 +10,7 @@
     function CadastroEscalaController(escalaGetList) {
         var vm = this;
         
-        vm.escalas = escalaGetList.objects;
+        vm.escalas = escalaGetList;
         
         vm.deletar = deletar;
 

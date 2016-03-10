@@ -10,7 +10,7 @@ from ...services import ServicoDiarioService,ServicoSemanalService
 def get_escalas():
     return Escala.query
 
-@api.route('/escalas/<int:id>', methods=['GET'])
+@api.route('/escalas/<int:id>/', methods=['GET'])
 @etag
 @json
 def get_escala(id):
@@ -56,7 +56,7 @@ def new_escala():
     db.session.commit()
     return {}, 201, {'Location': escala.get_url()}
 
-@api.route('/escalas/<int:id>', methods=['PUT'])
+@api.route('/escalas/<int:id>/', methods=['PUT'])
 @json
 def edit_escala(id):
     escala = Escala.query.get_or_404(id)
@@ -65,7 +65,7 @@ def edit_escala(id):
     db.session.commit()
     return {}
 
-@api.route('/escalas/<int:id>', methods=['DELETE'])
+@api.route('/escalas/<int:id>/', methods=['DELETE'])
 @json
 def delete_escala(id):
     escala = Escala.query.get_or_404(id)

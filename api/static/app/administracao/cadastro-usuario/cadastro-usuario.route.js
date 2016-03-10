@@ -39,8 +39,8 @@
             return usuarioService.getList();
         }
 
-        function usuarioGetOne(usuarioService,$routeParams){
-        	return usuarioService.one($routeParams.id);
+        function usuarioGetOne(usuarioService,$route){
+        	return usuarioService.one($route.current.params.id).get();
         }
 	}
 

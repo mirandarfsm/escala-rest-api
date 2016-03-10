@@ -29,7 +29,7 @@
 		})
 		.when('/cadastro-escala/:id', {
 		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala-form.html',
-		  controller: 'CadastroEscalaDetailCtrl',
+		  controller: 'CadastroEscalaDetailController',
 		  controllerAs: 'vm',
 		  resolve:{
 		  	escalaGetOne:escalaGetOne,
@@ -46,8 +46,8 @@
     	return usuarioService.getList();
     }
 
-    function escalaGetOne(escalaService,$routeParams){
-    	return escalaService.one($routeParams.id);
+    function escalaGetOne(escalaService,$route){
+    	return escalaService.one($route.current.params.id);
     }
 
 })();
