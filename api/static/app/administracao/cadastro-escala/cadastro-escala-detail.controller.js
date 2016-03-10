@@ -5,9 +5,9 @@
         .module('Escalante')
         .controller('CadastroEscalaDetailController',CadastroEscalaDetailController); 
 
-    CadastroEscalaDetailController.$inject = ['escalaGetOne','$location','escalaService','usuarioGetList'];
+    CadastroEscalaDetailController.$inject = ['escalaGetOne','$location','usuarioGetList'];
 
-    function CadastroEscalaDetailController(escalaGetOne,$location,escalaService,usuarioGetList) {
+    function CadastroEscalaDetailController(escalaGetOne,$location,usuarioGetList) {
         var vm = this;
 
         vm.usuarios = usuarioGetList;
@@ -42,8 +42,7 @@
         }
         
         function salvar() {
-            //self.usuario.data_promocao = new Date(self.data_promocao).getTime();
-            escalaService.put(vm.escala).success(function(){
+            vm.escala.save().then(function(){
                 $location.path('/cadastro-escala');
             });
         }

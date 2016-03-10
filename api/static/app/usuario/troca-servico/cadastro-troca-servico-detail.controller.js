@@ -7,17 +7,17 @@
   
     CadastroTrocaServicoDetailController.$inject = [];
 
-    function CadastroTrocaServicoDetailController($location,AuthenticationService,usuarioService){
+    function CadastroTrocaServicoDetailController(trocaServicoGetOne,$location,AuthenticationService){
         var vm = this;
 
-        vm.trocaServico = {};
-
+        vm.trocaServico = trocaServicoGetOne;
         vm.servicos = [];
+        
         vm.salvar = salvar;
         
         function salvar() {
             vm.trocaServico.substituido = usuario;            
-            autenticacaoService.all('troca/servico',vm.trocaServico).success(function() {
+            vm.trocaServico.save().then(function() {
                 $location.path('/cadastro-troca-servico');
             });
         }

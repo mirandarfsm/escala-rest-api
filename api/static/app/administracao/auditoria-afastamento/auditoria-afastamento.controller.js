@@ -5,9 +5,9 @@
         .module('Escalante')
         .controller('AuditoriaAfastamentoController',AuditoriaAfastamentoController);
 
-    AuditoriaAfastamentoController.$inject = ['afastamentoGetList','afastamentoService'];
+    AuditoriaAfastamentoController.$inject = ['afastamentoGetList'];
          
-    function AuditoriaAfastamentoController(afastamentoGetList,afastamentoService){
+    function AuditoriaAfastamentoController(afastamentoGetList){
         var vm = this;
         
         vm.afastamentos = afastamentoGetList.objects;
@@ -15,9 +15,9 @@
         vm.deletar = deletar;
         
         function deletar(index){
-            var afastamento = self.afastamentos[index];
-            afastamentoFactory.delete(afastamento.id).then(function(data){
-                self.afastamentos.splice(index,1);
+            var afastamento = vm.afastamentos[index];
+            afastamento.remove().then(function(data){
+                vm.afastamentos.splice(index,1);
             });
         }
 

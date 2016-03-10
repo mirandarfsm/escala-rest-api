@@ -24,7 +24,8 @@
 		controller: 'CadastroTrocaServicoDetailController',
 		controllerAs: 'vm',
 		resolve: {
-
+			servicoGetList: servicoGetList,
+			trocaServicoGetOne: trocaServicoGetOne
 		}
 	});
 
@@ -32,9 +33,18 @@
 		return autenticacaoService.get().getList('troca-servico');
 	}
 
-	function trocaServicoPendenteGetList(autenticacaoService,$routeParams){
+	function trocaServicoPendenteGetList(autenticacaoService){
+		return autenticacaoService.get().getList('troca-servico').getList('pendentes');
+	}
+
+	function servicoGetList(autenticacaoService){
+		return autenticacaoService.get().getList('servicos');
+	}
+
+	function trocaServicoGetOne(autenticacaoService,$routeParams){
 		return autenticacaoService.get().one('troca-servico',$routeParams.id);
 	}
+
 
   }
     

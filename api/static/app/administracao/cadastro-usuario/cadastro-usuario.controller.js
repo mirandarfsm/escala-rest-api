@@ -4,9 +4,9 @@
         .module('Escalante')
         .controller('CadastroUsuarioController',CadastroUsuarioController);
 
-    CadastroUsuarioController.$inject = ['usuarioGetList','usuarioService'];
+    CadastroUsuarioController.$inject = ['usuarioGetList'];
 
-    function CadastroUsuarioController(usuarioGetList,usuarioService) {
+    function CadastroUsuarioController(usuarioGetList) {
         var vm = this;
         
         vm.usuarios = usuarioGetList;
@@ -14,9 +14,9 @@
         vm.deletar = deletar;
 
         function deletar(index) {
-            var usuario = self.usuarios[index]
-            userFactory.delete(usuario.id).success(function () {
-                self.usuarios.splice(index,1);
+            var usuario = vm.usuarios[index];
+            usuario.remove().then(function () {
+                vm.usuarios.splice(index,1);
             });
         }
     }

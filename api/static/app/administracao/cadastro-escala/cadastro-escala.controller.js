@@ -5,18 +5,19 @@
         .module('Escalante')
         .controller('CadastroEscalaController',CadastroEscalaController);
 
-    CadastroEscalaController.$inject = ['escalaGetList','escalaService'];
+    CadastroEscalaController.$inject = ['escalaGetList'];
          
-    function CadastroEscalaController(escalaGetList,escalaService) {
+    function CadastroEscalaController(escalaGetList) {
         var vm = this;
         
-        vm.deletar = deletar;
         vm.escalas = escalaGetList.objects;
+        
+        vm.deletar = deletar;
 
         function deletar(index) {
-            var escala = self.escalas[index]
-            escalaService.delete(escala.id).success(function () {
-                self.escalas.splice(index,1);
+            var escala = vm.escalas[index];
+            escala.remove(escala.id).then(function () {
+                vm.escalas.splice(index,1);
             });
         }   
     }

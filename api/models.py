@@ -223,7 +223,7 @@ class Usuario(db.Model):
             self.especialidade = json['especialidade']
             self.posto = json['posto']
             self.saram = json['saram']
-            self.admin = json['admin']
+            #self.admin = json['admin']
         except KeyError as e:
             raise ValidationError('Invalid usuario: missing ' + e.args[0])
         return self
