@@ -384,11 +384,12 @@ class Afastamento(db.Model):
         }
 
     def from_json(self, json):
-        try:
-            self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
-            self.usuario = Usuario.query.get_or_404(self.usuario_id)
-        except (KeyError, NotFound):
-            raise ValidationError('Invalid usuario URL')
+        if 'usuario' in json:
+            try:
+                self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+                self.usuario = Usuario.query.get_or_404(self.usuario_id)
+            except (KeyError, NotFound):
+                raise ValidationError('Invalid usuario URL')
         try:
             dt_inicio = timestamp2date(json['data_inicio'])
             self.data_inicio = dt_inicio
