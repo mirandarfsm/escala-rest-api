@@ -5,14 +5,14 @@ from werkzeug.exceptions import abort
 from ..decorators import json, paginate, etag
 from . import api
 
-@api.route('/usuarios/me/troca-servico', methods=['GET'])
+@api.route('/usuarios/me/troca-servico/', methods=['GET'])
 @etag
 @paginate()
 def get_usuario_troca_servico():
     usuario = g.user
     return usuario.troca_servicos
 
-@api.route('/usuarios/me/troca-servico/<int:id>', methods=['GET'])
+@api.route('/usuarios/me/troca-servico/<int:id>/', methods=['GET'])
 @etag
 @json
 def get_usuario_troca_servico_detail(id):
@@ -20,7 +20,7 @@ def get_usuario_troca_servico_detail(id):
     usuario = g.user
     return usuario.troca_servicos.filter(Servico.id==id).first() or abort(404)
 
-@api.route('/usuarios/me/troca-servico/pendentes',methods=['GET'])
+@api.route('/usuarios/me/troca-servico/pendentes/',methods=['GET'])
 @etag
 @paginate()
 def get_usuario_troca_servico_pedente():
@@ -33,7 +33,7 @@ def get_usuario_troca_servico_pedente():
                         .filter(TrocaServico.substituido != usuario)
     return troca_servicos
 
-@api.route('/usuarios/me/troca-servico/pendentes/<int:id>',methods=['GET'])
+@api.route('/usuarios/me/troca-servico/pendentes/<int:id>/',methods=['GET'])
 @etag
 @json
 def get_usuario_troca_servico_pedente_detail(id):
@@ -45,7 +45,7 @@ def get_usuario_troca_servico_pedente_detail(id):
                     .filter(TrocaServico.id(id)).first() or abort(404)
     return troca_servico
     
-@api.route('/usuarios/me/troca-servico', methods=['POST'])
+@api.route('/usuarios/me/troca-servico/', methods=['POST'])
 @json
 def new_troca_servico():
     usuario = g.user
@@ -55,7 +55,7 @@ def new_troca_servico():
     db.session.commit()
     return {}, 201, {'Location': usuario.get_url()}
 
-@api.route('/usuarios/me/troca-servico/<int:id>/aceitar', methods=['PUT'])
+@api.route('/usuarios/me/troca-servico/<int:id>/aceitar/', methods=['PUT'])
 @json
 def aceitar_troca_servico(id):
     usuario = g.user
@@ -63,13 +63,13 @@ def aceitar_troca_servico(id):
     fazer_trocar_servico(troca_servico,usuario)
     return {}
 
-@api.route('/usuarios/me/troca-servico/<int:id>', methods=['PUT'])
+@api.route('/usuarios/me/troca-servico/<int:id>/', methods=['PUT'])
 @json
 def edit_troca_servico():
     #implementar
     return {}
 
-@api.route('/usuarios/me/troca-servico/<int:id>', methods=['DELETE'])
+@api.route('/usuarios/me/troca-servico/<int:id>/', methods=['DELETE'])
 @json
 def delete_troca_servico(id):
     usuario = g.user

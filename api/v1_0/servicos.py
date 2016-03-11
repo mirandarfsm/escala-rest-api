@@ -11,7 +11,7 @@ def get_usuario_servico():
     usuario = g.user
     return usuario.servicos
 
-@api.route('/usuarios/me/servicos/<int:id>', methods=['GET'])
+@api.route('/usuarios/me/servicos/<int:id>/', methods=['GET'])
 @etag
 @json
 def get_usuario_servico_detail(id):

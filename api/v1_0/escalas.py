@@ -11,7 +11,7 @@ def get_usuario_escala():
     usuario = g.user
     return usuario.escalas
 
-@api.route('/usuarios/me/escalas/<int:id>', methods=['GET'])
+@api.route('/usuarios/me/escalas/<int:id>/', methods=['GET'])
 @etag
 @json
 def get_usuario_escala_detail(id):

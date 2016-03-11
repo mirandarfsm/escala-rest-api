@@ -9,7 +9,7 @@ from . import api
 def get_servicos():
     return Servico.query
 
-@api.route('/servicos/<int:id>', methods=['GET'])
+@api.route('/servicos/<int:id>/', methods=['GET'])
 @etag
 @json
 def get_servico(id):
@@ -23,7 +23,7 @@ def new_servico():
     db.session.commit()
     return {}, 201, {'Location': servico.get_url()}
 
-@api.route('/servicos/<int:id>', methods=['PUT'])
+@api.route('/servicos/<int:id>/', methods=['PUT'])
 @json
 def edit_servico(id):
     servico = Servico.query.get_or_404(id)
@@ -41,7 +41,7 @@ def delete_all_servico():
     db.session.commit()
     return {}
 
-@api.route('/servicos/<int:id>', methods=['DELETE'])
+@api.route('/servicos/<int:id>/', methods=['DELETE'])
 @json
 def delete_servico(id):
     servico = Servico.query.get_or_404(id)

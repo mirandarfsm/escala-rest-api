@@ -34,15 +34,19 @@
 	}
 
 	function trocaServicoPendenteGetList(autenticacaoService){
-		return autenticacaoService.get().getList('troca-servico').getList('pendentes');
+		return autenticacaoService.get().one('troca-servico').getList('pendentes');
 	}
 
 	function servicoGetList(autenticacaoService){
 		return autenticacaoService.get().getList('servicos');
 	}
 
-	function trocaServicoGetOne(autenticacaoService,$routeParams){
-		return autenticacaoService.get().one('troca-servico',$routeParams.id);
+	function trocaServicoGetOne(autenticacaoService,$route){
+		var id = $route.current.params.id;
+    	if(id)
+    		return autenticacaoService.one(id).get();
+    	return autenticacaoService.one();
+
 	}
 
 

@@ -31,8 +31,11 @@
             return afastamentoService.getList();
         }
 
-        function afastamentoGetOne(afastamentoService,$routeParams){
-        	return afastamentoService.one($routeParams.id);
+        function afastamentoGetOne(afastamentoService,$route){
+        	var id = $route.current.params.id;
+	    	if(id)
+	    		return afastamentoService.one(id).get();
+	    	return afastamentoService.one();
         }
 	}
 

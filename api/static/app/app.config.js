@@ -24,7 +24,7 @@
             extractedData.prev = data.prev;
             extractedData.total = data.total;   
           } else {
-            extractedData = data.data;
+            extractedData = data;
           }
           return extractedData;
         });

@@ -11,7 +11,7 @@ def get_usuario_afastamento():
     usuario = g.user
     return usuario.afastamentos
 
-@api.route('/usuarios/me/afastamentos/<int:id>', methods=['GET'])
+@api.route('/usuarios/me/afastamentos/<int:id>/', methods=['GET'])
 @etag
 @json
 def get_usuario_afastamento_detail(id):
@@ -28,7 +28,7 @@ def new_afastamento():
     db.session.commit()
     return {}, 201, {'Location': afastamento.get_url()}
 
-@api.route('/usuarios/me/afastamentos/<int:id>', methods=['PUT'])
+@api.route('/usuarios/me/afastamentos/<int:id>/', methods=['PUT'])
 @json
 def edit_afastamento(id):
     usuario = g.user
@@ -38,7 +38,7 @@ def edit_afastamento(id):
     db.session.commit()
     return {}
 
-@api.route('/usuarios/me/afastamentos/<int:id>', methods=['DELETE'])
+@api.route('/usuarios/me/afastamentos/<int:id>/', methods=['DELETE'])
 @json
 def delete_afastamento(id):
     usuario = g.user

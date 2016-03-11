@@ -12,7 +12,6 @@
         
         vm.usuarios = usuarioGetList;
         vm.escala = escalaGetOne;
-        console.log(vm.escala);
         
         vm.adicionarFeriado = adicionarFeriado;
         vm.adicionarRoxa = adicionarRoxa;

@@ -40,7 +40,10 @@
         }
 
         function usuarioGetOne(usuarioService,$route){
-        	return usuarioService.one($route.current.params.id).get();
+        	var id = $route.current.params.id;
+        	if(id)
+        		return usuarioService.one(id).get();
+        	return usuarioService.one();
         }
 	}
 

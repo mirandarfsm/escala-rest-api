@@ -47,7 +47,10 @@
     }
 
     function escalaGetOne(escalaService,$route){
-    	return escalaService.one($route.current.params.id);
+    	var id = $route.current.params.id;
+    	if(id)
+    		return escalaService.one(id).get();
+    	return escalaService.one();
     }
 
 })();
