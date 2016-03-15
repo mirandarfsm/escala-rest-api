@@ -5,10 +5,12 @@
 		.module('Escalante')
 		.controller('GerenciaServicoDetailController',GerenciaServicoDetailController);
 	
-	GerenciaServicoDetailController.$inject = [];
+	GerenciaServicoDetailController.$inject = ['servicoGetList'];
 	
-	function GerenciaServicoDetailController(){
+	function GerenciaServicoDetailController(servicoGetList){
+		var vm = this;
 		
+		vm.servicos = servicoGetList;
 	}
 	
 })();

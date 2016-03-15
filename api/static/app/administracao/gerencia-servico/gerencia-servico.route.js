@@ -14,8 +14,26 @@
 			controller: 'GerenciaServicoController',
 			controllerAs: 'vm',
 			resolve: {
+				escalaGetList: escalaGetList
+			}
+		})
+		.when('/gerencia-servico/escala/:id',{
+			templateUrl: 'app/administracao/gerencia-servico/gerencia-servico-detail.html',
+			controller: 'GerenciaServicoDetailController',
+			controllerAs: 'vm',
+			resolve: {
+				
 			}
 		});
 	}
+	
+	function escalaGetList(escalaService){
+		return escalaService.getList();
+    }
+	
+	function servicoGetList(escalaService,$route){
+		return escalaService.one($route.params.id).getList('servico');
+	}
+    
 	
 })();
