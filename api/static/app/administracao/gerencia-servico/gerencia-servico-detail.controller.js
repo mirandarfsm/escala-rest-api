@@ -11,6 +11,7 @@
 		var vm = this;
 		
 		vm.servicos = servicoGetList;
+		vm.tipos = ['Preto','Vermelho','Roxo'];
 	}
 	
 })();

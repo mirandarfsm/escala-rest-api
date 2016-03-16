@@ -16,8 +16,9 @@
 		vm.cancelar = cancelar;
 		
 	    function gerarEscala(){
-	        escalaService.one(vm.escala.id).one('generate').then(function(){
-	        	$location.path('/gerencia-servico/escala/'+vm.escala.id);
+	        escalaService.one(vm.escala.id).one('generate').put().then(function(data){
+	        	console.log(vm.escala);
+	        	$location.path('/gerencia-servico/escala/' + vm.escala.id);
 	        });
 	    }
 	    

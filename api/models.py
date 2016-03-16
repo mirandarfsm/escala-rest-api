@@ -122,6 +122,7 @@ class Servico(db.Model):
         return {
             'id': self.id,
             'url': self.get_url(),
+            'usuario': self.usuario.to_json_min() if self.usuario else None,
             'escala': self.escala.to_json_min() if self.escala else None,
             'data': date2timestamp(self.data),
             'tipo': self.tipo

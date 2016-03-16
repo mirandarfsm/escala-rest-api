@@ -37,16 +37,15 @@ def get_escala_afastamento(id):
     escala = Escala.query.get_or_404(id)
     return escala.afastamentos
 
-@api.route('/escalas/<int:id>/generate/', methods=['GET'])
-@etag
+@api.route('/escalas/<int:id>/generate/', methods=['PUT'])
 @json
 def new_service_generate(id):
     escala = Escala.query.get_or_404(id)
     hash = {}
     hash[TipoEscala.DIARIA] = ServicoDiarioService().gerar_lista_militares_escalados
     hash[TipoEscala.SEMANAL] = ServicoSemanalService().gerar_lista_militares_escalados
-    usuarios = hash[escala.tipo](escala)
-    return usuarios
+    hash[escala.tipo](escala)
+    return {}
 
 @api.route('/escalas/', methods=['POST'])
 @json
