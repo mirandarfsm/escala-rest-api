@@ -3,8 +3,6 @@
 <hr/>
 <div>
 	{{vm.status}}
-	<a class="btn btn-default" ng-click="vm.novaTroca()" role="button">Novo Servico</a>
-	<a class="btn btn-default" ng-click="vm.deletarTodos()" role="button">Deletar todos servicos</a>
 	<table class="table table-hover">
 	    <thead>
 		    <tr>
@@ -19,9 +17,13 @@
 				<td>{{ servico.usuario.nome_guerra }}</td>
 		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ vm.tipos[servico.tipo] }}</td>
-		    	<td><a class="edit ml10" ng-click="vm.solicitarTroca($index)" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+		    	<td>
+		    		<a class="edit ml10" ng-click="vm.solicitarTroca($index)" title="Edit">
+		    			<i class="glyphicon glyphicon-pencil"></i>
+		    		</a>
+		    	</td>
 		    </tr>
 	    </tbody>
 	</table>
-	<uib-pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></uib-pagination>
+  	<uib-pagination total-items="vm.servicos.meta.total" ng-model="vm.servicos.meta.page" ng-change="vm.pageChanged()"></uib-pagination>
 </div>

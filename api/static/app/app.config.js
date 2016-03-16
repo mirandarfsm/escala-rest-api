@@ -15,14 +15,7 @@
           var extractedData;
           if (operation === "getList") {
             extractedData = data.objects;
-            extractedData.first = data.first;
-            extractedData.last = data.last;
-            extractedData.next = data.next;
-            extractedData.page = data.page;
-            extractedData.pages = data.pages;
-            extractedData.per_page = data.per_page;
-            extractedData.prev = data.prev;
-            extractedData.total = data.total;   
+            extractedData.meta = data.meta;
           } else {
             extractedData = data;
           }

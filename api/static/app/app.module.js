@@ -4,6 +4,7 @@
   angular
     .module("Escalante", [
       'ngRoute',
+      'ngAnimate',
       'ui.bootstrap',
       'ngSanitize',
       'ui.select',
