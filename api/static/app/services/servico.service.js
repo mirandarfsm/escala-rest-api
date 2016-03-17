@@ -3,11 +3,11 @@
 
 	angular
 		.module('Escalante')
-		.factory('afastamentoService',afastamentoService);
+		.factory('servicoService',servicoService);
 
-	afastamentoService.$inject = ['Restangular'];
+	servicoService.$inject = ['Restangular'];
 
-	function afastamentoService(Restangular){
+	function servicoService(Restangular){
 		return Restangular.service('servicos');
 	}
 

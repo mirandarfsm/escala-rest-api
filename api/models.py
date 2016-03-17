@@ -109,6 +109,7 @@ class Servico(db.Model):
 
     def to_json(self):
         return {
+            'id': self.id,
             'url': self.get_url(),
             'usuario': self.usuario.to_json_min() if self.usuario else None,
             'usuario_url': url_for('administracao.get_usuario', id=self.usuario_id,_external=True),
@@ -129,16 +130,18 @@ class Servico(db.Model):
         }
 
     def from_json(self, json):
-        try:
-            usuario_id = args_from_url(json['usuario'], 'administracao.get_usuario')['id']
-            self.usuario = Usuario.query.get_or_404(usuario_id)
-        except (KeyError, NotFound):
-            raise ValidationError('Invalid usuario URL')
-        try:
-            escala_id = args_from_url(json['escala'], 'administracao.get_escala')['id']
-            self.escala = Escala.query.get_or_404(escala_id)
-        except (KeyError, NotFound):
-            raise ValidationError('Invalid escala URL')
+        if 'usuario' in json:
+            try:
+                self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+                self.usuario = Usuario.query.get_or_404(self.usuario_id)
+            except (KeyError, NotFound):
+                raise ValidationError('Invalid usuario URL')
+        if 'escala' in json:
+            try:
+                escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
+                self.escala = Escala.query.get_or_404(escala_id)
+            except (KeyError, NotFound):
+                raise ValidationError('Invalid escala URL')
         try:
             date = timestamp2date(json['data'])
             self.data = date 

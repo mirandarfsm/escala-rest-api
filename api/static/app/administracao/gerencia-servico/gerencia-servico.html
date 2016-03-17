@@ -37,7 +37,7 @@
 		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ vm.tipos[servico.tipo] }}</td>
 		    	<td>
-		    		<a class="edit ml10" ng-click="vm.solicitarTroca($index)" title="Edit">
+		    		<a class="edit ml10" href="#/gerencia-servico/{{servico.id}}" title="Edit">
 		    			<i class="glyphicon glyphicon-pencil"></i>
 		    		</a>
 		    	</td>

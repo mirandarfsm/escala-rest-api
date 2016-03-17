@@ -1,21 +1,28 @@
 <h3>Cadastro de Serviço</h3>
 <hr/>
 <div>
-	<form role="form" class="form">
+	<form role="form">
 		<div class="form-group">
-            <ui-select ng-model="vm.escala" theme="bootstrap">
-                <ui-select-match placeholder="Escala ">{{$select.selected.name}} </ui-select-match>
-                <ui-select-choices repeat="escala in (vm.escalas| filter: $select.search)">
-                    <span ng-bind-html="escala.name"></span>
+		 	<label>Escala:</label>
+			<p>{{vm.servico.escala.name}}</p>
+		</div>
+		<div class="form-group">
+		 	<label>Data do Serviço:</label>
+			<p>{{vm.servico.data | date: 'dd/MM/yyyy'}}</p>
+		</div>
+		<div class="form-group">
+			<label>Militares:</label>
+			<ui-select ng-model="vm.servico.usuario" theme="bootstrap">
+				<ui-select-match placeholder="Militar">{{$select.selected.nome_guerra}} </ui-select-match>
+                <ui-select-choices repeat="usuario in (vm.usuarios| filter: $select.search)">
+                    <span ng-bind-html="usuario.nome_guerra"></span>
+                    <small>
+						{{usuario.posto}} {{usuario.especialidade}}
+					</small>
                 </ui-select-choices>
-            </ui-select>
+			</ui-select>
 		</div>
-		<div class="form-group">
-			<input class="form-control" type="date" ng-model="vm.data_inicio" placeholder="Data Inicio" name="data_inicio" disabled></input>
-		</div>
-        <div class="form-group">
-			<input class="form-control" type="date" ng-model="vm.data_fim" placeholder="Data Fim" name="data_fim" disabled></input >
-		</div>
-		<button type="submit" ng-click="vm.gerarEscala()" class="btn btn-default">Submit</button>
+		<button type="submit" ng-click="vm.salvar()" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" href="#/gerencia-servico" role="button">Cancel</a>
 	</form>
 </div>

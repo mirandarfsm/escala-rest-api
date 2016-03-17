@@ -22,7 +22,7 @@
 			controller: 'GerenciaServicoDetailController',
 			controllerAs: 'vm',
 			resolve: {
-				servicoGetList: servicoGetList
+				servicoGetOne: servicoGetOne
 			}
 		});
 	}
