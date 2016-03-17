@@ -1,0 +1,50 @@
+<uib-alert ng-show="alert" type="{{vm.alert.type}}" close="closeAlert()">{{vm.alert.msg}}</uib-alert>
+<h3>Servicos</h3>
+<hr/>
+<div>
+	<form role="form" class="form-inline">
+		<div class="form-group">
+            <ui-select ng-model="vm.escala" theme="bootstrap">
+                <ui-select-match placeholder="Escala ">{{$select.selected.name}} </ui-select-match>
+                <ui-select-choices repeat="escala in (vm.escalas| filter: $select.search)">
+                    <span ng-bind-html="escala.name"></span>
+                </ui-select-choices>
+            </ui-select>
+		</div>
+		<div class="form-group">
+			<input class="form-control" type="date" ng-model="vm.data_inicio" placeholder="Data Inicio" name="data_inicio" disabled></input>
+		</div>
+        <div class="form-group">
+			<input class="form-control" type="date" ng-model="vm.data_fim" placeholder="Data Fim" name="data_fim" disabled></input >
+		</div>
+		<button type="submit" ng-click="vm.getServicos()" class="btn btn-default">Submit</button>
+	</form>
+</div>
+<div ng-show="vm.servicos">
+	{{vm.status}}
+	<table class="table table-hover">
+	    <thead>
+		    <tr>
+				<th data-field="name" data-sortable="true">Usuário</th>
+		        <th data-field="name" data-sortable="true">Data</th>
+				<th data-field="name" data-sortable="true">Tipo</th>
+		        <th data-field="operate">Solicitar Troca</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="servico in vm.servicos">
+				<td>{{ servico.usuario.nome_guerra }}</td>
+		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ vm.tipos[servico.tipo] }}</td>
+		    	<td>
+		    		<a class="edit ml10" ng-click="vm.solicitarTroca($index)" title="Edit">
+		    			<i class="glyphicon glyphicon-pencil"></i>
+		    		</a>
+		    	</td>
+		    </tr>
+	    </tbody>
+	</table>
+	<div class="text-center">
+		<uib-pagination total-items="vm.servicos.meta.total" items-per-page="vm.servicos.meta.per_page" ng-model="vm.servicos.meta.page" ng-change="vm.pageChanged()"></uib-pagination>
+	</div>
+</div>

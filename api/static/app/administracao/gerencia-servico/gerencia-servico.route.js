@@ -10,15 +10,15 @@
 	function config($routeProvider){
 		$routeProvider
 		.when('/gerencia-servico',{
-			templateUrl: 'app/administracao/gerencia-servico/gerencia-servico-form.html',
+			templateUrl: 'app/administracao/gerencia-servico/gerencia-servico.html',
 			controller: 'GerenciaServicoController',
 			controllerAs: 'vm',
 			resolve: {
 				escalaGetList: escalaGetList
 			}
 		})
-		.when('/gerencia-servico/escala/:id',{
-			templateUrl: 'app/administracao/gerencia-servico/gerencia-servico-list.html',
+		.when('/gerencia-servico/:id',{
+			templateUrl: 'app/administracao/gerencia-servico/gerencia-servico-detail.html',
 			controller: 'GerenciaServicoDetailController',
 			controllerAs: 'vm',
 			resolve: {
@@ -31,8 +31,8 @@
 		return escalaService.getList();
     }
 	
-	function servicoGetList(escalaService,$route){
-		return escalaService.one($route.current.params.id).getList('servico');
+	function servicoGetOne(servicoService,$route){
+		return servicoService.one($route.current.params.id).get();
 	}
     
 	

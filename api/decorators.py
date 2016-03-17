@@ -50,12 +50,12 @@ def rate_limit(limit, per, scope_func=lambda: request.remote_addr):
     return decorator
 
 
-def paginate(max_per_page=10):
+def paginate(default_per_page=10,max_per_page=50):
     def decorator(f):
         @functools.wraps(f)
         def wrapped(*args, **kwargs):
             page = request.args.get('page', 1, type=int)
-            per_page = min(request.args.get('per_page', max_per_page,
+            per_page = min(request.args.get('per_page', default_per_page,
                                             type=int), max_per_page)
             query = f(*args, **kwargs)
             p = query.paginate(page, per_page)

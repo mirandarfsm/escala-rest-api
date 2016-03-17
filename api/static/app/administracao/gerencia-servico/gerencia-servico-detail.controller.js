@@ -5,24 +5,23 @@
 		.module('Escalante')
 		.controller('GerenciaServicoDetailController',GerenciaServicoDetailController);
 	
-	GerenciaServicoDetailController.$inject = ['servicoGetList','escalaService','$scope'];
+	GerenciaServicoDetailController.$inject = ['servicoGetList','$location'];
 	
-	function GerenciaServicoDetailController(servicoGetList,escalaService,$scope){
+	function GerenciaServicoDetailController(servicoGetOne,$location){
 		var vm = this;
 		
-		vm.itemPerPage = 10;
-		vm.itemsPerPage = [10, 30, 50];
-		vm.servicos = servicoGetList;
-		vm.tipos = ['Preto','Vermelho','Roxo'];
-		
-		
-		vm.pageChanged = pageChanged;
-		
-		function pageChanged(){
-			vm.servicos = vm.servicos.getList({
-				per_page: itemPerPage, 
-				page: vm.servicos.meta.page}).$object;
-		}
+		vm.servico = servicoGetOne;
+
+		vm.salvar = salvar;
+
+
+		function salvar() {
+            vm.servico.save().then(function(){
+                $location.path('/gerencia-servico');
+            });
+            //usuarioService.save(vm.usuario).success(function(){
+            //});
+        }
 	}
 	
 })();

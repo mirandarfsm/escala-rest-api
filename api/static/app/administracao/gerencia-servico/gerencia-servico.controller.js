@@ -7,26 +7,25 @@
 	
 	GerenciaServicoController.$inject = ['escalaGetList','escalaService','$location'];
 	
-	function GerenciaServicoController(escalaGetList,escalaService,$location){
+	function GerenciaServicoController(escalaGetList){
 		var vm = this;
 		
 		vm.escalas = escalaGetList;
+		vm.tipos = ['Preto','Vermelho','Roxo'];
 		
-		vm.gerarEscala = gerarEscala; 
-		vm.cancelar = cancelar;
+		vm.getServicos = getServicos;
+		vm.pageChanged = pageChanged;
 		
-	    function gerarEscala(){
-	        escalaService.one(vm.escala.id).one('generate').put().then(function(data){
-	        	console.log(vm.escala);
-	        	$location.path('/gerencia-servico/escala/' + vm.escala.id);
-	        });
-	    }
-	    
-	    function cancelar (){
-	        vm.escala = {}
-	        vm.data_inicio = "";
-	        vm.data_fim = undefined;
-	    }
+		function pageChanged(){
+			vm.servicos = vm.servicos.getList({
+				per_page: vm.itemPerPage, 
+				page: vm.servicos.meta.page}).$object;
+		}
+
+		function getServicos(){
+			vm.servicos = vm.escala.getList('servico').$object;
+		}
+
 	}
 	
 })();

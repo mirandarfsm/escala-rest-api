@@ -1,0 +1,21 @@
+<h3>Cadastro de Serviço</h3>
+<hr/>
+<div>
+	<form role="form" class="form">
+		<div class="form-group">
+            <ui-select ng-model="vm.escala" theme="bootstrap">
+                <ui-select-match placeholder="Escala ">{{$select.selected.name}} </ui-select-match>
+                <ui-select-choices repeat="escala in (vm.escalas| filter: $select.search)">
+                    <span ng-bind-html="escala.name"></span>
+                </ui-select-choices>
+            </ui-select>
+		</div>
+		<div class="form-group">
+			<input class="form-control" type="date" ng-model="vm.data_inicio" placeholder="Data Inicio" name="data_inicio" disabled></input>
+		</div>
+        <div class="form-group">
+			<input class="form-control" type="date" ng-model="vm.data_fim" placeholder="Data Fim" name="data_fim" disabled></input >
+		</div>
+		<button type="submit" ng-click="vm.gerarEscala()" class="btn btn-default">Submit</button>
+	</form>
+</div>
