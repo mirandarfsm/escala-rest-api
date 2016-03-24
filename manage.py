@@ -51,6 +51,7 @@ def populatedb():
 @manager.command
 def test():
     from subprocess import call
+    #nosetests -v --with-coverage --cover-package=api --cover-branches --cover-erase --cover-html --cover-html-dir=cover --exe
     call(['nosetests', '-v',
           '--with-coverage', '--cover-package=api', '--cover-branches',
           '--cover-erase', '--cover-html', '--cover-html-dir=cover','--exe'])
