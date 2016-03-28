@@ -45,13 +45,15 @@ def to_json(inst, cls):
 '''
 
 def timestamp2date(timestamp):
+    #return datetime.fromtimestamp(timestamp/1e3)
     if timestamp:
-        return datetime.fromtimestamp(timestamp/1e3)
+        return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
     return timestamp
 
 def date2timestamp(date):
+    #return time.mktime(date.timetuple())*1e3
     if date:
-        return time.mktime(date.timetuple())*1e3
+        return datetime.combine(date,datetime.min.time()).isoformat()
     return date
 
 class TipoServico(object):

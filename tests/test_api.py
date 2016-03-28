@@ -58,7 +58,16 @@ class TestAPI(unittest.TestCase):
 
         # create new
         rv, json = self.client.post('/api/v1.0/usuarios/',
-                                    data={'name': 'susan','email':'susan@','saram':123,'data_promocao':1458820097283})
+                                    data={
+                                          'name': 'susan',
+                                          'username':'susan',
+                                          'nome_guerra':'susan',
+                                          'especialidade':'3S',
+                                          'posto':'SIN','email':'susan@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T00:00:00.0Z"
+                                        }
+                                    )
         self.assertTrue(rv.status_code == 201)
         susan_url = rv.headers['Location']
 
@@ -67,13 +76,23 @@ class TestAPI(unittest.TestCase):
         self.assertTrue(rv.status_code == 200)
         self.assertTrue(json['name'] == 'susan')
         self.assertTrue(json['url'] == susan_url)
-        self.assertTrue(json['data_promocao'] == '2011-06-16')
+        self.assertTrue(json['data_promocao'] == "2016-03-28T00:00:00")
         self.assertTrue(json['saram'] == 123)
         self.assertTrue(json['email'] == 'susan@')
 
         # create new
         rv, json = self.client.post('/api/v1.0/usuarios/',
-                                    data={'name': 'david','email':'david@','saram':123,'data_promocao':1458820097283})
+                                    data={
+                                          'name': 'david',
+                                          'username':'david',
+                                          'nome_guerra':'david',
+                                          'especialidade':'1S',
+                                          'posto':'SAD',
+                                          'email':'david@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T11:08:12.144Z"
+                                        }
+                                    )
         self.assertTrue(rv.status_code == 201)
         david_url = rv.headers['Location']
 
@@ -82,7 +101,7 @@ class TestAPI(unittest.TestCase):
         self.assertTrue(rv.status_code == 200)
         self.assertTrue(json['name'] == 'david')
         self.assertTrue(json['url'] == david_url)
-        self.assertTrue(json['data_promocao'] == '2011-06-16')
+        self.assertTrue(json['data_promocao'] == "2016-03-28T00:00:00")
         self.assertTrue(json['saram'] == 123)
         self.assertTrue(json['email'] == 'david@')
 
@@ -96,7 +115,17 @@ class TestAPI(unittest.TestCase):
                              data={'not-name': 'david'}))
 
         # modify
-        rv, json = self.client.put(david_url, data={'name': 'david2','email':'david@','saram':123,'data_promocao':1458820097283})
+        rv, json = self.client.put(david_url, data={
+                                          'name': 'david2',
+                                          'username':'david',
+                                          'nome_guerra':'david',
+                                          'especialidade':'1S',
+                                          'posto':'SAD',
+                                          'email':'david@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T11:08:12.144Z"
+                                        }
+                                    )
         self.assertTrue(rv.status_code == 200)
 
         # get
@@ -107,10 +136,10 @@ class TestAPI(unittest.TestCase):
         # get collection
         rv, json = self.client.get('/api/v1.0/usuarios/')
         self.assertTrue(rv.status_code == 200)
-        urls = [usuario.url for usuario in json['objects']]
+        urls = [usuario['url'] for usuario in json['objects']]
         self.assertTrue(susan_url in urls)
         self.assertTrue(david_url in urls)
-        self.assertTrue(len(urls) == 2)
+        self.assertTrue(len(urls) == 3)
 
         # delete
         rv, json = self.client.delete(susan_url)
@@ -119,10 +148,10 @@ class TestAPI(unittest.TestCase):
         # get collection
         rv, json = self.client.get('/api/v1.0/usuarios/')
         self.assertTrue(rv.status_code == 200)
-        urls = [usuario.url for usuario in json['objects']]
+        urls = [usuario['url'] for usuario in json['objects']]
         self.assertFalse(susan_url in urls)
         self.assertTrue(david_url in urls)
-        self.assertTrue(len(urls) == 1)
+        self.assertTrue(len(urls) == 2)
 
     def test_escalas(self):
         # get collection
