@@ -10,16 +10,19 @@
         var vm = this;
 
         vm.usuario = usuarioGetOne;
+        vm.popup = false;
 
+        vm.open = open;
         vm.salvar = salvar;
+   
+        function open(){
+             vm.popup = true;
+        }
 
         function salvar() {
-            vm.usuario.data_promocao = new Date(vm.data_promocao).getTime();
             vm.usuario.save().then(function(){
                 $location.path('/cadastro-usuario');
             });
-            //usuarioService.save(vm.usuario).success(function(){
-            //});
         }
     }
 

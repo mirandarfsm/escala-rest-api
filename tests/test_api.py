@@ -52,9 +52,9 @@ class TestAPI(unittest.TestCase):
 
     def test_usuarios(self):
         # get collection
-        #rv, json = self.client.get('/api/v1.0/usuarios/')
-        #self.assertTrue(rv.status_code == 200)
-        #self.assertTrue(json['objects'] == [])
+        rv, json = self.client.get('/api/v1.0/usuarios/')
+        self.assertTrue(rv.status_code == 200)
+        self.assertTrue(len(json['objects']) == 1)
 
         # create new
         rv, json = self.client.post('/api/v1.0/usuarios/',
@@ -157,11 +157,15 @@ class TestAPI(unittest.TestCase):
         # get collection
         rv, json = self.client.get('/api/v1.0/escalas/')
         self.assertTrue(rv.status_code == 200)
-        self.assertTrue(json['urls'] == [])
+        self.assertTrue(json['objects'] == [])
 
         # create new
         rv, json = self.client.post('/api/v1.0/escalas/',
-                                    data={'name': 'sobreaviso administrativo ccasj'})
+                                    data={
+                                          'name': 'sobreaviso administrativo ccasj',
+                                          'tipo':'0'
+                                          }
+                                    )
         self.assertTrue(rv.status_code == 201)
         administrativo_url = rv.headers['Location']
 
@@ -173,7 +177,11 @@ class TestAPI(unittest.TestCase):
 
         # create new
         rv, json = self.client.post('/api/v1.0/escalas/',
-                                    data={'name': 'sobreaviso tecnico ccasj'})
+                                    data={
+                                          'name': 'sobreaviso tecnico ccasj',
+                                          'tipo': '1'
+                                          }
+                                    )
         self.assertTrue(rv.status_code == 201)
         tecnico_url = rv.headers['Location']
 
@@ -191,7 +199,11 @@ class TestAPI(unittest.TestCase):
             self.client.post('/api/v1.0/escalas/', data={'not-name': 'tecnico'}))
 
         # modify
-        rv, json = self.client.put(tecnico_url, data={'name': 'tecnico2'})
+        rv, json = self.client.put(tecnico_url, data={
+                                                      'name': 'tecnico2',
+                                                      'tipo':'0'
+                                                      }
+                                   )
         self.assertTrue(rv.status_code == 200)
 
         # get
@@ -202,9 +214,10 @@ class TestAPI(unittest.TestCase):
         # get collection
         rv, json = self.client.get('/api/v1.0/escalas/')
         self.assertTrue(rv.status_code == 200)
-        self.assertTrue(administrativo_url in json['urls'])
-        self.assertTrue(tecnico_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 2)
+        urls = [ escala['url'] for escala in json['objects'] ]
+        self.assertTrue(administrativo_url in urls)
+        self.assertTrue(tecnico_url in urls)
+        self.assertTrue(len(urls) == 2)
 
         # delete
         rv, json = self.client.delete(tecnico_url)
@@ -213,9 +226,10 @@ class TestAPI(unittest.TestCase):
         # get collection
         rv, json = self.client.get('/api/v1.0/escalas/')
         self.assertTrue(rv.status_code == 200)
-        self.assertTrue(administrativo_url in json['urls'])
-        self.assertFalse(tecnico_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 1)
+        urls = [ escala['url'] for escala in json['objects'] ]
+        self.assertTrue(administrativo_url in urls)
+        self.assertFalse(tecnico_url in urls)
+        self.assertTrue(len(urls) == 1)
 
     def test_servicos(self):
         # create new usuarios
