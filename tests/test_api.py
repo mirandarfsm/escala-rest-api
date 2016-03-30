@@ -234,64 +234,83 @@ class TestAPI(unittest.TestCase):
     def test_servicos(self):
         # create new usuarios
         rv, json = self.client.post('/api/v1.0/usuarios/',
-                                    data={'name': 'susan','email':'susan@','saram':123,'data_promocao':1458820097283})
+                                    data={
+                                          'name': 'susan',
+                                          'username':'susan',
+                                          'nome_guerra':'susan',
+                                          'especialidade':'3S',
+                                          'posto':'SIN','email':'susan@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T00:00:00.0Z"
+                                        }
+                                    )
         self.assertTrue(rv.status_code == 201)
         susan_url = rv.headers['Location']
 
         rv, json = self.client.post('/api/v1.0/usuarios/',
-                                    data={'name': 'david','email':'susan@','saram':123,'data_promocao':1458820097283})
+                                   data={
+                                          'name': 'david2',
+                                          'username':'david',
+                                          'nome_guerra':'david',
+                                          'especialidade':'1S',
+                                          'posto':'SAD',
+                                          'email':'david@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T11:08:12.144Z"
+                                        }
+                                   )
         self.assertTrue(rv.status_code == 201)
         david_url = rv.headers['Location']
 
         # create new classes
         rv, json = self.client.post('/api/v1.0/escalas/',
-                                    data={'name': 'sobreaviso administrativo ccasj'})
+                                    data={
+                                          'name': 'sobreaviso administrativo ccasj',
+                                          'tipo':'0'
+                                          }
+                                    )
         self.assertTrue(rv.status_code == 201)
         administrativo_url = rv.headers['Location']
 
         rv, json = self.client.post('/api/v1.0/escalas/',
-                                    data={'name': 'sobreaviso tecnico ccasj'})
+                                    data={
+                                          'name': 'sobreaviso tecnico ccasj',
+                                          'tipo': '1'
+                                          }
+                                    )
         self.assertTrue(rv.status_code == 201)
         tecnico_url = rv.headers['Location']
 
         # register usuarios to classes
         rv, json = self.client.post('/api/v1.0/servicos/',
-                                    data={'usuario': susan_url,
-                                          'escala': administrativo_url,
-                                          'data': '2012-01-11',
+                                    data={'usuario': {'url': susan_url },
+                                          'escala': {'url': administrativo_url },
+                                          'data': "2012-01-11T11:08:12.144Z",
                                           'tipo': 1})
         self.assertTrue(rv.status_code == 201)
         susan_in_administrativo_url = rv.headers['Location']
 
         rv, json = self.client.post('/api/v1.0/servicos/',
-                                    data={'usuario': susan_url,
-                                          'escala': tecnico_url,
-                                          'data': '2012-01-12',
-                                          'tipo': 2})
-        self.assertTrue(rv.status_code == 201)
-        susan_in_tecnico_url = rv.headers['Location']
-
-        rv, json = self.client.post('/api/v1.0/servicos/',
-                                    data={'usuario': david_url,
-                                          'escala': administrativo_url,
-                                          'data': '2012-01-13',
+                                    data={'usuario': {'url': david_url },
+                                          'escala': {'url': administrativo_url },
+                                          'data': "2012-01-13T11:08:12.144Z",
                                           'tipo': 0})
         self.assertTrue(rv.status_code == 201)
         david_in_administrativo_url = rv.headers['Location']
 
         # get registration
-        rv, json = self.client.get(susan_in_tecnico_url)
+        rv, json = self.client.get(susan_in_administrativo_url)
         self.assertTrue(rv.status_code == 200)
-        self.assertTrue(json['usuario'] == susan_url)
-        self.assertTrue(json['escala'] == tecnico_url)
+        self.assertTrue(json['usuario']['url'] == susan_url)
+        self.assertTrue(json['escala']['url'] == administrativo_url)
 
         # get collection
         rv, json = self.client.get('/api/v1.0/servicos/')
         self.assertTrue(rv.status_code == 200)
-        self.assertTrue(susan_in_administrativo_url in json['urls'])
-        self.assertTrue(susan_in_tecnico_url in json['urls'])
-        self.assertTrue(david_in_administrativo_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 3)
+        urls = [ servico['url'] for servico in json['objects'] ]
+        self.assertTrue(susan_in_administrativo_url in urls)
+        self.assertTrue(david_in_administrativo_url in urls)
+        self.assertTrue(len(urls) == 2)
 
         # bad registrations
         rv,json = self.client.post('/api/v1.0/servicos/', data={})
@@ -299,31 +318,37 @@ class TestAPI(unittest.TestCase):
 
         self.assertRaises(ValidationError, lambda:
             self.client.post('/api/v1.0/servicos/',
-                             data={'usuario': david_url}))
+                             data={'usuario': {'url': david_url}}))
 
         self.assertRaises(ValidationError, lambda:
             self.client.post('/api/v1.0/servicos/',
-                             data={'escala': administrativo_url}))
+                             data={'escala': {'url': administrativo_url}}))
 
         self.assertRaises(ValidationError, lambda:
             self.client.post('/api/v1.0/servicos/',
-                             data={'usuario': david_url, 'escala': 'bad-url'}))
+                                data={
+                                    'usuario': {'url': david_url},
+                                    'escala': {'url': 'bad-url'}
+                                }
+                            )
+            )
 
         self.assertRaises(ValidationError, lambda:
             self.client.post('/api/v1.0/servicos/',
-                             data={'usuario': david_url,
-                                   'escala': administrativo_url + '1'}))
+                             data={'usuario': {'url': david_url},
+                                   'escala': {'url': administrativo_url + '1'}
+                                    }
+                             )
+            )
         db.session.remove()
 
         # get classes from each student
         rv, json = self.client.get(susan_url)
         self.assertTrue(rv.status_code == 200)
-        susans_serv_url = json['servicos']
-        rv, json = self.client.get(susans_serv_url)
-        self.assertTrue(rv.status_code == 200)
-        self.assertTrue(susan_in_administrativo_url in json['urls'])
-        self.assertTrue(susan_in_tecnico_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 2)
+        
+        urls = [ servico['url'] for servico in json['servicos']]
+        self.assertTrue(susan_in_administrativo_url in urls)
+        self.assertTrue(len(urls) == 1)
 
         rv, json = self.client.get(david_url)
         self.assertTrue(rv.status_code == 200)

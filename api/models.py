@@ -170,20 +170,16 @@ class Servico(db.Model):
             try:
                 self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
                 self.usuario = Usuario.query.get_or_404(self.usuario_id)
-            except (KeyError, NotFound):
+            except (KeyError, NotFound, TypeError):
                 raise ValidationError('Invalid usuario URL')
         if 'escala' in json:
             try:
                 escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
                 self.escala = Escala.query.get_or_404(escala_id)
-            except (KeyError, NotFound):
+            except (KeyError, NotFound, TypeError):
                 raise ValidationError('Invalid escala URL')
         try:
-            date = timestamp2date(json['data'])
-            self.data = date 
-        except KeyError:
-            raise ValidationError('Invalid data: '+json['data'])
-        try:
+            self.data = timestamp2date(json['data'])
             self.tipo = json['tipo']
         except KeyError as e:
             raise ValidationError('Invalid servico: missing ' + e.args[0])
