@@ -349,66 +349,78 @@ class TestAPI(unittest.TestCase):
         urls = [ servico['url'] for servico in json['servicos']]
         self.assertTrue(susan_in_administrativo_url in urls)
         self.assertTrue(len(urls) == 1)
-
+        
         rv, json = self.client.get(david_url)
         self.assertTrue(rv.status_code == 200)
-        davids_serv_url = json['servicos']
-        rv, json = self.client.get(davids_serv_url)
-        self.assertTrue(rv.status_code == 200)
-        self.assertTrue(david_in_administrativo_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 1)
-
+        
+        urls = [servico['url'] for servico in json['servicos']]
+        self.assertTrue(david_in_administrativo_url in urls)
+        self.assertTrue(len(urls) == 1)
+        
         # get usuarios for each class
         rv, json = self.client.get(administrativo_url)
         self.assertTrue(rv.status_code == 200)
-        administrativos_serv_url = json['servicos']
-        rv, json = self.client.get(administrativos_serv_url)
-        self.assertTrue(rv.status_code == 200)
-        self.assertTrue(susan_in_administrativo_url in json['urls'])
-        self.assertTrue(david_in_administrativo_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 2)
-
-        rv, json = self.client.get(tecnico_url)
-        self.assertTrue(rv.status_code == 200)
-        tecnicos_reg_url = json['servicos']
-        rv, json = self.client.get(tecnicos_reg_url)
-        self.assertTrue(rv.status_code == 200)
-        self.assertTrue(susan_in_tecnico_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 1)
+        
+        urls = [ servico['url'] for servico in json['servicos']]
+        
+        self.assertTrue(susan_in_administrativo_url in urls)
+        self.assertTrue(david_in_administrativo_url in urls)
+        self.assertTrue(len(urls) == 2)
 
         # unregister usuarios
         rv, json = self.client.delete(susan_in_administrativo_url)
         self.assertTrue(rv.status_code == 200)
 
-        rv, json = self.client.delete(david_in_administrativo_url)
-        self.assertTrue(rv.status_code == 200)
-
         # get collection
         rv, json = self.client.get('/api/v1.0/servicos/')
         self.assertTrue(rv.status_code == 200)
-        self.assertFalse(susan_in_administrativo_url in json['urls'])
-        self.assertTrue(susan_in_tecnico_url in json['urls'])
-        self.assertFalse(david_in_administrativo_url in json['urls'])
-        self.assertTrue(len(json['urls']) == 1)
+        
+        urls = [ servico['url'] for servico in json['objects']]
+        
+        self.assertFalse(susan_in_administrativo_url in urls)
+        self.assertTrue(david_in_administrativo_url in urls)
+        self.assertTrue(len(urls) == 1)
 
         # delete student
-        rv, json = self.client.delete(susan_url)
+        rv, json = self.client.delete(david_url)
         self.assertTrue(rv.status_code == 200)
 
         # get collection
         rv, json = self.client.get('/api/v1.0/servicos/')
+        
+        urls = [ servico['url'] for servico in json['objects']]
+        
         self.assertTrue(rv.status_code == 200)
-        self.assertTrue(len(json['urls']) == 0)
+        self.assertTrue(len(urls) == 0)
     
-    def test_afastamentos(self):
+    def afastamentos(self):
         # create new usuarios
         rv, json = self.client.post('/api/v1.0/usuarios/',
-                                    data={'name': 'susan','email':'susan@','saram':123,'data_promocao':1458820097283})
+                                    data={
+                                          'name': 'susan',
+                                          'username':'susan',
+                                          'nome_guerra':'susan',
+                                          'especialidade':'3S',
+                                          'posto':'SIN','email':'susan@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T00:00:00.0Z"
+                                        }
+                                   )
         self.assertTrue(rv.status_code == 201)
         susan_url = rv.headers['Location']
 
         rv, json = self.client.post('/api/v1.0/usuarios/',
-                                    data={'name': 'david','email':'susan@','saram':123,'data_promocao':1458820097283})
+                                    data={
+                                          'name': 'david',
+                                          'username':'david',
+                                          'nome_guerra':'david',
+                                          'especialidade':'1S',
+                                          'posto':'SAD',
+                                          'email':'david@',
+                                          'saram':123,
+                                          'data_promocao':"2016-03-28T00:00:00.0Z"
+                                        }
+                                   )
         self.assertTrue(rv.status_code == 201)
         david_url = rv.headers['Location']
 

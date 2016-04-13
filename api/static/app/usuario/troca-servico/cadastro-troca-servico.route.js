@@ -11,7 +11,7 @@
 	$routeProvider  
 	// cadastro de troca de servico
 	.when('/cadastro-troca-servico', {
-		templateUrl: 'app/usuario/troca-servico/cadastro-troca-servico-list.html',
+		templateUrl: 'app/usuario/troca-servico/cadastro-troca-servico.html',
 		controller: 'CadastroTrocaServicoController',
 		controllerAs: 'vm',
 		resolve: {
@@ -20,7 +20,7 @@
 		}
 	})
 	.when('/cadastro-troca-servico/new', {
-		templateUrl: 'app/usuario/troca-servico/cadastro-troca-servico-form.html',
+		templateUrl: 'app/usuario/troca-servico/cadastro-troca-servico-detail.html',
 		controller: 'CadastroTrocaServicoDetailController',
 		controllerAs: 'vm',
 		resolve: {

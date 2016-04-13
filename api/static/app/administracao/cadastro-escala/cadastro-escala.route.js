@@ -11,7 +11,7 @@
 		$routeProvider
 		// cadastro de escala
 		.when('/cadastro-escala', {
-		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala-list.html',
+		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala.html',
 		  controller: 'CadastroEscalaController',
 		  controllerAs: 'vm',
 		  resolve:{
@@ -19,7 +19,7 @@
 		  }
 		})
 		.when('/cadastro-escala/new', {
-		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala-form.html',
+		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala-detail.html',
 		  controller: 'CadastroEscalaDetailController',
 		  controllerAs: 'vm',
 		  resolve:{
@@ -28,7 +28,7 @@
 		  }
 		})
 		.when('/cadastro-escala/:id', {
-		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala-form.html',
+		  templateUrl: 'app/administracao/cadastro-escala/cadastro-escala-detail.html',
 		  controller: 'CadastroEscalaDetailController',
 		  controllerAs: 'vm',
 		  resolve:{

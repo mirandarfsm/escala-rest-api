@@ -11,7 +11,7 @@
 		$routeProvider
 		// cadastro de usuario
 		.when('/cadastro-usuario', {
-			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-list.html',
+			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario.html',
 			controller: 'CadastroUsuarioController',
 			controllerAs: 'vm',
 			resolve: {
@@ -19,7 +19,7 @@
 			}
 		})
 		.when('/cadastro-usuario/new', {
-			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-form.html',
+			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-detail.html',
 			controller: 'CadastroUsuarioDetailController',
 			controllerAs: 'vm',
 			resolve: {
@@ -27,7 +27,7 @@
 			}
 		})
 		.when('/cadastro-usuario/:id', {
-			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-form.html',
+			templateUrl: 'app/administracao/cadastro-usuario/cadastro-usuario-detail.html',
 			controller: 'CadastroUsuarioDetailController',
 			controllerAs: 'vm',
 			resolve: {

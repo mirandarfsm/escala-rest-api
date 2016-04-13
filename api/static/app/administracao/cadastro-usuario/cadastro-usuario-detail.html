@@ -1,0 +1,40 @@
+<h3>Cadastro de Usuário</h3>
+<hr/>
+<div>
+	<form role="form">
+		<div class="form-group">
+		 	<label>Nome:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.name" name="name" ></input>
+		</div>
+		<div class="form-group">
+		 	<label>Nome de Guerra:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.nome_guerra" name="nome_guerra" ></input>
+		</div>
+		<div class="form-group">
+		 	<label>Email:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.email" name="email" ></input>
+		</div>
+		<div class="form-group">
+		 	<label>Login:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.username" name="username"></input>
+		</div>
+		<div class="form-group">
+		 	<label>Saram:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.saram" name="saram"></input>
+		</div>
+		<div class="form-group">
+		 	<label>Posto:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.posto" name="posto"></input>
+		</div>
+		<div class="form-group">
+		 	<label>Especialidade:</label>
+			<input class="form-control" type="text" ng-model="vm.usuario.especialidade" name="especialidade"></input>
+		</div>
+		<div class="form-group">
+		 	<label>Data Promação:</label>
+			<input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.usuario.data_promocao" is-open="vm.popup" ng-click="vm.open()" close-text="Close" />
+		</div>
+		<button type="submit" ng-click="vm.salvar()" class="btn btn-default">Submit</button>
+		<a class="btn btn-default" href="#/cadastro-usuario" role="button">Cancel</a>
+	</form>
+</div>
