@@ -5,7 +5,7 @@ from werkzeug.exceptions import NotFound
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import url_for, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import sqltypes 
+from sqlalchemy import types
 from .helpers import args_from_url
 from .errors import ValidationError
 
@@ -17,16 +17,16 @@ def to_json(inst, cls):
     Jsonify the sql alchemy query result.
     """
     convert = dict()
-    convert[sqlalchemy.sql.sqltypes.Date] = date2timestamp
+    convert['DATE'] = date2timestamp
     # add your coversions for things like datetime's 
     # and what-not that aren't serializable.
     d = dict()
     for c in cls.__table__.columns:
         v = getattr(inst, c.name)
-        print type(c.type), type(convert.keys()[0])
-        if c.type in convert.keys() and v is not None:
+        current_type = str(c.type)
+        if current_type in convert.keys() and v is not None:
             try:
-                d[c.name] = convert[c.type](v)
+                d[c.name] = convert[current_type](v)
             except:
                 d[c.name] = "Error:  Failed to covert using ", str(convert[c.type])
         elif v is None:
@@ -34,18 +34,6 @@ def to_json(inst, cls):
         else:
             d[c.name] = v
     return d
-'''    
-    class Person(base):
-    __tablename__ = 'person'
-    id = Column(Integer, Sequence('person_id_seq'), primary_key=True)
-    first_name = Column(Text)
-    last_name = Column(Text)
-    email = Column(Text)
-
-    @property
-    def json(self):
-        return to_json(self, self.__class__)
-'''
 
 def timestamp2date(timestamp):
     #return datetime.fromtimestamp(timestamp/1e3)
@@ -87,35 +75,12 @@ class TrocaServico(db.Model):
         return url_for('api.get_usuario_troca_servico', id=self.id, _external=True)
 
     def to_json(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'substituido': self.substituido.to_json_min() if self.substituido else None,
-            'substituido_url': url_for('administracao.get_usuario', id=self.substituido_id,_external=True),
-            'substituido': self.substituto.to_json_min() if self.substituto else None,
-            'substituto_url': url_for('administracao.get_usuario', id=self.substituto_id,_external=True) if self.substituto_id else None,
-            'servico': self.servico.to_json_min(),
-            'servico_url': url_for('administracao.get_servico', id=self.servico_id,_external=True),
-            'data': date2timestamp(self.data),
-            'motivo': self.motivo
-        }
-    
-    def to_json_min(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'substituido': self.substituido.to_json_min() if self.substituido else None,
-            'substituido_url': url_for('administracao.get_usuario', id=self.substituido_id,_external=True),
-            'substituto_url': url_for('administracao.get_usuario', id=self.substituto_id,_external=True)if self.substituto_id else None,
-            'servico': self.servico.to_json_min(),
-            'servico_url': url_for('administracao.get_servico', id=self.servico_id,_external=True),
-            'data': date2timestamp(self.data),
-            'motivo': self.motivo
-        }
+        return to_json(self, self.__class__)
 
     def from_json(self, json):
         try:
-            servico_id = args_from_url(json['servico']['url'], 'administracao.get_servico')['id']
+            servico_id = json['servico']['id']
+            #servico_id = args_from_url(json['servico']['url'], 'administracao.get_servico')['id']
             self.servico = Servico.query.get_or_404(servico_id)
         except (KeyError, NotFound):
             raise ValidationError('Invalid servico URL')
@@ -147,38 +112,21 @@ class Servico(db.Model):
         return url_for('administracao.get_servico', id=self.id, _external=True)
 
     def to_json(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'usuario': self.usuario.to_json_min() if self.usuario else None,
-            'usuario_url': url_for('administracao.get_usuario', id=self.usuario_id,_external=True),
-            'escala': self.escala.to_json_min() if self.escala else None,
-            'escala_url': url_for('administracao.get_escala', id=self.escala_id,_external=True),
-            'data': date2timestamp(self.data),
-            'tipo': self.tipo
-        }
-    
-    def to_json_min(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'usuario': self.usuario.to_json_min() if self.usuario else None,
-            'escala': self.escala.to_json_min() if self.escala else None,
-            'data': date2timestamp(self.data),
-            'tipo': self.tipo
-        }
+        return to_json(self, self.__class__)
 
     def from_json(self, json):
         if 'usuario' in json:
             try:
-                self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+                self.usuario_id = json['usuario']['id']
+                #self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
                 self.usuario = Usuario.query.get_or_404(self.usuario_id)
             except (KeyError, NotFound, TypeError):
                 raise ValidationError('Invalid usuario URL')
         if 'escala' in json:
             try:
-                escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
-                self.escala = Escala.query.get_or_404(escala_id)
+                self.escala_id = json['escala']['id']
+                #escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
+                self.escala = Escala.query.get_or_404(self.escala_id)
             except (KeyError, NotFound, TypeError):
                 raise ValidationError('Invalid escala URL')
         try:
@@ -214,42 +162,10 @@ class Usuario(db.Model):
     def get_url(self):
         return url_for('administracao.get_usuario', id=self.id, _external=True)
 
-    @property
-    def json(self):
-        return to_json(self, self.__class__)
-
     def to_json(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'name': self.name,
-            'nome_guerra': self.nome_guerra,
-            'email': self.email,
-            'admin': self.admin,
-            'especialidade': self.especialidade,
-            'posto': self.posto,
-            'saram': self.saram,
-            'username': self.username,
-            'data_promocao': date2timestamp(self.data_promocao),
-            'escalas': [escala.to_json_min() for escala in self.escalas.all()],
-            'afastamentos': [afastamento.to_json_min() for afastamento in self.afastamentos],
-            'servicos': [servico.to_json_min() for servico in self.servicos.all()]
-        }
-    
-    def to_json_min(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'name': self.name,
-            'nome_guerra': self.nome_guerra,
-            'email': self.email,
-            'admin': self.admin,
-            'especialidade': self.especialidade,
-            'posto': self.posto,
-            'saram': self.saram,
-            'username': self.username,
-            'data_promocao': date2timestamp(self.data_promocao)
-        }
+        dict = to_json(self, self.__class__)
+        del dict['password_hash']
+        return dict
 
     def from_json(self, json):
         try:
@@ -347,29 +263,12 @@ class Escala(db.Model):
         return url_for('administracao.get_escala', id=self.id, _external=True)
 
     def to_json(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'name': self.name,
-            'tipo': self.tipo,
-            'usuarios': [usuario.to_json() for usuario in self.usuarios.all()],
-            'servicos': [servico.to_json_min() for servico in self.servicos.all()],
-            'usuarios_url': url_for('administracao.get_escala_usuario',id=self.id, _external=True),
-            'servicos_url': url_for('administracao.get_escala_servico',id=self.id, _external=True)
-        }
-    
-    def to_json_min(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'name': self.name,
-            'tipo': self.tipo
-        }
+        return to_json(self, self.__class__)
 
     def from_json(self, json):
         if 'usuarios' in json:
             try:
-                self.usuarios = [Usuario.query.get_or_404(args_from_url(usuario['url'], 'administracao.get_usuario')['id']) for usuario in json['usuarios']]
+                self.usuarios = [Usuario.query.get_or_404(usuario['id']) for usuario in json['usuarios']]#args_from_url(usuario['url'], 'administracao.get_usuario')['id']
             except (KeyError, NotFound) as e:
                 raise ValidationError('Invalid escala: missing ' + e.args[0])    
         try:
@@ -404,32 +303,12 @@ class Afastamento(db.Model):
         return url_for('administracao.get_afastamento', id=self.id, _external=True)
 
     def to_json(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'usuario': self.usuario.to_json_min(),
-            'motivo': self.motivo,
-            'data_inicio': date2timestamp(self.data_inicio),
-            'data_fim': date2timestamp(self.data_fim),
-            'observacao': self.observacao,
-            'ativo': self.ativo
-        }
-    
-    def to_json_min(self):
-        return {
-            'id': self.id,
-            'url': self.get_url(),
-            'motivo': self.motivo,
-            'data_inicio': date2timestamp(self.data_inicio),
-            'data_fim': date2timestamp(self.data_fim),
-            'observacao': self.observacao,
-            'ativo': self.ativo
-        }
+        return to_json(self, self.__class__)
 
     def from_json(self, json):
         if 'usuario' in json:
             try:
-                self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+                self.usuario_id = json['usuario']['id'] #args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
                 self.usuario = Usuario.query.get_or_404(self.usuario_id)
             except (KeyError, NotFound):
                 raise ValidationError('Invalid usuario URL')

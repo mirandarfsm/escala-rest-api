@@ -7,7 +7,9 @@ from . import api
 @etag
 @paginate()
 def get_afastamentos():
-    return Afastamento.query
+    c=  Afastamento.query
+    print c.all()[0].to_json()
+    return c 
 
 @api.route('/afastamentos/<int:id>/', methods=['GET'])
 @etag

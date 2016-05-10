@@ -11,7 +11,7 @@
         var vm = this;
         
         vm.afastamentos = afastamentoGetList.objects;
-
+        console.log(afastamentoGetList);
         vm.deletar = deletar;
         
         function deletar(index){
