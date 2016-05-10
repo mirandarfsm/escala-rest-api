@@ -11,9 +11,11 @@ def get_usuarios():
 
 @api.route('/usuarios/<int:id>/', methods=['GET'])
 @etag
-@json
+#@json
 def get_usuario(id):
-    return Usuario.query.get_or_404(id)
+    user = Usuario.query.get_or_404(id).json
+    print user
+    return jsonify(user)
 
 @api.route('/usuarios/<int:id>/escala/', methods=['GET'])
 @etag

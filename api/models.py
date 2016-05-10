@@ -5,22 +5,25 @@ from werkzeug.exceptions import NotFound
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import url_for, current_app
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import sqltypes 
 from .helpers import args_from_url
 from .errors import ValidationError
 
 db = SQLAlchemy()
 
-'''
+
 def to_json(inst, cls):
     """
     Jsonify the sql alchemy query result.
     """
     convert = dict()
+    convert[sqlalchemy.sql.sqltypes.Date] = date2timestamp
     # add your coversions for things like datetime's 
     # and what-not that aren't serializable.
     d = dict()
     for c in cls.__table__.columns:
         v = getattr(inst, c.name)
+        print type(c.type), type(convert.keys()[0])
         if c.type in convert.keys() and v is not None:
             try:
                 d[c.name] = convert[c.type](v)
@@ -30,8 +33,8 @@ def to_json(inst, cls):
             d[c.name] = str()
         else:
             d[c.name] = v
-    return json.dumps(d)
-    
+    return d
+'''    
     class Person(base):
     __tablename__ = 'person'
     id = Column(Integer, Sequence('person_id_seq'), primary_key=True)
@@ -71,10 +74,11 @@ class TrocaServico(db.Model):
     substituido_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     substituto_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     servico_id = db.Column(db.Integer, db.ForeignKey('servico.id'))
-    data = data = db.Column(db.Date, default=datetime.utcnow)
+    data = db.Column(db.Date, default=datetime.utcnow)
     motivo = db.Column(db.String(50))
-    substituido = db.relationship("Usuario", foreign_keys=[substituido_id],backref=db.backref('troca_servicos',uselist=False, order_by=id,lazy='joined'))
+    substituido = db.relationship("Usuario", foreign_keys=[substituido_id])
     substituto = db.relationship("Usuario", foreign_keys=[substituto_id])
+    servico = db.relationship("Servico", foreign_keys=[servico_id])
     
     def __repr__(self):
         return repr((self.motivo,self.substituido,self.servico,self.substituto_id,date2timestamp(self.data)))
@@ -124,7 +128,6 @@ class Servico(db.Model):
     escala_id = db.Column('escala_id', db.Integer, db.ForeignKey('escala.id'))
     data = db.Column(db.Date, default=datetime.utcnow)
     tipo = db.Column(db.Integer)
-    troca_servico = db.relationship("TrocaServico", backref=db.backref("servico", uselist=False,lazy='joined'),lazy='dynamic',cascade='all, delete-orphan')
 
     def __init__(self,data=None,tipo=None,id=None,usuario_id=None,escala_id=None):
         self.id = id 
@@ -210,6 +213,10 @@ class Usuario(db.Model):
 
     def get_url(self):
         return url_for('administracao.get_usuario', id=self.id, _external=True)
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__)
 
     def to_json(self):
         return {
