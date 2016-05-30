@@ -11,7 +11,6 @@ from .errors import ValidationError
 
 db = SQLAlchemy()
 
-
 def to_json(inst, cls):
     """
     Jsonify the sql alchemy query result.
@@ -38,6 +37,7 @@ def to_json(inst, cls):
 def timestamp2date(timestamp):
     #return datetime.fromtimestamp(timestamp/1e3)
     if timestamp:
+        print type(timestamp)
         return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
     return timestamp
 
@@ -56,108 +56,24 @@ class TipoEscala(object):
     DIARIA = 0
     SEMANAL = 1
 
-class TrocaServico(db.Model):
-    __tablename__ = 'troca_servico'
-    id = db.Column(db.Integer, primary_key=True)
-    substituido_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
-    substituto_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
-    servico_id = db.Column(db.Integer, db.ForeignKey('servico.id'))
-    data = db.Column(db.Date, default=datetime.utcnow)
-    motivo = db.Column(db.String(50))
-    substituido = db.relationship("Usuario", foreign_keys=[substituido_id])
-    substituto = db.relationship("Usuario", foreign_keys=[substituto_id])
-    servico = db.relationship("Servico", foreign_keys=[servico_id])
-    
-    def __repr__(self):
-        return repr((self.motivo,self.substituido,self.servico,self.substituto_id,date2timestamp(self.data)))
-    
-    def get_url(self):
-        return url_for('api.get_usuario_troca_servico', id=self.id, _external=True)
+class Perfil(object):
+    ADMINISTRADOR = 0
+    ESCALANTE = 1
+    USUARIO = 2
 
-    def to_json(self):
-        return to_json(self, self.__class__)
-
-    def from_json(self, json):
-        try:
-            servico_id = json['servico']['id']
-            #servico_id = args_from_url(json['servico']['url'], 'administracao.get_servico')['id']
-            self.servico = Servico.query.get_or_404(servico_id)
-        except (KeyError, NotFound):
-            raise ValidationError('Invalid servico URL')
-        return self
-
-class Servico(db.Model):
-    __tablename__ = 'servico'
-    id = db.Column(db.Integer, primary_key=True)
-    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.id'))
-    escala_id = db.Column('escala_id', db.Integer, db.ForeignKey('escala.id'))
-    data = db.Column(db.Date, default=datetime.utcnow)
-    tipo = db.Column(db.Integer)
-
-    def __init__(self,data=None,tipo=None,id=None,usuario_id=None,escala_id=None):
-        self.id = id 
-        self.data = data
-        self.tipo = tipo
-        self.usuario_id = usuario_id
-        self.escala_id = escala_id
-        if usuario_id:
-            self.usuario = Usuario.query.get_or_404(usuario_id)
-        if escala_id:
-            self.escala = Escala.query.get_or_404(escala_id)
-            
-    def __repr__(self):
-        return repr((date2timestamp(self.data),self.tipo,self.escala))
-
-    def get_url(self):
-        return url_for('administracao.get_servico', id=self.id, _external=True)
-
-    def to_json(self):
-        return to_json(self, self.__class__)
-
-    def from_json(self, json):
-        if 'usuario' in json:
-            try:
-                self.usuario_id = json['usuario']['id']
-                #self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
-                self.usuario = Usuario.query.get_or_404(self.usuario_id)
-            except (KeyError, NotFound, TypeError):
-                raise ValidationError('Invalid usuario URL')
-        if 'escala' in json:
-            try:
-                self.escala_id = json['escala']['id']
-                #escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
-                self.escala = Escala.query.get_or_404(self.escala_id)
-            except (KeyError, NotFound, TypeError):
-                raise ValidationError('Invalid escala URL')
-        try:
-            self.data = timestamp2date(json['data'])
-            self.tipo = json['tipo']
-        except KeyError as e:
-            raise ValidationError('Invalid servico: missing ' + e.args[0])
-        return self
-
-usuario_escala = db.Table ('usuario_escala',
-     db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.id')),
-     db.Column('escala_id', db.Integer, db.ForeignKey('escala.id'))
-)
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), index=True)
+    id = db.Column(db.BigInteger, primary_key=True)
+    nome = db.Column(db.String(50), index=True)
     nome_guerra = db.Column(db.String(50))
     email = db.Column(db.String(50))
     especialidade = db.Column(db.String(100))
     posto = db.Column(db.String(25))
-    saram = db.Column(db.Integer)
+    saram = db.Column(db.String(25))
     data_promocao = db.Column(db.Date, default=datetime.utcnow)
     username = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
-    admin = db.Column(db.Boolean, default=False)
-    afastamentos = db.relationship('Afastamento',backref=db.backref('usuario', lazy='joined'),lazy='dynamic',cascade="all, delete-orphan")
-    servicos = db.relationship('Servico',backref=db.backref('usuario', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
-    escalas = db.relationship('Escala', secondary=usuario_escala,lazy='dynamic')
-
 
     def get_url(self):
         return url_for('administracao.get_usuario', id=self.id, _external=True)
@@ -246,58 +162,22 @@ class Usuario(db.Model):
         total += milico.antiguidade
         return total
 
-class Escala(db.Model):
-    __tablename__ = 'escala'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), index=True)
-    tipo = db.Column(db.Integer,default=0)
-    servicos = db.relationship('Servico',backref=db.backref('escala', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
-    usuarios = db.relationship('Usuario',secondary=usuario_escala,lazy='dynamic',cascade='save-update')
-    feriados = []
-    roxas = []
-
-    def __repr__(self):
-        return repr((self.name))
+class UsuarioPerfil(db.Model):
+    __tablename__ = 'usuario_perfil'
+    id = db.Column(db.BigInteger, primary_key = True)
+    usuario = db.relationship('Usuario',lazy='dynamic',cascade='save-update')
+    perfil = db.Column(db.Integer)
     
-    def get_url(self):
-        return url_for('administracao.get_escala', id=self.id, _external=True)
-
-    def to_json(self):
-        return to_json(self, self.__class__)
-
-    def from_json(self, json):
-        if 'usuarios' in json:
-            try:
-                self.usuarios = [Usuario.query.get_or_404(usuario['id']) for usuario in json['usuarios']]#args_from_url(usuario['url'], 'administracao.get_usuario')['id']
-            except (KeyError, NotFound) as e:
-                raise ValidationError('Invalid escala: missing ' + e.args[0])    
-        try:
-            self.name = json['name']
-            self.tipo = json['tipo']
-        except KeyError as e:
-            raise ValidationError('Invalid escala: missing ' + e.args[0])
-        return self
-
-
 class Afastamento(db.Model):
     __tablename__ = 'afastamento'
-    id = db.Column(db.Integer, primary_key=True)
-    motivo = db.Column(db.String(50))
+    id = db.Column(db.BigInteger, primary_key=True)
+    usuario = db.relationship('Usuario',lazy='dynamic',cascade='save-update')
     data_inicio = db.Column(db.Date)
     data_fim = db.Column(db.Date)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+    motivo = db.Column(db.String(50))
     observacao = db.Column(db.String(300))
+    data_aprovado = db.Column(db.DateTime)
     ativo = db.Column(db.Boolean,default=False)
-    data_aprovado = db.Column(db.Date)
-
-    def __init__(self,motivo=None,data_inicio=None,data_fim=None,id=None,usuario_id=None):
-        self.id = id 
-        self.motivo = motivo
-        self.data_inicio = data_inicio
-        self.data_fim = data_fim
-        self.usuario_id = usuario_id
-        if usuario_id:
-            self.usuario = Usuario.query.get_or_404(usuario_id)
 
     def get_url(self):
         return url_for('administracao.get_afastamento', id=self.id, _external=True)
@@ -328,5 +208,148 @@ class Afastamento(db.Model):
         except KeyError as e:
             raise ValidationError('Invalid afastamento: missing ' + e.args[0])
         return self
+    
+class Escala(db.Model):
+    __tablename__ = 'escala'
+    id = db.Column(db.BigInteger, primary_key=True)
+    name = db.Column(db.String(50), index=True)
+    tipo = db.Column(db.Integer,default=0)
+    #servicos = db.relationship('Servico',backref=db.backref('escala', lazy='joined'),lazy='dynamic', cascade='all, delete-orphan')
+    #usuarios = db.relationship('Usuario',secondary=usuario_escala,lazy='dynamic',cascade='save-update')
+    #feriados = []
+    #roxas = []
 
+    def __repr__(self):
+        return repr((self.name))
+    
+    def get_url(self):
+        return url_for('administracao.get_escala', id=self.id, _external=True)
 
+    def to_json(self):
+        return to_json(self, self.__class__)
+
+    def from_json(self, json):
+        if 'usuarios' in json:
+            try:
+                self.usuarios = [Usuario.query.get_or_404(usuario['id']) for usuario in json['usuarios']]#args_from_url(usuario['url'], 'administracao.get_usuario')['id']
+            except (KeyError, NotFound) as e:
+                raise ValidationError('Invalid escala: missing ' + e.args[0])    
+        try:
+            self.name = json['name']
+            self.tipo = json['tipo']
+        except KeyError as e:
+            raise ValidationError('Invalid escala: missing ' + e.args[0])
+        return self
+
+class DataEspecial(db.Model):
+    __tablename__ = 'data_especial'
+    id = db.Column(db.BigInteger, primary_key=True)
+    escala = db.relationship('Escala',lazy='dynamic',cascade='save-update')
+    data = db.Column(db.Date)
+    tipo = db.Column(db.Integer)
+    
+class UsuarioEscala(db.Model):
+    __tablename__ = 'usuario_escala'
+    id = db.Column(db.BigInteger, primary_key=True)
+    escala = db.relationship('Escala',lazy='dynamic',cascade='save-update')
+    usuario = db.relationship('Usuario',lazy='dynamic',cascade='save-update')
+    data_cadastro = db.Column(db.DataTime)
+    data_fim = db.Column(db.DataTime)
+    
+    def __repr__(self):
+        return repr(self.escala))
+
+    def get_url(self):
+        return url_for('administracao.get_servico', id=self.id, _external=True)
+
+    def to_json(self):
+        return to_json(self, self.__class__)
+    
+    def from_json(self, json):
+        if 'usuario' in json:
+            try:
+                self.usuario_id = json['usuario']['id']
+                #self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+                self.usuario = Usuario.query.get_or_404(self.usuario_id)
+            except (KeyError, NotFound, TypeError):
+                raise ValidationError('Invalid usuario URL')
+        if 'escala' in json:
+            try:
+                self.escala_id = json['escala']['id']
+                #escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
+                self.escala = Escala.query.get_or_404(self.escala_id)
+            except (KeyError, NotFound, TypeError):
+                raise ValidationError('Invalid escala URL')
+        try:
+            self.data = timestamp2date(json['data'])
+            self.tipo = json['tipo']
+        except KeyError as e:
+            raise ValidationError('Invalid servico: missing ' + e.args[0])
+        return self
+
+class Servico(db.Model):
+    __tablename__ = 'servico'
+    id = db.Column(db.BigInteger, primary_key=True)
+    usuario_escala = db.relationship('UsuarioEscala',lazy='dynamic',cascade='save-update')
+    data = db.Column(db.Date, default=datetime.utcnow)
+    tipo = db.Column(db.Integer)
+            
+    def __repr__(self):
+        return repr((date2timestamp(self.data),self.tipo,self.usuario_escala))
+
+    def get_url(self):
+        return url_for('administracao.get_servico', id=self.id, _external=True)
+
+    def to_json(self):
+        return to_json(self, self.__class__)
+
+    def from_json(self, json):
+        if 'usuario' in json:
+            try:
+                self.usuario_id = json['usuario']['id']
+                #self.usuario_id = args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+                self.usuario = Usuario.query.get_or_404(self.usuario_id)
+            except (KeyError, NotFound, TypeError):
+                raise ValidationError('Invalid usuario URL')
+        if 'escala' in json:
+            try:
+                self.escala_id = json['escala']['id']
+                #escala_id = args_from_url(json['escala']['url'], 'administracao.get_escala')['id']
+                self.escala = Escala.query.get_or_404(self.escala_id)
+            except (KeyError, NotFound, TypeError):
+                raise ValidationError('Invalid escala URL')
+        try:
+            self.data = timestamp2date(json['data'])
+            self.tipo = json['tipo']
+        except KeyError as e:
+            raise ValidationError('Invalid servico: missing ' + e.args[0])
+        return self
+
+class TrocaServico(db.Model):
+    __tablename__ = 'troca_servico'
+    id = db.Column(db.Integer, primary_key=True)
+    substituto = db.relationship('UsuarioEscala',lazy='dynamic',cascade='save-update')
+    substituido = db.relationship('UsuarioEscala',lazy='dynamic',cascade='save-update')
+    motivo = db.Column(db.String(50))
+    data_solicitacao = db.Column(db.DateTime)
+    data_troca_servico = db.Column(db.DateTime)
+    data_aceito = db.Column(db.DateTime)
+    servico = db.relationship("Servico", foreign_keys=[servico_id])
+    
+    def __repr__(self):
+        return repr((self.motivo,self.substituido,self.servico,self.substituto_id,date2timestamp(self.data)))
+    
+    def get_url(self):
+        return url_for('api.get_usuario_troca_servico', id=self.id, _external=True)
+
+    def to_json(self):
+        return to_json(self, self.__class__)
+
+    def from_json(self, json):
+        try:
+            servico_id = json['servico']['id']
+            #servico_id = args_from_url(json['servico']['url'], 'administracao.get_servico')['id']
+            self.servico = Servico.query.get_or_404(servico_id)
+        except (KeyError, NotFound):
+            raise ValidationError('Invalid servico URL')
+        return self
