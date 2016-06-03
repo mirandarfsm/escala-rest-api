@@ -73,7 +73,11 @@ class Usuario(db.Model):
     data_promocao = db.Column(db.Date, default=datetime.utcnow)
     username = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
-
+    ativo = db.Column(db.Boolean, default=True)
+    perfis = db.relationship('UsuarioPerfil',back_populates="usuario")
+    afastamentos = db.relationship('Afastamentos',back_populates="usuario")
+    escalas = db.relationship('UsuarioEscala',back_populates="usuario")
+    
     def get_url(self):
         return url_for('administracao.get_usuario', id=self.id, _external=True)
 
@@ -83,6 +87,8 @@ class Usuario(db.Model):
         return dict
 
     def from_json(self, json):
+        if 'perfis' in json:
+            self.perfis = json['perfis']
         try:
             self.data_promocao = timestamp2date(json['data_promocao'])
         except KeyError as e:
@@ -159,18 +165,20 @@ class Usuario(db.Model):
 class UsuarioPerfil(db.Model):
     __tablename__ = 'usuario_perfil'
     id = db.Column(db.BigInteger, primary_key = True)
-    usuario = db.relationship('Usuario',backref='perfis')
+    id_usuario = db.Column(db.BigInteger, db.ForeignKey('usuario.id'))
+    usuario = db.relationship('Usuario', back_populates="perfis")
     perfil = db.Column(db.Integer)
     
 class Afastamento(db.Model):
     __tablename__ = 'afastamento'
     id = db.Column(db.BigInteger, primary_key=True)
-    usuario = db.relationship('Usuario')
+    usuario = db.relationship('Usuario', back_populates="afastamentos")
+    id_usuario = db.Column(db.BigInteger, db.ForeignKey('usuario.id'))
     data_inicio = db.Column(db.Date)
     data_fim = db.Column(db.Date)
     motivo = db.Column(db.String(50))
     observacao = db.Column(db.String(300))
-    data_aprovado = db.Column(db.DateTime)
+    data_revisao = db.Column(db.DateTime)
     ativo = db.Column(db.Boolean,default=False)
 
     def get_url(self):
@@ -180,12 +188,13 @@ class Afastamento(db.Model):
         return to_json(self, self.__class__)
 
     def from_json(self, json):
-        if 'usuario' in json:
-            try:
-                self.usuario_id = json['usuario']['id'] #args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
-                self.usuario = Usuario.query.get_or_404(self.usuario_id)
-            except (KeyError, NotFound):
-                raise ValidationError('Invalid usuario URL')
+        if 'observacao' in json:
+            self.observacao = json['observacao']
+        try:
+            self.id_usuario = json['usuario']['id'] #args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+            self.usuario = Usuario.query.get_or_404(self.usuario_id)
+        except (KeyError, NotFound):
+            raise ValidationError('Invalid usuario ID')
         try:
             dt_inicio = timestamp2date(json['data_inicio'])
             self.data_inicio = dt_inicio
@@ -198,7 +207,6 @@ class Afastamento(db.Model):
             raise ValidationError('Invalid data_fim: '+ e.args[0])
         try:
             self.motivo = json['motivo']
-            self.observacao = json['observacao']
         except KeyError as e:
             raise ValidationError('Invalid afastamento: missing ' + e.args[0])
         return self
@@ -206,8 +214,11 @@ class Afastamento(db.Model):
 class Escala(db.Model):
     __tablename__ = 'escala'
     id = db.Column(db.BigInteger, primary_key=True)
-    name = db.Column(db.String(50), index=True)
+    nome = db.Column(db.String(50), index=True)
     tipo = db.Column(db.Integer,default=0)
+    ativo = db.Column(db.Boolean, default=True)
+    datas_especias = db.relationship('DataEspecial',back_populates = "escala")
+    usuarios = db.relationship('UsuarioEscala', back_populates = "escala")
     
     def __repr__(self):
         return repr((self.name))
@@ -220,7 +231,7 @@ class Escala(db.Model):
 
     def from_json(self, json):
         try:
-            self.name = json['name']
+            self.nome = json['name']
             self.tipo = json['tipo']
         except KeyError as e:
             raise ValidationError('Invalid escala: missing ' + e.args[0])
@@ -229,7 +240,8 @@ class Escala(db.Model):
 class DataEspecial(db.Model):
     __tablename__ = 'data_especial'
     id = db.Column(db.BigInteger, primary_key=True)
-    escala = db.relationship('Escala')
+    id_escala = db.Column(db.BigInteger,db.ForeignKey('escala.id'))
+    escala = db.relationship('Escala', back_populates = "datas_especias")
     data = db.Column(db.Date)
     tipo = db.Column(db.Integer)
     
@@ -237,12 +249,11 @@ class DataEspecial(db.Model):
         return to_json(self, self.__class__)
 
     def from_json(self, json):
-        if 'escala' in json:
-            try:
-                self.escala_id = json['escala']['id']
-                self.escala = Escala.query.get_or_404(self.escala_id)
-            except (KeyError, NotFound):
-                raise ValidationError('Invalid escala URL')
+        try:
+            self.id_escala = json['escala']['id']
+            self.escala = Escala.query.get_or_404(self.escala_id)
+        except (KeyError, NotFound):
+            raise ValidationError('Invalid escala URL')
         try:
             self.data = timestamp2date(json['data'])
             self.tipo = json['tipo']
@@ -253,8 +264,11 @@ class DataEspecial(db.Model):
 class UsuarioEscala(db.Model):
     __tablename__ = 'usuario_escala'
     id = db.Column(db.BigInteger, primary_key=True)
-    escala = db.relationship('Escala')
-    usuario = db.relationship('Usuario')
+    id_escala = db.Column(db.BigInteger, db.ForeignKey('escala.id'))
+    id_usuario = db.Column(db.BigInteger, db.ForeignKey('usuario.id'))
+    escala = db.relationship('Escala', back_populates = "usuarios")
+    usuario = db.relationship('Usuario', back_populates = "escalas")
+    servicos = db.relationship('Servico',back_populates = "usuario_escala")
     data_cadastro = db.Column(db.DataTime)
     data_fim = db.Column(db.DataTime)
     
@@ -263,22 +277,22 @@ class UsuarioEscala(db.Model):
     
     def from_json(self, json):
         try:
-            self.usuario_id = json['usuario']['id']
-            self.usuario = Usuario.query.get_or_404(self.usuario_id)
+            self.id_usuario = json['usuario']['id']
+            self.usuario = Usuario.query.get_or_404(self.id_usuario)
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario id')
         try:
-            self.escala_id = json['escala']['id']
-            self.escala = Escala.query.get_or_404(self.escala_id)
+            self.id_escala = json['escala']['id']
+            self.escala = Escala.query.get_or_404(self.id_escala)
         except (KeyError, NotFound):
             raise ValidationError('Invalid escala id')
-        self.data_cadastro = datetime.now()
         return self
 
 class Servico(db.Model):
     __tablename__ = 'servico'
     id = db.Column(db.BigInteger, primary_key=True)
-    usuario_escala = db.relationship('UsuarioEscala',backref='servicos')
+    id_usuario_escala = db.Column(db.BigInteger, db.ForeignKey('usuario_escala.id'))
+    usuario_escala = db.relationship('UsuarioEscala',back_populates='servicos')
     data = db.Column(db.Date, default=datetime.utcnow)
     tipo = db.Column(db.Integer)
             
@@ -290,8 +304,8 @@ class Servico(db.Model):
 
     def from_json(self, json):
         try:
-            self.usuario_escala_id = json['usuario_escala']['id']
-            self.usuario_escala = UsuarioEscala.query.get_or_404(self.usuario_escala_id)
+            self.id_usuario_escala = json['usuario_escala']['id']
+            self.usuario_escala = UsuarioEscala.query.get_or_404(self.id_usuario_escala)
         except (KeyError, NotFound, TypeError):
             raise ValidationError('Invalid usuario_escala id')
         try:
@@ -303,13 +317,16 @@ class Servico(db.Model):
 
 class TrocaServico(db.Model):
     __tablename__ = 'troca_servico'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True)
+    id_substituto = db.Column(db.BigInteger, db.ForeignKey('usuario_escala.id')
+    id_substituido = db.Column(db.BigInteger, db.ForeignKey('usuario_escala.id')
+    id_servico = db.Column(db.BigInteger, db.ForeignKey('servico.id')
     substituto = db.relationship('UsuarioEscala')
     substituido = db.relationship('UsuarioEscala')
+    servico = db.relationship("Servico")
     motivo = db.Column(db.String(50))
     data_solicitacao = db.Column(db.DateTime)
     data_troca_servico = db.Column(db.DateTime)
-    servico = db.relationship("Servico", foreign_keys=[servico_id])
     
     def get_url(self):
         return url_for('api.get_usuario_troca_servico', id=self.id, _external=True)
@@ -319,10 +336,10 @@ class TrocaServico(db.Model):
 
     def from_json(self, json):
         try:
-            servico_id = json['servico']['id']
-            self.servico = Servico.query.get_or_404(servico_id)
+            self.id_servico = json['servico']['id']
+            self.servico = Servico.query.get_or_404(self.id_servico)
         except (KeyError, NotFound):
-            raise ValidationError('Invalid servico URL')
+            raise ValidationError('Invalid servico ID')
         self.substituido = self.servico.usuario_escala
         self.data_solicitacao = datetime.now()
         return self

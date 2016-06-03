@@ -1,6 +1,7 @@
 import functools
 import hashlib
 from flask import jsonify, request, url_for, current_app, make_response, g
+from .models import Perfil
 from .rate_limit import RateLimit
 from .errors import too_many_requests, precondition_failed, not_modified,forbidden
 
@@ -55,8 +56,7 @@ def paginate(default_per_page=10,max_per_page=50):
         @functools.wraps(f)
         def wrapped(*args, **kwargs):
             page = request.args.get('page', 1, type=int)
-            per_page = min(request.args.get('per_page', default_per_page,
-                                            type=int), max_per_page)
+            per_page = min(request.args.get('per_page', default_per_page,type=int), max_per_page)
             query = f(*args, **kwargs)
             p = query.paginate(page, per_page)
             pages = {'page': page, 'per_page': per_page,
@@ -105,12 +105,20 @@ def no_cache(f):
 def admin(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
-        if not g.user.admin:
+        if Perfil.ADMINISTRADOR not in g.user.perfis:
             return forbidden("You don't have admin's permission")
         # invoke the wrapped function
         return f(*args, **kwargs)
     return wrapped
 
+def escalante(f):
+    @functools.wraps(f)
+    def wrapped(*args, **kwargs):
+        if Perfil.ESCALANTE not in g.user.perfis:
+            return forbidden("You don't have escalante's permission")
+        # invoke the wrapped function
+        return f(*args, **kwargs)
+    return wrapped
 
 def etag(f):
     @functools.wraps(f)
