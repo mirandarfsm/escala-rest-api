@@ -63,7 +63,7 @@ class Perfil(object):
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50), index=True)
     nome_guerra = db.Column(db.String(50))
     email = db.Column(db.String(50))
@@ -74,8 +74,8 @@ class Usuario(db.Model):
     username = db.Column(db.String(64), index=True)
     password_hash = db.Column(db.String(128))
     ativo = db.Column(db.Boolean, default=True)
-    perfis = db.relationship('UsuarioPerfil',back_populates="usuario")
-    afastamentos = db.relationship('Afastamentos',back_populates="usuario")
+    perfis = db.relationship('UsuarioPerfil',back_populates="usuario", lazy='joined')
+    afastamentos = db.relationship('Afastamento',back_populates="usuario")
     escalas = db.relationship('UsuarioEscala',back_populates="usuario")
     
     def get_url(self):
@@ -83,12 +83,14 @@ class Usuario(db.Model):
 
     def to_json(self):
         dict = to_json(self, self.__class__)
+        dict['perfis'] = [usuario_perfil.perfil for usuario_perfil in self.perfis]
         del dict['password_hash']
         return dict
 
     def from_json(self, json):
         if 'perfis' in json:
-            self.perfis = json['perfis']
+            for perfil in json['perfis']:
+                self.add_perfil(perfil)
         try:
             self.data_promocao = timestamp2date(json['data_promocao'])
         except KeyError as e:
@@ -161,19 +163,28 @@ class Usuario(db.Model):
             total += reduce(lambda x,y: x*y*3,map(lambda x: x.data.year * x.data.month * x.data.day*3,servicos))
         total += milico.antiguidade
         return total
+    
+    def add_perfil(self,perfil):
+        usuario_perfil = UsuarioPerfil(perfil = perfil) 
+        self.perfis.append(usuario_perfil)
+    
+    def has_perfil(self,perfil):
+        perfis = [usuario_perfil.perfil for usuario_perfil in self.perfis]
+        print perfis
+        return perfil in perfis
 
 class UsuarioPerfil(db.Model):
     __tablename__ = 'usuario_perfil'
-    id = db.Column(db.BigInteger, primary_key = True)
-    id_usuario = db.Column(db.BigInteger, db.ForeignKey('usuario.id'))
+    id = db.Column(db.Integer, primary_key = True)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     usuario = db.relationship('Usuario', back_populates="perfis")
     perfil = db.Column(db.Integer)
     
 class Afastamento(db.Model):
     __tablename__ = 'afastamento'
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     usuario = db.relationship('Usuario', back_populates="afastamentos")
-    id_usuario = db.Column(db.BigInteger, db.ForeignKey('usuario.id'))
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     data_inicio = db.Column(db.Date)
     data_fim = db.Column(db.Date)
     motivo = db.Column(db.String(50))
@@ -213,7 +224,7 @@ class Afastamento(db.Model):
     
 class Escala(db.Model):
     __tablename__ = 'escala'
-    id = db.Column(db.BigInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50), index=True)
     tipo = db.Column(db.Integer,default=0)
     ativo = db.Column(db.Boolean, default=True)
@@ -221,7 +232,7 @@ class Escala(db.Model):
     usuarios = db.relationship('UsuarioEscala', back_populates = "escala")
     
     def __repr__(self):
-        return repr((self.name))
+        return repr((self.nome))
     
     def get_url(self):
         return url_for('administracao.get_escala', id=self.id, _external=True)
@@ -239,8 +250,8 @@ class Escala(db.Model):
 
 class DataEspecial(db.Model):
     __tablename__ = 'data_especial'
-    id = db.Column(db.BigInteger, primary_key=True)
-    id_escala = db.Column(db.BigInteger,db.ForeignKey('escala.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    id_escala = db.Column(db.Integer,db.ForeignKey('escala.id'))
     escala = db.relationship('Escala', back_populates = "datas_especias")
     data = db.Column(db.Date)
     tipo = db.Column(db.Integer)
@@ -263,14 +274,14 @@ class DataEspecial(db.Model):
 
 class UsuarioEscala(db.Model):
     __tablename__ = 'usuario_escala'
-    id = db.Column(db.BigInteger, primary_key=True)
-    id_escala = db.Column(db.BigInteger, db.ForeignKey('escala.id'))
-    id_usuario = db.Column(db.BigInteger, db.ForeignKey('usuario.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    id_escala = db.Column(db.Integer, db.ForeignKey('escala.id'))
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     escala = db.relationship('Escala', back_populates = "usuarios")
     usuario = db.relationship('Usuario', back_populates = "escalas")
     servicos = db.relationship('Servico',back_populates = "usuario_escala")
-    data_cadastro = db.Column(db.DataTime)
-    data_fim = db.Column(db.DataTime)
+    data_cadastro = db.Column(db.DateTime)
+    data_fim = db.Column(db.DateTime)
     
     def to_json(self):
         return to_json(self, self.__class__)
@@ -290,8 +301,8 @@ class UsuarioEscala(db.Model):
 
 class Servico(db.Model):
     __tablename__ = 'servico'
-    id = db.Column(db.BigInteger, primary_key=True)
-    id_usuario_escala = db.Column(db.BigInteger, db.ForeignKey('usuario_escala.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    id_usuario_escala = db.Column(db.Integer, db.ForeignKey('usuario_escala.id'))
     usuario_escala = db.relationship('UsuarioEscala',back_populates='servicos')
     data = db.Column(db.Date, default=datetime.utcnow)
     tipo = db.Column(db.Integer)
@@ -317,12 +328,12 @@ class Servico(db.Model):
 
 class TrocaServico(db.Model):
     __tablename__ = 'troca_servico'
-    id = db.Column(db.BigInteger, primary_key=True)
-    id_substituto = db.Column(db.BigInteger, db.ForeignKey('usuario_escala.id')
-    id_substituido = db.Column(db.BigInteger, db.ForeignKey('usuario_escala.id')
-    id_servico = db.Column(db.BigInteger, db.ForeignKey('servico.id')
-    substituto = db.relationship('UsuarioEscala')
-    substituido = db.relationship('UsuarioEscala')
+    id = db.Column(db.Integer, primary_key=True)
+    id_substituto = db.Column(db.Integer, db.ForeignKey('usuario_escala.id'))
+    id_substituido = db.Column(db.Integer, db.ForeignKey('usuario_escala.id'))
+    id_servico = db.Column(db.Integer, db.ForeignKey('servico.id'))
+    substituto = db.relationship('UsuarioEscala',foreign_keys=[id_substituto])
+    substituido = db.relationship('UsuarioEscala',foreign_keys=[id_substituido])
     servico = db.relationship("Servico")
     motivo = db.Column(db.String(50))
     data_solicitacao = db.Column(db.DateTime)

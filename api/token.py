@@ -24,4 +24,6 @@ def unauthorized_error():
 @token_auth.login_required
 @json
 def request_token():
-    return {'token': g.user.generate_auth_token(),'usuario': g.user.to_json()}
+    teste = {'token': g.user.generate_auth_token(),'usuario': g.user.to_json()}
+    print teste
+    return teste

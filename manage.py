@@ -2,7 +2,7 @@
 from flask import Flask, g, jsonify
 from flask.ext.script import Manager,Server
 from api.app import create_app
-from api.models import db, Usuario
+from api.models import db, Usuario,Perfil
 
 manager = Manager(create_app)
 manager.add_command("runserver", Server(host='0.0.0.0'))
@@ -32,8 +32,9 @@ def adduser(username):
 @manager.command
 def addadmin():
     """Register admin user."""
-    user = Usuario(name="admin",email="admin@admin",nome_guerra="admin",username="teste", password="teste",admin=True)
+    user = Usuario(nome="admin",email="admin@admin",nome_guerra="admin",username="teste", password="teste")
     db.session.add(user)
+    user.add_perfil(Perfil.ADMINISTRADOR)
     db.session.commit()
     print('User {0} was registered successfully.'.format("teste"))    
 

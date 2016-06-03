@@ -56,7 +56,11 @@
 
 		function isAdmin(){
 			if(service.isLogged()){
-			  return usuario.admin;
+			  return usuario.perfis.forEach(function(perfil){
+				if (perfil === 0 ) {
+                    return true;
+                }
+			  }, this);
 			}
 			return false;
 		}

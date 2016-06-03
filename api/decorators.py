@@ -105,7 +105,7 @@ def no_cache(f):
 def admin(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
-        if Perfil.ADMINISTRADOR not in g.user.perfis:
+        if not g.user.has_perfil(Perfil.ADMINISTRADOR):
             return forbidden("You don't have admin's permission")
         # invoke the wrapped function
         return f(*args, **kwargs)
