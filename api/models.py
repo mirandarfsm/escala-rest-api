@@ -37,7 +37,7 @@ def to_json(inst, cls):
 def timestamp2date(timestamp):
     #return datetime.fromtimestamp(timestamp/1e3)
     if timestamp:
-        print type(timestamp)
+        #print type(timestamp)
         return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
     return timestamp
 
@@ -75,7 +75,7 @@ class Usuario(db.Model):
     password_hash = db.Column(db.String(128))
     ativo = db.Column(db.Boolean, default=True)
     perfis = db.relationship('UsuarioPerfil',back_populates="usuario", lazy='joined')
-    afastamentos = db.relationship('Afastamento',back_populates="usuario")
+    afastamentos = db.relationship('Afastamento',back_populates="usuario", lazy='dynamic')
     escalas = db.relationship('UsuarioEscala',back_populates="usuario")
     
     def get_url(self):
@@ -170,7 +170,7 @@ class Usuario(db.Model):
     
     def has_perfil(self,perfil):
         perfis = [usuario_perfil.perfil for usuario_perfil in self.perfis]
-        print perfis
+        #print perfis
         return perfil in perfis
 
 class UsuarioPerfil(db.Model):
@@ -198,12 +198,12 @@ class Afastamento(db.Model):
     def to_json(self):
         return to_json(self, self.__class__)
 
-    def from_json(self, json):
+    def from_json(self, json, id_usuario=None):
         if 'observacao' in json:
             self.observacao = json['observacao']
         try:
-            self.id_usuario = json['usuario']['id'] #args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
-            self.usuario = Usuario.query.get_or_404(self.usuario_id)
+            self.id_usuario = id_usuario if id_usuario else json['usuario']['id'] #args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+            self.usuario = Usuario.query.get_or_404(self.id_usuario)
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario ID')
         try:
@@ -229,7 +229,7 @@ class Escala(db.Model):
     tipo = db.Column(db.Integer,default=0)
     ativo = db.Column(db.Boolean, default=True)
     datas_especias = db.relationship('DataEspecial',back_populates = "escala")
-    usuarios = db.relationship('UsuarioEscala', back_populates = "escala")
+    usuarios = db.relationship('UsuarioEscala', back_populates = "escala", lazy = 'dynamic')
     
     def __repr__(self):
         return repr((self.nome))
@@ -332,9 +332,9 @@ class TrocaServico(db.Model):
     id_substituto = db.Column(db.Integer, db.ForeignKey('usuario_escala.id'))
     id_substituido = db.Column(db.Integer, db.ForeignKey('usuario_escala.id'))
     id_servico = db.Column(db.Integer, db.ForeignKey('servico.id'))
-    substituto = db.relationship('UsuarioEscala',foreign_keys=[id_substituto])
-    substituido = db.relationship('UsuarioEscala',foreign_keys=[id_substituido])
-    servico = db.relationship("Servico")
+    substituto = db.relationship('UsuarioEscala',foreign_keys=[id_substituto], lazy='joined')
+    substituido = db.relationship('UsuarioEscala',foreign_keys=[id_substituido], lazy='joined')
+    servico = db.relationship("Servico",lazy='joined')
     motivo = db.Column(db.String(50))
     data_solicitacao = db.Column(db.DateTime)
     data_troca_servico = db.Column(db.DateTime)

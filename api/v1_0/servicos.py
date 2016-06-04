@@ -1,5 +1,5 @@
 from flask import request,jsonify,g
-from ..models import db,Servico
+from ..models import db,Servico,UsuarioEscala
 from ..decorators import json, paginate, etag
 from werkzeug.exceptions import abort
 from . import api
@@ -9,7 +9,7 @@ from . import api
 @paginate()
 def get_usuario_servico():
     usuario = g.user
-    return usuario.servicos
+    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_usuario == usuario.id, UsuarioEscala.data_fim == None)
 
 @api.route('/usuarios/me/servicos/<int:id>/', methods=['GET'])
 @etag

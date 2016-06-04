@@ -2,7 +2,8 @@ from flask import request,jsonify
 from ...models import db, Escala,TipoEscala
 from ...decorators import json, paginate, etag
 from . import api
-from ...services import ServicoDiarioService,ServicoSemanalService 
+from ...services import ServicoDiarioService,ServicoSemanalService
+from ...controller import UsuarioEscalaController
 
 @api.route('/escalas/', methods=['GET'])
 @etag
@@ -23,20 +24,6 @@ def get_escala_usuario(id):
     escala = Escala.query.get_or_404(id)
     return escala.usuarios
 
-@api.route('/escalas/<int:id>/servico/', methods=['GET'])
-@etag
-@paginate()
-def get_escala_servico(id):
-    escala = Escala.query.get_or_404(id)
-    return escala.servicos
-
-@api.route('/escalas/<int:id>/afastamento/', methods=['GET'])
-@etag
-@paginate()
-def get_escala_afastamento(id):
-    escala = Escala.query.get_or_404(id)
-    return escala.afastamentos
-
 @api.route('/escalas/<int:id>/generate/', methods=['PUT'])
 @json
 def new_service_generate(id):
@@ -52,6 +39,9 @@ def new_service_generate(id):
 def new_escala():
     escala = Escala().from_json(request.json)
     db.session.add(escala)
+    if 'usuarios' in request.json:
+        lista_id_usuario = [usuario['id'] for usuario in request.json['usuarios']]
+        UsuarioEscalaController().modificar_lista_usuario(escala,lista_id_usuario)
     db.session.commit()
     return {}, 201, {'Location': escala.get_url()}
 
@@ -61,6 +51,9 @@ def edit_escala(id):
     escala = Escala.query.get_or_404(id)
     escala.from_json(request.json)
     db.session.add(escala)
+    if 'usuarios' in request.json:
+        lista_id_usuario = [usuario['id'] for usuario in request.json['usuarios']]
+        UsuarioEscalaController().modificar_lista_usuario(escala,lista_id_usuario)
     db.session.commit()
     return {}
 
@@ -68,6 +61,8 @@ def edit_escala(id):
 @json
 def delete_escala(id):
     escala = Escala.query.get_or_404(id)
-    db.session.delete(escala)
+    #db.session.delete(escala)
+    escala.ativo = not escala.ativo
+    db.session.add(escala)
     db.session.commit()
     return {}

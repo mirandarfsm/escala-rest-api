@@ -22,8 +22,7 @@ def get_usuario_afastamento_detail(id):
 @json
 def new_afastamento():
     usuario = g.user
-    afastamento = Afastamento().from_json(request.json)
-    afastamento.usuario = usuario
+    afastamento = Afastamento().from_json(request.json,usuario.id)
     db.session.add(afastamento)
     db.session.commit()
     return {}, 201, {'Location': afastamento.get_url()}

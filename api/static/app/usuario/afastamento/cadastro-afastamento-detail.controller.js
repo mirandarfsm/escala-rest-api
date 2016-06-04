@@ -11,12 +11,23 @@
 	    var vm = this;
 	    
 	    vm.afastamento = afastamentoGetOne;
-	    
+		vm.popupDataInicio = false;
+	    vm.popupDataFim = false;
+		
+        vm.openDataInicio = openDataInicio;
+		vm.openDataFim = openDataFim;
 	    vm.salvar = salvar;
+   
+		
+        function openDataInicio(){
+            vm.popupDataInicio = true;
+        }
+   
+        function openDataFim(){
+            vm.popupDataFim = true;
+        }
 	    
 	    function salvar(){
-	        vm.afastamento.data_inicio = new Date(vm.data_inicio).getTime();
-	    	vm.afastamento.data_fim = new Date(vm.data_fim).getTime();
 			vm.afastamento.save().then(function(){
 	            $location.path("/cadastro-afastamento");
 	    	});	

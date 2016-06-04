@@ -56,13 +56,15 @@
 
 		function isAdmin(){
 			if(service.isLogged()){
-			  return usuario.perfis.forEach(function(perfil){
-				if (perfil === 0 ) {
-                    return true;
-                }
-			  }, this);
+			  return checkPerfil(usuario.perfis,0);
 			}
 			return false;
+		}
+		
+		function checkPerfil(arr, val) {
+			return arr.some(function(arrVal) {
+				return val === arrVal;
+			});
 		}
 
 		return service;

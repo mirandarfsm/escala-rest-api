@@ -12,7 +12,7 @@ def verify_password(username_or_token, password):
     g.user = Usuario.query.filter_by(username=username_or_token).first()
     if not g.user:
         return False
-    return g.user.verify_password(password)
+    return g.user.verify_password(password) and g.user.ativo == True
 
 @token_auth.error_handler
 def unauthorized_error():
@@ -25,5 +25,5 @@ def unauthorized_error():
 @json
 def request_token():
     teste = {'token': g.user.generate_auth_token(),'usuario': g.user.to_json()}
-    print teste
+    #print teste
     return teste

@@ -44,8 +44,8 @@
 	function trocaServicoGetOne(autenticacaoService,$route){
 		var id = $route.current.params.id;
     	if(id)
-    		return autenticacaoService.one(id).get();
-    	return autenticacaoService.one();
+    		return autenticacaoService.get().one('troca-servico',id).get();
+    	return autenticacaoService.get().one('troca-servico');
 
 	}
 

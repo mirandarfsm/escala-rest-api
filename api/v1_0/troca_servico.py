@@ -1,5 +1,5 @@
 from flask import request,jsonify,g
-from ..models import db,Servico,Escala,TrocaServico
+from ..models import db,Servico,Escala,TrocaServico,UsuarioEscala
 from ..services import fazer_trocar_servico
 from werkzeug.exceptions import abort
 from ..decorators import json, paginate, etag
@@ -10,7 +10,8 @@ from . import api
 @paginate()
 def get_usuario_troca_servico():
     usuario = g.user
-    return usuario.troca_servicos
+    return TrocaServico.query.filter(UsuarioEscala.id_usuario == g.user.id) \
+                            .filter(TrocaServico.data_troca_servico == None)
 
 @api.route('/usuarios/me/troca-servico/<int:id>/', methods=['GET'])
 @etag
@@ -27,7 +28,8 @@ def get_usuario_troca_servico_pedente():
     usuario = g.user
     troca_servicos = TrocaServico.query \
                         .join(TrocaServico.servico) \
-                        .join(Servico.escala) \
+                        .join(Servico.usuario_escala) \
+                        .join(UsuarioEscala.escala) \
                         .filter(Escala.id.in_(escala.id for escala in usuario.escalas)) \
                         .filter(TrocaServico.substituto == None) \
                         .filter(TrocaServico.substituido != usuario)

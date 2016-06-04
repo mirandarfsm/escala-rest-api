@@ -7,7 +7,7 @@ from . import api
 @etag
 @paginate()
 def get_usuarios():
-    return Usuario.query.filter_by(**request.args).all()
+    return Usuario.query
 
 @api.route('/usuarios/<int:id>/', methods=['GET'])
 @etag
@@ -22,13 +22,6 @@ def get_usuario_escala(id):
     usuario = Usuario.query.get_or_404(id)
     return usuario.escalas
     #return usuario.escalas.filter(UsuarioEscala.dt_fim == None)
-
-@api.route('/usuarios/<int:id>/servico/', methods=['GET'])
-@etag
-@paginate()
-def get_usuario_servico(id):
-    usuario = Usuario.query.get_or_404(id)
-    #return usuario.servicos
 
 @api.route('/usuarios/<int:id>/afastamento/', methods=['GET'])
 @etag
@@ -56,10 +49,10 @@ def edit_usuarios(id):
 
 @api.route('/usuarios/<int:id>/', methods=['DELETE'])
 @json
-def delete_usuario(id):
+def desativar_usuario(id):
     usuario = Usuario.query.get_or_404(id)
     #db.session.delete(usuario)
-    usuario.ativo = False
+    usuario.ativo = not usuario.ativo
     db.session.add(usuario)
     db.session.commit()
     return {}
