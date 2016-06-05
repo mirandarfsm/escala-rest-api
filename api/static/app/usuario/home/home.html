@@ -1,6 +1,6 @@
 <div>
     <h1>Seja Bem Vindo, {{usuario.posto | uppercase}} {{usuario.nome_guerra | uppercase}}</h1>
-    <p ng-show="vm.number">Seu próximo servico será {{vm.number}}</p>
+    <p ng-show="vm.menorServico">Seu próximo servico será {{vm.menorServico.data | date}}</p>
     <br />
     <div class="row">
         <div class="col-md-2"></div>

@@ -1,4 +1,4 @@
-from models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento
+from models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento,UsuarioEscala
 import datetime
 import calendar
 
@@ -33,63 +33,66 @@ class ServicoDiarioService(object):
         return (datetime.date(year,month,1),datetime.date(year,month,last_day))
 
     def gerar_lista_servico(self,end_date,escala,start_date=datetime.date.today()):
-        feriados = escala.feriados
-        roxas = escala.roxas
+        datas_vermelhas = escala.get_datas_vermelhas()
+        datas_roxas = escala.get_datas_roxas()
         d = start_date
         delta = datetime.timedelta(days=1)
         weekend = set([5,6])
         servicos = []
         while d <= end_date:
             tipo = TipoServico.PRETO
-            if d.weekday() in weekend or d in feriados:
+            if d.weekday() in weekend or d in datas_vermelhas:
                 tipo =  TipoServico.VERMELHO
-            if d in roxas:
+            if d in datas_roxas:
                 tipo = TipoServico.ROXA
-            servicos.append(Servico(data=d,tipo=tipo,escala_id=escala.id))
+            servicos.append(Servico(data=d,tipo=tipo))
             d += delta
         return servicos
     
-    def is_descanso(self,milico,date):
-        for servico in milico.servicos:
-            descanso_start = servico.data - datetime.timedelta(days=2)
-            descanso_end = servico.data + datetime.timedelta(days=2)
-            if descanso_start <= date <= descanso_end:
+    def is_descanso(self,usuario_escala,data):
+        data_inicio = data - datetime.timedelta(days=2)
+        data_fim = data + datetime.timedelta(days=2)
+        servico = usuario_escala.servicos.filter(Servico.data.between(data_inicio,data_fim)).first()
+        if servico:
                 return True
         return False
 
-    def is_afastado(self,milico,date):
-        for afastamento in milico.afastamentos.filter(Afastamento.ativo == True,Afastamento.data_aprovado is not None):
-            if afastamento.data_inicio <= date <= afastamento.data_fim:
-                return True     
+    def is_afastado(self,usuario,date):
+        afastamento = usuario.afastamentos.filter(Afastamento.ativo == True) \
+                            .filter(Afastamento.data_revisao is not None) \
+                            .filter(Afastamento.data_inicio <= date, Afastamento.data_fim >= date).first()
+        if afastamento:
+            return True     
         return False
 
-    def get_next_military(self,militares,servico):
-        for i in range(len(militares)):
-            militar = militares[0]
-            if not self.is_afastado(militar,servico.data):
-                if not self.is_descanso(militar,servico.data):
-                    militares.pop(0)
-                    militares.append(militar)
-                    return militar
-            militares[0] = militares[i+1]
-            militares[i+1] = militar
+    def get_next_military(self,lista_usuario_escala,servico):
+        for i in range(len(lista_usuario_escala)):
+            usuario_escala = lista_usuario_escala[0]
+            if not self.is_afastado(usuario_escala.usuario,servico.data):
+                if not self.is_descanso(usuario_escala,servico.data):
+                    lista_usuario_escala.pop(0)
+                    lista_usuario_escala.append(usuario_escala)
+                    return usuario_escala
+            lista_usuario_escala[0] = lista_usuario_escala[i+1]
+            lista_usuario_escala[i+1] = usuario_escala
         raise Exception("Nao existe militares para serem escalados na data: "+ str(servico.data))
 
     
     def gerar_lista_militares_escalados(self,escala):
-        milicos = escala.usuarios.all()
+        lista_usuario_escala = escala.usuarios.all()
         hash = {}
-        hash[TipoServico.VERMELHO] = sorted(milicos,key=Usuario.by_vermelha_key)
-        hash[TipoServico.PRETO] = sorted(milicos,key=Usuario.by_preta_key)
-        hash[TipoServico.ROXA] = sorted(milicos,key=Usuario.by_roxa_key)
+        hash[TipoServico.VERMELHO] = sorted(lista_usuario_escala,key=UsuarioEscala.by_vermelha_key)
+        hash[TipoServico.PRETO] = sorted(lista_usuario_escala,key=UsuarioEscala.by_preta_key)
+        hash[TipoServico.ROXA] = sorted(lista_usuario_escala,key=UsuarioEscala.by_roxa_key)
         date = get_next_month(datetime.date.today())
         start_date,last_date = self.get_first_last_mounth_day(date.year,date.month)
         servicos = self.gerar_lista_servico(last_date,escala,start_date)
         for servico in servicos:
-            milico = self.get_next_military(hash[servico.tipo],servico)
-            milico.servicos.append(servico)
+            usuario_escala = self.get_next_military(hash[servico.tipo],servico)
+            servico.id_usuario_escala = usuario_escala.id
+            db.session.add(servico)
             db.session.commit()
-        return milicos
+        return lista_usuario_escala
 
 class ServicoSemanalService(object):
     

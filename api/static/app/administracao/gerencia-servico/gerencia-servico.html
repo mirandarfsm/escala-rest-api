@@ -1,4 +1,3 @@
-<uib-alert ng-show="alert" type="{{vm.alert.type}}" close="closeAlert()">{{vm.alert.msg}}</uib-alert>
 <h3>Servicos</h3>
 <hr/>
 <div>
@@ -33,7 +32,7 @@
 	    </thead>
 	    <tbody>
 		    <tr ng-repeat="servico in vm.servicos">
-				<td>{{ servico.usuario.nome_guerra }}</td>
+				<td>{{ servico.usuario_escala.usuario.nome_guerra }}</td>
 		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ vm.tipos[servico.tipo] }}</td>
 		    	<td>

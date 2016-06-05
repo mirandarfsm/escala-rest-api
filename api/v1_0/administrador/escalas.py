@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from ...models import db, Escala,TipoEscala,Usuario,UsuarioEscala
+from ...models import db, Escala,TipoEscala,Usuario,UsuarioEscala,Servico
 from ...decorators import json, paginate, etag
 from . import api
 from ...services import ServicoDiarioService,ServicoSemanalService
@@ -23,6 +23,14 @@ def get_escala(id):
 def get_escala_usuario(id):
     escala = Escala.query.get_or_404(id)
     return Usuario.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id, UsuarioEscala.data_fim == None)
+
+@api.route('/escalas/<int:id>/servico/', methods=['GET'])
+@etag
+@paginate()
+def get_escala_servico(id):
+    escala = Escala.query.get_or_404(id)
+    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id, UsuarioEscala.data_fim == None)
+
 @api.route('/escalas/<int:id>/generate/', methods=['PUT'])
 @json
 def new_service_generate(id):
@@ -38,10 +46,10 @@ def new_service_generate(id):
 def new_escala():
     escala = Escala().from_json(request.json)
     db.session.add(escala)
+    db.session.commit()
     if 'usuarios' in request.json:
         lista_id_usuario = [usuario['id'] for usuario in request.json['usuarios']]
         UsuarioEscalaController().modificar_lista_usuario(escala,lista_id_usuario)
-    db.session.commit()
     return {}, 201, {'Location': escala.get_url()}
 
 @api.route('/escalas/<int:id>/', methods=['PUT'])
@@ -50,10 +58,10 @@ def edit_escala(id):
     escala = Escala.query.get_or_404(id)
     escala.from_json(request.json)
     db.session.add(escala)
+    db.session.commit()
     if 'usuarios' in request.json and escala.ativo:
         lista_id_usuario = [usuario['id'] for usuario in request.json['usuarios']]
         UsuarioEscalaController().modificar_lista_usuario(escala,lista_id_usuario)
-    db.session.commit()
     return {}
 
 @api.route('/escalas/<int:id>/', methods=['DELETE'])

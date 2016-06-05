@@ -135,34 +135,6 @@ class Usuario(db.Model):
     @property
     def antiguidade(self):
         return int(self.data_promocao.year/self.data_promocao.month/self.data_promocao.day)
-
-    def vermelhas(self):
-        return [servico for servico in self.servicos if servico.tipo == TipoServico.VERMELHO]
-
-    def pretas(self):
-        return [servico for servico in self.servicos if servico.tipo == TipoServico.PRETO]
-    
-    def roxas(self):
-        return [servico for servico in self.servicos if servico.tipo == TipoServico.ROXA]
-
-    def by_vermelha_key(milico):
-        servicos = milico.roxas()
-        return milico.hash_service(servicos)
-        
-    def by_preta_key(milico):
-        servicos = milico.pretas()
-        return milico.hash_service(servicos)
-     
-    def by_roxa_key(milico):
-        servicos = milico.vermelhas()
-        return milico.hash_service(servicos)
-        
-    def hash_service(milico,servicos):
-        total = 0
-        if len(servicos) > 0:
-            total += reduce(lambda x,y: x*y*3,map(lambda x: x.data.year * x.data.month * x.data.day*3,servicos))
-        total += milico.antiguidade
-        return total
     
     def add_perfil(self,perfil):
         usuario_perfil = UsuarioPerfil(perfil = perfil) 
@@ -233,7 +205,7 @@ class Escala(db.Model):
     nome = db.Column(db.String(50), index=True)
     tipo = db.Column(db.Integer,default=0)
     ativo = db.Column(db.Boolean, default=True)
-    datas_especias = db.relationship('DataEspecial',back_populates = "escala")
+    datas_especias = db.relationship('DataEspecial',back_populates = "escala", lazy = 'dynamic')
     usuarios = db.relationship('UsuarioEscala', back_populates = "escala", lazy = 'dynamic')
     
     def __repr__(self):
@@ -254,6 +226,12 @@ class Escala(db.Model):
         except KeyError as e:
             raise ValidationError('Invalid escala: missing ' + e.args[0])
         return self
+    
+    def get_datas_vermelhas(self):
+        return self.datas_especias.filter(DataEspecial.tipo == TipoServico.VERMELHO).all()
+    
+    def get_datas_roxas(self):
+        return self.datas_especias.filter(DataEspecial.tipo == TipoServico.ROXA).all()
 
 class DataEspecial(db.Model):
     __tablename__ = 'data_especial'
@@ -287,7 +265,7 @@ class UsuarioEscala(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'))
     escala = db.relationship('Escala', back_populates = "usuarios")
     usuario = db.relationship('Usuario', back_populates = "escalas")
-    servicos = db.relationship('Servico',back_populates = "usuario_escala")
+    servicos = db.relationship('Servico',back_populates = "usuario_escala",lazy='dynamic')
     data_cadastro = db.Column(db.DateTime)
     data_fim = db.Column(db.DateTime)
     
@@ -309,6 +287,34 @@ class UsuarioEscala(db.Model):
         except (KeyError, NotFound):
             raise ValidationError('Invalid escala id')
         return self
+    
+    def vermelhas(self):
+        return [servico for servico in self.servicos if servico.tipo == TipoServico.VERMELHO]
+
+    def pretas(self):
+        return [servico for servico in self.servicos if servico.tipo == TipoServico.PRETO]
+    
+    def roxas(self):
+        return [servico for servico in self.servicos if servico.tipo == TipoServico.ROXA]
+
+    def by_vermelha_key(usuario_escala):
+        servicos = usuario_escala.roxas()
+        return usuario_escala.hash_service(servicos)
+        
+    def by_preta_key(usuario_escala):
+        servicos = usuario_escala.pretas()
+        return usuario_escala.hash_service(servicos)
+     
+    def by_roxa_key(usuario_escala):
+        servicos = usuario_escala.vermelhas()
+        return usuario_escala.hash_service(servicos)
+        
+    def hash_service(usuario_escala,servicos):
+        total = 0
+        if len(servicos) > 0:
+            total += reduce(lambda x,y: x*y*3,map(lambda x: x.data.year * x.data.month * x.data.day*3,servicos))
+        total += usuario_escala.usuario.antiguidade
+        return total
 
 class Servico(db.Model):
     __tablename__ = 'servico'
