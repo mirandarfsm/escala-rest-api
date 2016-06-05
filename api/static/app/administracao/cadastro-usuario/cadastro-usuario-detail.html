@@ -34,6 +34,15 @@
 		 	<label>Data Promação:</label>
 			<input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.usuario.data_promocao" is-open="vm.popup" ng-click="vm.open()" close-text="Close" />
 		</div>
+		<div class="form-group">
+		 	<label>Perfil:</label> <br />
+			<div class="checkbox-inline" ng-repeat="perfil in vm.perfis">
+				<label>
+					<input type="checkbox" check-list="vm.usuario.perfis" value="perfil.valor">
+					{{perfil.nome}}
+				</label>
+			</div>
+		</div>
 		<button type="submit" ng-click="vm.salvar()" class="btn btn-default">Submit</button>
 		<a class="btn btn-default" href="#/cadastro-usuario" role="button">Cancel</a>
 	</form>

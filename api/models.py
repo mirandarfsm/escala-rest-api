@@ -59,7 +59,6 @@ class TipoEscala(object):
 class Perfil(object):
     ADMINISTRADOR = 0
     ESCALANTE = 1
-    USUARIO = 2
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
@@ -89,8 +88,7 @@ class Usuario(db.Model):
 
     def from_json(self, json):
         if 'perfis' in json:
-            for perfil in json['perfis']:
-                self.add_perfil(perfil)
+            self.add_perfis(json['perfis'])
         try:
             self.data_promocao = timestamp2date(json['data_promocao'])
         except KeyError as e:
@@ -136,14 +134,25 @@ class Usuario(db.Model):
     def antiguidade(self):
         return int(self.data_promocao.year/self.data_promocao.month/self.data_promocao.day)
     
-    def add_perfil(self,perfil):
-        usuario_perfil = UsuarioPerfil(perfil = perfil) 
-        self.perfis.append(usuario_perfil)
+    def add_perfis(self,perfis):
+        novos_perfis = []
+        for perfil in perfis:
+            usuario_perfil = self.get_perfil(perfil);
+            if usuario_perfil:
+                novos_perfis.append(usuario_perfil)
+            else:
+                novos_perfis.append(UsuarioPerfil(perfil = perfil))
+        self.perfis = novos_perfis
     
     def has_perfil(self,perfil):
         perfis = [usuario_perfil.perfil for usuario_perfil in self.perfis]
-        #print perfis
         return perfil in perfis
+    
+    def get_perfil(self,perfil):
+        for usuario_perfil in self.perfis:
+            if usuario_perfil.perfil == perfil:
+                return usuario_perfil
+        return None
 
 class UsuarioPerfil(db.Model):
     __tablename__ = 'usuario_perfil'

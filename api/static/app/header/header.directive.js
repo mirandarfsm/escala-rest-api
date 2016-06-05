@@ -15,10 +15,10 @@
 	    };
 	}
 
-	function HeaderController($scope,$location,$rootScope,autenticacaoService){
+	function HeaderController($scope,$location,autenticacaoService){
 		var vm = this;
 		
-		vm.logout = logout;
+		$scope.logout = logout;
 		
 		function logout() {
 			autenticacaoService.logout();
