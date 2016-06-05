@@ -1,4 +1,3 @@
-<uib-alert ng-show="alert" type="{{cadastroUsuarioCtrl.alert.type}}" close="closeAlert()">{{cadastroUsuarioCtrl.alert.msg}}</uib-alert>
 <h3>Cadastro de Usuário</h3>
 <hr/>
 <div>
@@ -23,7 +22,8 @@
 				<td>{{ usuario.nome_guerra }} </td>
 		    	<td>{{ usuario.email }}</td>
 		    	<td><a class="edit ml10" href="#/cadastro-usuario/{{usuario.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
-				<td><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
+				<td ng-show="usuario.ativo"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
+				<td ng-show="!usuario.ativo"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>

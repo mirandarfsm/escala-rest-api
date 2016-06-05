@@ -5,12 +5,13 @@
 		.module('Escalante')
 		.controller('CadastroAfastamentoDetailController',CadastroAfastamentoDetailController); 
 	
-	CadastroAfastamentoDetailController.$inject = ['afastamentoGetOne','$location'];
+	CadastroAfastamentoDetailController.$inject = ['afastamentoGetOne','$location','$rootScope'];
 	
-	function CadastroAfastamentoDetailController(afastamentoGetOne,$location){
+	function CadastroAfastamentoDetailController(afastamentoGetOne,$location,$rootScope){
 	    var vm = this;
 	    
 	    vm.afastamento = afastamentoGetOne;
+		console.log(vm.afastamento)
 		vm.popupDataInicio = false;
 	    vm.popupDataFim = false;
 		

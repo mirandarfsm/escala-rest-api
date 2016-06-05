@@ -11,10 +11,22 @@
 	  
 	  $routeProvider
 	  .when("/", {
-		  templateUrl: 'app/usuario/home/teste.html',
-		  controller: 'TesteController',
-		  controllerAs: 'vm'
+		  templateUrl: 'app/usuario/home/home.html',
+		  controller: 'HomeController',
+		  controllerAs: 'vm',
+          resolve: {
+		    	servicoGetList: servicoGetList,
+                afastamentoGetList: afastamentoGetList
+		    }
 		});
+  }
+  
+  function servicoGetList(autenticacaoService){
+      return autenticacaoService.get().getList('servicos');
+  }
+  
+  function afastamentoGetList(autenticacaoService) {
+        return autenticacaoService.get().getList('afastamentos');
   }
     
 })();

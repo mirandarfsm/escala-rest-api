@@ -8,7 +8,8 @@
       'ui.bootstrap',
       'ngSanitize',
       'ui.select',
-      'restangular'
+      'restangular',
+      'ui.calendar'
     ]);
 
 })();

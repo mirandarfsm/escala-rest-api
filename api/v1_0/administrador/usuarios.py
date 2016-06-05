@@ -2,6 +2,7 @@ from flask import request,jsonify
 from ...models import db, Usuario
 from ...decorators import json, paginate, etag
 from . import api
+from ...controller import UsuarioEscalaController
 
 @api.route('/usuarios/', methods=['GET'])
 @etag
@@ -53,6 +54,7 @@ def desativar_usuario(id):
     usuario = Usuario.query.get_or_404(id)
     #db.session.delete(usuario)
     usuario.ativo = not usuario.ativo
+    UsuarioEscalaController().remover_usuario_de_escalas(usuario)
     db.session.add(usuario)
     db.session.commit()
     return {}

@@ -1,25 +1,35 @@
 <div>
-	<form role="form">
-		<div class="form-group">
-		 	<label>Email:</label>
-			<input type="text" class="form-control">
+	<!-- Modal Troca Senha -->
+	<script type="text/ng-template" id="troca-senha-modal.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Trocar Senha</h3>
+        </div>
+		<div class="modal-body">
+			<form role="form" id="trocaSenhaForm">
+				<div class="form-group">
+					<label>Senha Atual:</label>
+					<input type="text" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>Nova Senha:</label>
+					<input type="text" class="form-control">
+				</div>
+				<div class="form-group" >
+					<label>Confirmar Nova Senha:</label>
+					<input type="text" class="form-control">
+				</div>
+			</form>
 		</div>
-		<div class="form-group">
-		 	<label>Senha:</label>
-		 	<input type="text" class="form-control">
-		</div>
-		<div class="form-group">
-		 	<label>Nova Senha:</label>
-		 	<input type="text" class="form-control">
-		</div>
-		<div class="form-group" >
-	 		<label>Confirmar Nova Senha:</label>
-			<input type="text" class="form-control">
-		</div>
-		<button type="submit" class="btn btn-default">Trocar Senha</button>
-	</form>
-	<hr/>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-default" form="trocaSenhaForm">Trocar Senha</button>
+			<button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+		</div>			
+    </script>
+
+    <button type="button" class="btn btn-default" ng-click="vm.show()">Trocar Senha</button>
+	
 	<h3>Preferências</h3>
+	<hr/>
 	<form>
 		<div class="checkbox">
 		    <label>

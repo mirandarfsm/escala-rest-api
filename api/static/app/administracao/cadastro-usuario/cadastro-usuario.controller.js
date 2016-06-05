@@ -16,7 +16,7 @@
         function deletar(index) {
             var usuario = vm.usuarios[index];
             usuario.remove().then(function () {
-                vm.usuarios.splice(index,1);
+                vm.usuarios[index].ativo = !vm.usuarios[index].ativo;
             });
         }
     }

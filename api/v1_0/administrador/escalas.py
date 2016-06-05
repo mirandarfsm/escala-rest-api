@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from ...models import db, Escala,TipoEscala
+from ...models import db, Escala,TipoEscala,Usuario,UsuarioEscala
 from ...decorators import json, paginate, etag
 from . import api
 from ...services import ServicoDiarioService,ServicoSemanalService
@@ -22,8 +22,7 @@ def get_escala(id):
 @paginate()
 def get_escala_usuario(id):
     escala = Escala.query.get_or_404(id)
-    return escala.usuarios
-
+    return Usuario.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id, UsuarioEscala.data_fim == None)
 @api.route('/escalas/<int:id>/generate/', methods=['PUT'])
 @json
 def new_service_generate(id):
@@ -51,7 +50,7 @@ def edit_escala(id):
     escala = Escala.query.get_or_404(id)
     escala.from_json(request.json)
     db.session.add(escala)
-    if 'usuarios' in request.json:
+    if 'usuarios' in request.json and escala.ativo:
         lista_id_usuario = [usuario['id'] for usuario in request.json['usuarios']]
         UsuarioEscalaController().modificar_lista_usuario(escala,lista_id_usuario)
     db.session.commit()
@@ -63,6 +62,7 @@ def delete_escala(id):
     escala = Escala.query.get_or_404(id)
     #db.session.delete(escala)
     escala.ativo = not escala.ativo
+    UsuarioEscalaController().remover_escala_de_usuarios(escala)
     db.session.add(escala)
     db.session.commit()
     return {}

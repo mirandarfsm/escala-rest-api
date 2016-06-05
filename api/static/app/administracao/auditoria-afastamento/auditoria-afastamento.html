@@ -1,4 +1,3 @@
-<uib-alert ng-show="alert" type="{{gerenciaAfastamentoCtrl.alert.type}}" close="closeAlert()">{{gerenciaAfastamentoCtrl.alert.msg}}</uib-alert>
 <h3>Gerência de Afastamentos</h3>
 <hr/>
 <div >
@@ -20,7 +19,7 @@
 		    	<td>{{ afastamento.motivo }}</td>
 		    	<td>{{ afastamento.data_inicio | date: 'dd/MM/yyyy' }}</td>
 		    	<td>{{ afastamento.data_fim | date: 'dd/MM/yyyy' }}</td>
-		    	<td><a class="edit ml10" href="#/gerencia-afastamento/{{afastamento.id}}" title="See"><i class="glyphicon glyphicon-eye-open"></i></a></td>
+		    	<td><a class="edit ml10" href="#/auditoria-afastamento/{{afastamento.id}}" title="See"><i class="glyphicon glyphicon-eye-open"></i></a></td>
 		    	<td><a class="edit ml10" href="#/cadastro-afastamento/{{afastamento.id}}" title="Accept"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
 				<td><a class="remove ml10" ng-click="vm.deletar($index)" title="Reject"><i class="glyphicon glyphicon-ban-circle text-danger"></i></a></td>
 		    </tr>

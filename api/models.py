@@ -76,16 +76,16 @@ class Usuario(db.Model):
     ativo = db.Column(db.Boolean, default=True)
     perfis = db.relationship('UsuarioPerfil',back_populates="usuario", lazy='joined')
     afastamentos = db.relationship('Afastamento',back_populates="usuario", lazy='dynamic')
-    escalas = db.relationship('UsuarioEscala',back_populates="usuario")
+    escalas = db.relationship('UsuarioEscala',back_populates="usuario", lazy = 'dynamic')
     
     def get_url(self):
         return url_for('administracao.get_usuario', id=self.id, _external=True)
 
     def to_json(self):
-        dict = to_json(self, self.__class__)
-        dict['perfis'] = [usuario_perfil.perfil for usuario_perfil in self.perfis]
-        del dict['password_hash']
-        return dict
+        json = to_json(self, self.__class__)
+        json['perfis'] = [usuario_perfil.perfil for usuario_perfil in self.perfis]
+        del json['password_hash']
+        return json
 
     def from_json(self, json):
         if 'perfis' in json:
@@ -99,7 +99,7 @@ class Usuario(db.Model):
             self.username = json['username']
             self.password = json['username']
             self.nome_guerra = json['nome_guerra']
-            self.nome = json['name']
+            self.nome = json['nome']
             self.email = json['email']
             self.especialidade = json['especialidade']
             self.posto = json['posto']
@@ -180,6 +180,9 @@ class UsuarioPerfil(db.Model):
     usuario = db.relationship('Usuario', back_populates="perfis")
     perfil = db.Column(db.Integer)
     
+    def to_json(self):
+        pass
+    
 class Afastamento(db.Model):
     __tablename__ = 'afastamento'
     id = db.Column(db.Integer, primary_key=True)
@@ -196,7 +199,9 @@ class Afastamento(db.Model):
         return url_for('administracao.get_afastamento', id=self.id, _external=True)
 
     def to_json(self):
-        return to_json(self, self.__class__)
+        json = to_json(self, self.__class__)
+        json['usuario'] = self.usuario.to_json()
+        return json
 
     def from_json(self, json, id_usuario=None):
         if 'observacao' in json:
@@ -238,11 +243,13 @@ class Escala(db.Model):
         return url_for('administracao.get_escala', id=self.id, _external=True)
 
     def to_json(self):
-        return to_json(self, self.__class__)
+        json = to_json(self, self.__class__)
+        json['datas'] = [data.to_json() for data in self.datas_especias]
+        return json
 
     def from_json(self, json):
         try:
-            self.nome = json['name']
+            self.nome = json['nome']
             self.tipo = json['tipo']
         except KeyError as e:
             raise ValidationError('Invalid escala: missing ' + e.args[0])
@@ -257,7 +264,8 @@ class DataEspecial(db.Model):
     tipo = db.Column(db.Integer)
     
     def to_json(self):
-        return to_json(self, self.__class__)
+        json = to_json(self, self.__class__)
+        return json
 
     def from_json(self, json):
         try:
@@ -284,7 +292,10 @@ class UsuarioEscala(db.Model):
     data_fim = db.Column(db.DateTime)
     
     def to_json(self):
-        return to_json(self, self.__class__)
+        json = to_json(self, self.__class__)
+        json['usuario'] = self.usuario.to_json()
+        json['escala'] = self.escala.to_json()
+        return json
     
     def from_json(self, json):
         try:
@@ -311,7 +322,9 @@ class Servico(db.Model):
         return url_for('administracao.get_servico', id=self.id, _external=True)
 
     def to_json(self):
-        return to_json(self, self.__class__)
+        json = to_json(self, self.__class__)
+        json['usuario_escala'] = self.usuario_escala.to_json()
+        return json
 
     def from_json(self, json):
         try:
@@ -343,7 +356,11 @@ class TrocaServico(db.Model):
         return url_for('api.get_usuario_troca_servico', id=self.id, _external=True)
 
     def to_json(self):
-        return to_json(self, self.__class__)
+        json = to_json(self, self.__class__)
+        json['servico'] = self.servico.to_json()
+        json['substituido'] = self.substituido.to_json()
+        json['substituto'] = self.substituto.to_json()
+        return json
 
     def from_json(self, json):
         try:

@@ -17,7 +17,7 @@
         function deletar(index) {
             var escala = vm.escalas[index];
             escala.remove(escala.id).then(function () {
-                vm.escalas.splice(index,1);
+                vm.escalas[index].ativo = !vm.escalas[index].ativo;
             });
         }   
     }

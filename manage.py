@@ -41,10 +41,14 @@ def addadmin():
 @manager.command
 def populatedb():
     """Register admin user."""
-    users = [Usuario(name="111",nome_guerra="111" ,email="111@111",username="111", password="111"), \
-            Usuario(name="333",nome_guerra="333" ,email="333@333",username="333", password="333"), \
-            Usuario(name="222",nome_guerra="222" ,email="222@222",username="222", password="222"), \
-            Usuario(name="978",nome_guerra="978" ,email="978@978",username="978", password="978")]
+    users = [Usuario(nome="miranda",nome_guerra="miranda" ,email="miranda@intranet",username="miranda", password="miranda"), \
+            Usuario(nome="claudio",nome_guerra="claudio" ,email="claudio@intranet",username="claudio", password="claudio"), \
+            Usuario(nome="joao",nome_guerra="joao" ,email="joao@intranet",username="joao", password="joao"), \
+            Usuario(nome="marcele",nome_guerra="marcele" ,email="marcele@intranet",username="marcele", password="marcele"), \
+            Usuario(nome="juliana",nome_guerra="juliana" ,email="juliana@intranet",username="juliana", password="juliana"), \
+            Usuario(nome="marta",nome_guerra="marta" ,email="marta@intranet",username="marta", password="marta"), \
+            Usuario(nome="renata",nome_guerra="renata" ,email="renata@intranet",username="renata", password="renata"), \
+            Usuario(nome="ornelas",nome_guerra="ornelas" ,email="ornelas@intranet",username="ornelas", password="ornelas")]
     db.session.add_all(users)
     db.session.commit()
     print('Users were registered successfully.') 

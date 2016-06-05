@@ -12,6 +12,7 @@
         
         vm.usuarios = usuarioGetList;
         vm.escala = escalaGetOne;
+        vm.escala.usuarios = vm.escala.getList('usuario').$object;
         
         vm.adicionarFeriado = adicionarFeriado;
         vm.adicionarRoxa = adicionarRoxa;

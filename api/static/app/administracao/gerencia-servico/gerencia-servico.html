@@ -5,9 +5,9 @@
 	<form role="form" class="form-inline">
 		<div class="form-group">
             <ui-select ng-model="vm.escala" theme="bootstrap">
-                <ui-select-match placeholder="Escala ">{{$select.selected.name}} </ui-select-match>
+                <ui-select-match placeholder="Escala ">{{$select.selected.nome}} </ui-select-match>
                 <ui-select-choices repeat="escala in (vm.escalas| filter: $select.search)">
-                    <span ng-bind-html="escala.name"></span>
+                    <span ng-bind-html="escala.nome"></span>
                 </ui-select-choices>
             </ui-select>
 		</div>

@@ -10,8 +10,7 @@
     function AuditoriaAfastamentoController(afastamentoGetList){
         var vm = this;
         
-        vm.afastamentos = afastamentoGetList.objects;
-        console.log(afastamentoGetList);
+        vm.afastamentos = afastamentoGetList;
         vm.deletar = deletar;
         
         function deletar(index){
