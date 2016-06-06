@@ -9,7 +9,7 @@ from . import api
 @paginate()
 def get_usuario_servico():
     usuario = g.user
-    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_usuario == usuario.id, UsuarioEscala.data_fim == None)
+    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_usuario == usuario.id)
 
 @api.route('/usuarios/me/servicos/<int:id>/', methods=['GET'])
 @etag

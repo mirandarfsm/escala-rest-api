@@ -12,7 +12,7 @@
         
         vm.usuarios = usuarioGetList;
         vm.escala = escalaGetOne;
-        vm.escala.usuarios = vm.escala.getList('usuario').$object;
+        vm.escala.usuarios = vm.escala.id ? vm.escala.getList('usuario').$object : undefined;
         
         vm.adicionarFeriado = adicionarFeriado;
         vm.adicionarRoxa = adicionarRoxa;
