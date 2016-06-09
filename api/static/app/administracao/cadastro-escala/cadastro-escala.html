@@ -1,23 +1,21 @@
-<uib-alert ng-show="alert" type="{{cadastroEscalaCtrl.alert.type}}" close="closeAlert()">{{cadastroEscalaCtrl.alert.msg}}</uib-alert>
+<a class="pull-right btn btn-default btn-success" href="#/cadastro-escala/new" role="button">Novo Escala</a>
 <h3>Cadastro de Escala</h3>
 <hr/>
 <div>
-	{{vm.status}}
-	<a class="btn btn-default" href="#/cadastro-escala/new" role="button">Novo Escala</a>
-	<table class="table table-hover">
+	<table class="table table-striped table-bordered table-hover">
 	    <thead>
 		    <tr>
-		        <th data-field="name" data-sortable="true">Name</th>
-		        <th data-field="operate">Editar</th>
-		        <th data-field="operate">Remover</th>
+		        <th data-field="operate" class="col-md-1 text-center"><i class="glyphicon glyphicon-pencil text-primary"></i></th>
+		        <th data-field="operate" class="col-md-1 text-center"><i class="glyphicon glyphicon-remove text-danger"></i></th>
+		        <th data-field="name" data-sortable="true" class="col-xs-10 col-md-10 col-lg-10" >Nome</th>
 		    </tr>
 	    </thead>
 	    <tbody>
 		    <tr ng-repeat="escala in vm.escalas">
+		    	<td class="text-center"><a class="edit ml10" href="#/cadastro-escala/{{escala.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td ng-show="escala.ativo" class="text-center"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
+				<td ng-show="!escala.ativo" class="text-center"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
 		    	<td>{{ escala.nome }}</td>
-		    	<td><a class="edit ml10" href="#/cadastro-escala/{{escala.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
-				<td ng-show="escala.ativo"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
-				<td ng-show="!escala.ativo"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>

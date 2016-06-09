@@ -18,7 +18,8 @@
 			getToken: getToken,
 			logout: logout,
 			isLogged: isLogged,
-			isAdmin: isAdmin
+			isAdmin: isAdmin,
+			isEscalante: isEscalante
 			
 		};
 
@@ -57,6 +58,13 @@
 		function isAdmin(){
 			if(service.isLogged()){
 			  return checkPerfil(usuario.perfis,0);
+			}
+			return false;
+		}
+		
+		function isEscalante(){
+			if(service.isLogged()){
+			  return checkPerfil(usuario.perfis,1);
 			}
 			return false;
 		}

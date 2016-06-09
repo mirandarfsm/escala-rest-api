@@ -1,29 +1,28 @@
+<a class="pull-right btn btn-default btn-success" href="#/cadastro-usuario/new" role="button">Novo Usuário</a>
 <h3>Cadastro de Usuário</h3>
 <hr/>
 <div>
-	{{vm.status}}
-	<a class="btn btn-default" href="#/cadastro-usuario/new" role="button">Novo Usuário</a>
-	<table class="table table-hover">
+	<table class="table table-striped table-bordered table-hover">
 	    <thead>
 		    <tr>
-				<th data-field="name" data-sortable="true">Posto/Graduação</th>
-		        <th data-field="email" data-sortable="true">Especialidade</th>
+		        <th data-field="operate" class="col-md-1 text-center">Editar</th>
+		        <th data-field="operate" class="col-md-1 text-center">Remover</th>
+				<th data-field="name" data-sortable="true" class="col-md-1">Posto/Graduação</th>
+		        <th data-field="email" data-sortable="true" class="col-md-1">Especialidade</th>
 		        <th data-field="name" data-sortable="true">Nome</th>
 		        <th data-field="email" data-sortable="true">Email</th>
-		        <th data-field="operate">Editar</th>
-		        <th data-field="operate">Remover</th>
 		    </tr>
 	    </thead>
 	    <tbody>
 	    	
 		    <tr ng-repeat="usuario in vm.usuarios">
+		    	<td class="text-center"><a class="edit ml10" href="#/cadastro-usuario/{{usuario.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
+				<td ng-show="usuario.ativo" class="text-center"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
+				<td ng-show="!usuario.ativo" class="text-center"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
 		    	<td>{{usuario.posto}}</td>
 				<td>{{usuario.especialidade}}</td>
 				<td>{{ usuario.nome_guerra }} </td>
 		    	<td>{{ usuario.email }}</td>
-		    	<td><a class="edit ml10" href="#/cadastro-usuario/{{usuario.id}}" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a></td>
-				<td ng-show="usuario.ativo"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-remove text-danger"></i></a></td>
-				<td ng-show="!usuario.ativo"><a class="remove ml10" ng-click="vm.deletar($index)" title="Remove"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
 		    </tr>
 	    </tbody>
 	</table>

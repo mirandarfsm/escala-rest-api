@@ -26,6 +26,7 @@
         }
 
         function salvar() {
+        	if(!vm.usuario.id) vm.usuario.password = vm.usuario.username; 
             vm.usuario.save().then(function(){
                 $location.path('/cadastro-usuario');
             });

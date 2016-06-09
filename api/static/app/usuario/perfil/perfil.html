@@ -8,15 +8,15 @@
 			<form role="form" id="trocaSenhaForm">
 				<div class="form-group">
 					<label>Senha Atual:</label>
-					<input type="text" class="form-control">
+					<input type="password" class="form-control">
 				</div>
 				<div class="form-group">
 					<label>Nova Senha:</label>
-					<input type="text" class="form-control">
+					<input type="password" class="form-control">
 				</div>
 				<div class="form-group" >
 					<label>Confirmar Nova Senha:</label>
-					<input type="text" class="form-control">
+					<input type="password" class="form-control">
 				</div>
 			</form>
 		</div>
@@ -25,8 +25,6 @@
 			<button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
 		</div>			
     </script>
-
-    <button type="button" class="btn btn-default" ng-click="vm.show()">Trocar Senha</button>
 	
 	<h3>Preferências</h3>
 	<hr/>
@@ -46,6 +44,7 @@
 		    	<input type="checkbox" ng-model="vm.test"> teste
 		    </label>
 	    </div>
-		<button type="submit" ng-click="vm.aceitar()" class="btn btn-default">Submit</button>
+		<button type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Submit</button>
+		<button type="button" class="btn btn-default" ng-click="vm.show()">Trocar Senha</button>
 	</form>
 </div>

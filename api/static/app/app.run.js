@@ -16,6 +16,7 @@
       }
       $rootScope.isAuthenticated = autenticacaoService.isLogged();
       $rootScope.isAdmin = autenticacaoService.isAdmin();
+      $rootScope.isEscalante = autenticacaoService.isEscalante();
       if ($location.path() !== '/login' && !autenticacaoService.isLogged()) {
         $location.path('/login');
       };

@@ -15,7 +15,9 @@
 		vm.gerarEscala = gerarEscala; 
 		
 	    function gerarEscala(){
-	        vm.escala.one('generate').put();
+	        vm.escala.one('generate').put().then(function(){
+	        	alert("Distribuição de Serviço executado com sucesso");
+	        });
 	    }
 	}
 	

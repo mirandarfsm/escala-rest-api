@@ -29,7 +29,7 @@ def get_escala_usuario(id):
 @paginate()
 def get_escala_servico(id):
     escala = Escala.query.get_or_404(id)
-    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id, UsuarioEscala.data_fim == None)
+    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id)
 
 @api.route('/escalas/<int:id>/generate/', methods=['PUT'])
 @json

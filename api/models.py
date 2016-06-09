@@ -89,13 +89,16 @@ class Usuario(db.Model):
     def from_json(self, json):
         if 'perfis' in json:
             self.add_perfis(json['perfis'])
+            
+        if 'password' in json:
+                self.password = json['password']
+                
         try:
             self.data_promocao = timestamp2date(json['data_promocao'])
         except KeyError as e:
             raise ValidationError('Invalid date: '+ e.args[0])
         try:
             self.username = json['username']
-            self.password = json['username']
             self.nome_guerra = json['nome_guerra']
             self.nome = json['nome']
             self.email = json['email']
@@ -214,7 +217,7 @@ class Escala(db.Model):
     nome = db.Column(db.String(50), index=True)
     tipo = db.Column(db.Integer,default=0)
     ativo = db.Column(db.Boolean, default=True)
-    datas_especias = db.relationship('DataEspecial',back_populates = "escala", lazy = 'dynamic')
+    datas_especiais = db.relationship('DataEspecial',back_populates = "escala", lazy = 'dynamic')
     usuarios = db.relationship('UsuarioEscala', back_populates = "escala", lazy = 'dynamic')
     
     def __repr__(self):
@@ -225,10 +228,12 @@ class Escala(db.Model):
 
     def to_json(self):
         json = to_json(self, self.__class__)
-        json['datas'] = [data.to_json() for data in self.datas_especias]
+        json['datas_especiais'] = [data.to_json() for data in self.datas_especiais]
         return json
 
     def from_json(self, json):
+        if 'datas_especiais' in json:
+            self.add_datas(json['datas_especiais'])       
         try:
             self.nome = json['nome']
             self.tipo = json['tipo']
@@ -236,17 +241,34 @@ class Escala(db.Model):
             raise ValidationError('Invalid escala: missing ' + e.args[0])
         return self
     
+    def add_datas(self,datas_especiais):
+        novas_datas = []
+        for data_especial in datas_especiais:
+            data = self.get_data_especial(timestamp2date(data_especial['data']));
+            if data:
+                data.tipo = data_especial['tipo'] 
+                novas_datas.append(data)
+            else:
+                novas_datas.append(DataEspecial(data=timestamp2date(data_especial['data']),tipo = data_especial['tipo']))
+        self.datas_especiais = novas_datas
+    
+    def get_data_especial(self,data):
+        for data_especial in self.datas_especiais:
+            if data_especial.data == data:
+                return data_especial
+        return None
+
     def get_datas_vermelhas(self):
-        return self.datas_especias.filter(DataEspecial.tipo == TipoServico.VERMELHO).all()
+        return self.datas_especiais.filter(DataEspecial.tipo == TipoServico.VERMELHO).all()
     
     def get_datas_roxas(self):
-        return self.datas_especias.filter(DataEspecial.tipo == TipoServico.ROXA).all()
+        return self.datas_especiais.filter(DataEspecial.tipo == TipoServico.ROXA).all()
 
 class DataEspecial(db.Model):
     __tablename__ = 'data_especial'
     id = db.Column(db.Integer, primary_key=True)
     id_escala = db.Column(db.Integer,db.ForeignKey('escala.id'))
-    escala = db.relationship('Escala', back_populates = "datas_especias")
+    escala = db.relationship('Escala', back_populates = "datas_especiais")
     data = db.Column(db.Date)
     tipo = db.Column(db.Integer)
     

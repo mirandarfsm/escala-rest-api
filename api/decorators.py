@@ -79,10 +79,12 @@ def paginate(default_per_page=10,max_per_page=50):
             pages['last'] = url_for(request.endpoint, page=p.pages,
                                     per_page=per_page, _external=True,
                                     **kwargs)
-            return jsonify({
+            json = {
                 'objects': [item.to_json() for item in p.items],
                 'meta': pages
-            })
+            }
+            print json
+            return jsonify(json)
         return wrapped
     return decorator
 
