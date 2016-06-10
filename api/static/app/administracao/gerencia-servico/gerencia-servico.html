@@ -1,47 +1,42 @@
-<h3>Servicos</h3>
+<a class="pull-right btn btn-default btn-success" href="#/cadastro-servico/new" role="button">Novo Serviço</a>
+<h3>Gerência de Serviços</h3>
 <hr/>
 <div class="row">
 	<div class="col-md-4"></div>
 	<div class="col-md-4">
-	            <ui-select ng-model="vm.escala" theme="bootstrap" ng-click="vm.getServicos()">
-	                <ui-select-match placeholder="Escala ">{{$select.selected.nome}} </ui-select-match>
-	                <ui-select-choices repeat="escala in (vm.escalas| filter: $select.search)">
-	                    <span ng-bind-html="escala.nome"></span>
-	                </ui-select-choices>
-	            </ui-select>
-	<!-- 		<div class="form-group"> -->
-	<!-- 			<input class="form-control" type="date" ng-model="vm.data_inicio" placeholder="Data Inicio" name="data_inicio" disabled></input> -->
-	<!-- 		</div> -->
-	<!--         <div class="form-group"> -->
-	<!-- 			<input class="form-control" type="date" ng-model="vm.data_fim" placeholder="Data Fim" name="data_fim" disabled></input > -->
-	<!-- 		</div> -->
-	<!-- 		<button type="submit" ng-click="vm.getServicos()" class="btn btn-default">Submit</button> -->
+	    <ui-select ng-model="vm.escala" theme="bootstrap" >
+	        <ui-select-match placeholder="Escala " >{{$select.selected.nome}} </ui-select-match>
+	        <ui-select-choices ng-click="vm.getServicos()" repeat="escala in (vm.escalas| filter: $select.search)">
+	            <span ng-bind-html="escala.nome"></span>
+	        </ui-select-choices>
+	    </ui-select>
 	</div>
 </div>
 <div style="margin-top: 10px;">
-	<div ui-calendar="vm.uiConfig.calendar" class="span8 calendar" ng-model="vm.eventSources"></div>
-<!-- 	<table class="table table-striped table-bordered table-hover"> -->
-<!-- 	    <thead> -->
-<!-- 		    <tr> -->
-<!-- 		        <th data-field="operate" class="col-md-1 text-center"><i class="glyphicon glyphicon-pencil"></th> -->
-<!-- 				<th data-field="name" data-sortable="true">Usuário</th> -->
-<!-- 		        <th data-field="name" data-sortable="true">Data</th> -->
-<!-- 				<th data-field="name" data-sortable="true">Tipo</th> -->
-<!-- 		    </tr> -->
-<!-- 	    </thead> -->
-<!-- 	    <tbody> -->
-<!-- 		    <tr ng-repeat="servico in vm.servicos"> -->
-<!-- 		    	<td> -->
-<!-- 		    		<a class="edit ml10" href="#/gerencia-servico/{{servico.id}}" title="Edit"> -->
-<!-- 		    			<i class="glyphicon glyphicon-pencil"></i> -->
-<!-- 		    		</a> -->
-<!-- 		    	</td> -->
-<!-- 				<td>{{ servico.usuario_escala.usuario.nome_guerra }}</td> -->
-<!-- 		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td> -->
-<!--                 <td>{{ vm.tipos[servico.tipo] }}</td> -->
-<!-- 		    </tr> -->
-<!-- 	    </tbody> -->
-<!-- 	</table> -->
+	<table class="table table-striped table-bordered table-hover">
+	    <thead>
+		    <tr>
+		        <th data-field="operate" class="col-md-1 text-center"><i class="glyphicon glyphicon-pencil"></th>
+				<th data-field="name" data-sortable="true">Usuário</th>
+				<th data-field="name" data-sortable="true">Escala</th>
+		        <th data-field="name" data-sortable="true">Data</th>
+				<th data-field="name" data-sortable="true">Tipo</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="servico in vm.servicos">
+		    	<td class="text-center">
+		    		<a class="edit ml10" href="#/gerencia-servico/{{servico.id}}" title="Edit">
+		    			<i class="glyphicon glyphicon-pencil"></i>
+		    		</a>
+		    	</td>
+				<td>{{ servico.usuario_escala.usuario.nome_guerra }}</td>
+				<td>{{ servico.usuario_escala.escala.nome }}</td>
+		    	<td>{{ servico.data | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ vm.tipos[servico.tipo] }}</td>
+		    </tr>
+	    </tbody>
+	</table>
 <!-- 	<div class="text-center"> -->
 <!-- 		<uib-pagination total-items="vm.servicos.meta.total" items-per-page="vm.servicos.meta.per_page" ng-model="vm.servicos.meta.page" ng-change="vm.pageChanged()"></uib-pagination> -->
 <!-- 	</div> -->

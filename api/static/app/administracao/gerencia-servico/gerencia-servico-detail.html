@@ -4,18 +4,22 @@
 	<form role="form">
 		<div class="form-group">
 		 	<label>Escala:</label>
-			<p>{{vm.servico.escala.name}}</p>
+			<p>{{vm.servico.usuario_escala.escala.nome}}</p>
 		</div>
 		<div class="form-group">
 		 	<label>Data do Serviço:</label>
 			<p>{{vm.servico.data | date: 'dd/MM/yyyy'}}</p>
 		</div>
 		<div class="form-group">
-			<label>Militares:</label>
-			<ui-select ng-model="vm.servico.usuario" theme="bootstrap">
-				<ui-select-match placeholder="Militar">{{$select.selected.nome_guerra}} </ui-select-match>
-                <ui-select-choices repeat="usuario in (vm.usuarios| filter: $select.search)">
-                    <span ng-bind-html="usuario.nome_guerra"></span>
+		 	<label>Substituído:</label>
+			<p>{{vm.servico.usuario_escala.usuario.nome_guerra}}</p>
+		</div>
+		<div class="form-group">
+			<label>Substituto:</label>
+			<ui-select ng-model="vm.substituto" theme="bootstrap">
+				<ui-select-match placeholder="Militar">{{$select.selected.usuario.nome_guerra}} </ui-select-match>
+                <ui-select-choices repeat="usuario_escala in (vm.listUsuarioEscala| filter: $select.search)">
+                    <span ng-bind-html="usuario_escala.usuario.nome_guerra"></span>
                     <small>
 						{{usuario.posto}} {{usuario.especialidade}}
 					</small>

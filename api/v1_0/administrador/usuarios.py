@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from ...models import db, Usuario
+from ...models import db, Usuario,Escala
 from ...decorators import json, paginate, etag
 from . import api
 from ...controller import UsuarioEscalaController
@@ -20,6 +20,14 @@ def get_usuario(id):
 @etag
 @json
 def get_usuario_escala(id):
+    usuario = Usuario.query.get_or_404(id)
+    return Escala.query.join(UsuarioEscala).filter(UsuarioEscala.id_usuario == usuario.id, UsuarioEscala.data_fim == None)
+    #return usuario.escalas.filter(UsuarioEscala.dt_fim == None)
+    
+@api.route('/usuarios/<int:id>/usuario-escala/', methods=['GET'])
+@etag
+@json
+def get_usuario_usuario_escala(id):
     usuario = Usuario.query.get_or_404(id)
     return usuario.escalas
     #return usuario.escalas.filter(UsuarioEscala.dt_fim == None)

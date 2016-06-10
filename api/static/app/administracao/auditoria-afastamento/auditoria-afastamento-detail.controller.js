@@ -12,13 +12,24 @@
 
 		vm.afastamento = afastamentoGetOne;
 
-		vm.salvar = salvar;
+		vm.aceitar = aceitar;
+		vm.rejeitar = rejeitar;
 
+		function aceitar(){
+			vm.afastamento.ativo = true;
+			salvar();
+		}
+		
+		function rejeitar(){
+			vm.afastamento.ativo = false;
+			salvar();
+		}
+		
 		function salvar() {
-			vm.afastamento.data_inicio = new Date(vm.data_inicio).getTime();
-			vm.afastamento.data_fim = new Date(vm.data_fim).getTime();
+			vm.afastamento.data_inicio = new Date(vm.afastamento.data_inicio)
+			vm.afastamento.data_fim = new Date(vm.afastamento.data_fim)
 			vm.afastamento.save().then(function() {
-				$location.path("/gerencia-afastamento");
+				$location.path("/auditoria-afastamento");
 			});
 		}
 	}

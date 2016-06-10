@@ -22,8 +22,14 @@
 		 	<label>Observações:</label>
 			<p>{{vm.afastamento.observacao}}</p>
 		</div>
-		<button type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Aceitar</button>
-		<button type="submit" ng-click="vm.rejeitar()" class="btn btn-default btn-danger">Rejeitar</button>
-		<a class="btn btn-default" href="#/auditoria-afastamento" role="button">Cancel</a>
+		<div class="form-group">
+		 	<label>Situação:</label>
+			<p ng-show="!vm.afastamento.data_revisao">Pendente</p>
+			<p ng-show="vm.afastamento.data_revisao && vm.afastamento.ativo">Aprovado</p>
+			<p ng-show="vm.afastamento.data_revisao && !vm.afastamento.ativo">Reprovado</p>
+		</div>
+		<button ng-show="!vm.afastamento.data_revisao" type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Aceitar</button>
+		<button ng-show="!vm.afastamento.data_revisao" type="submit" ng-click="vm.rejeitar()" class="btn btn-default btn-danger">Rejeitar</button>
+		<a class="btn btn-default" href="#/auditoria-afastamento" role="button">Voltar</a>
 	</form>
 </div>

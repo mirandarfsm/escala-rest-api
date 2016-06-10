@@ -1,6 +1,8 @@
 from flask import url_for, request,jsonify
+from datetime import datetime
 from ...models import db, Afastamento
 from ...decorators import json, paginate, etag
+from ...errors import ValidationError
 from . import api
 
 @api.route('/afastamentos/', methods=['GET'])
@@ -26,8 +28,17 @@ def new_afastamento():
 @api.route('/afastamentos/<int:id>/', methods=['PUT'])
 @json
 def edit_afastamento(id):
+    # Camada de servico
     afastamento = Afastamento.query.get_or_404(id)
+    if afastamento.data_revisao is not None:
+        raise ValidationError('Afastamento nao pode ser alterado')
+    
     afastamento.from_json(request.json)
+    
+    if 'ativo' in request.json:
+            afastamento.ativo = request.json['ativo']
+            afastamento.data_revisao = datetime.now()
+    
     db.session.add(afastamento)
     db.session.commit()
     return {}
@@ -36,6 +47,8 @@ def edit_afastamento(id):
 @json
 def delete_afastamento(id):
     afastamento = Afastamento.query.get_or_404(id)
+    if afastamento.data_revisao is not None:
+        raise ValidationError('Afastamento nao pode ser alterado')
     db.session.delete(afastamento)
     db.session.commit()
     return {}

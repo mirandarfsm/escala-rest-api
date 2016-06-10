@@ -191,7 +191,7 @@ class Afastamento(db.Model):
         if 'observacao' in json:
             self.observacao = json['observacao']
         try:
-            self.id_usuario = id_usuario if id_usuario else json['usuario']['id'] #args_from_url(json['usuario']['url'], 'administracao.get_usuario')['id']
+            self.id_usuario = id_usuario if id_usuario else json['usuario']['id']
             self.usuario = Usuario.query.get_or_404(self.id_usuario)
         except (KeyError, NotFound):
             raise ValidationError('Invalid usuario ID')

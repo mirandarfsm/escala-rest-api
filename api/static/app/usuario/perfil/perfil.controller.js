@@ -17,7 +17,7 @@
 			var modalInstance = $uibModal.open({
 				templateUrl: 'troca-senha-modal.html',
 				controller: 'TrocaSenhaModalController',
-				controllerAs: 'vm',
+				controllerAs: 'vm'
 			});
 		};		
 	
@@ -25,7 +25,10 @@
 	
 	function TrocaSenhaModalController($uibModalInstance) {
 		var vm = this;
-		vm.cancel = function () {
+		
+		vm.cancel = cancel; 
+			
+		function cancel() {
 			$uibModalInstance.dismiss('cancel');
 		};
 	}

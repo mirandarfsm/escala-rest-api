@@ -5,21 +5,32 @@
         .module('Escalante')
         .controller('AuditoriaAfastamentoController',AuditoriaAfastamentoController);
 
-    AuditoriaAfastamentoController.$inject = ['afastamentoGetList'];
+    AuditoriaAfastamentoController.$inject = ['afastamentoGetList','$location'];
          
-    function AuditoriaAfastamentoController(afastamentoGetList){
+    function AuditoriaAfastamentoController(afastamentoGetList,$location){
         var vm = this;
         
         vm.afastamentos = afastamentoGetList;
-        vm.deletar = deletar;
-        
-        function deletar(index){
-            var afastamento = vm.afastamentos[index];
-            afastamento.remove().then(function(data){
-                vm.afastamentos.splice(index,1);
-            });
-        }
+        vm.aceitar = aceitar;
+		vm.rejeitar = rejeitar;
 
+		function aceitar(afastamento){
+			afastamento.ativo = true;
+			salvar(afastamento);
+		}
+		
+		function rejeitar(afastamento){
+			afastamento.ativo = false;
+			salvar(afastamento);
+		}
+		
+		function salvar(afastamento) {
+			afastamento.data_inicio = new Date(afastamento.data_inicio)
+			afastamento.data_fim = new Date(afastamento.data_fim)
+			afastamento.save().then(function() {
+				$location.path("/auditoria-afastamento");
+			});
+		}
     }
 
 })();

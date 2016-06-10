@@ -11,7 +11,6 @@
 	    var vm = this;
 	    
 	    vm.afastamento = afastamentoGetOne;
-		console.log(vm.afastamento)
 		vm.popupDataInicio = false;
 	    vm.popupDataFim = false;
 		

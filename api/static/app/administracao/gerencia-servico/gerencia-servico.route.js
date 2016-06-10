@@ -14,7 +14,8 @@
 			controller: 'GerenciaServicoController',
 			controllerAs: 'vm',
 			resolve: {
-				escalaGetList: escalaGetList
+				escalaGetList: escalaGetList,
+				servicoGetList: servicoGetList
 			}
 		})
 		.when('/gerencia-servico/:id',{
@@ -30,6 +31,10 @@
 	function escalaGetList(escalaService){
 		return escalaService.getList();
     }
+	
+	function servicoGetList(servicoService){
+		return servicoService.getList();
+	}
 	
 	function servicoGetOne(servicoService,$route){
 		return servicoService.one($route.current.params.id).get();

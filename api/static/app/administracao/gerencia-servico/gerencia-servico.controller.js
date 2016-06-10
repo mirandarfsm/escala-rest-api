@@ -3,48 +3,23 @@
 
 	angular
 		.module('Escalante')
-		.controller('GerenciaServicoController',GerenciaServicoController);
+		.controller('GerenciaServicoController',GerenciaServicoController)
+		.controller('TrocaServicoModalController',GerenciaServicoController);
 	
-	GerenciaServicoController.$inject = ['escalaGetList','escalaService','$location'];
+	GerenciaServicoController.$inject = ['escalaGetList','servicoGetList','$uibModal'];
 	
-	function GerenciaServicoController(escalaGetList){
+	function GerenciaServicoController(escalaGetList,servicoGetList,$uibModal){
 		var vm = this;
-		
-		vm.escalas = escalaGetList;
-		vm.tipos = ['Preto','Vermelho','Roxo'];
-		var tipoServico = ['black','red','purple'];
 
-		vm.uiConfig = {
-			calendar:{
-				height: 450,
-				editable: true
-			}
-		};
+		vm.tipos = ['Preto','Vermelho','Roxo'];
+		vm.escalas = escalaGetList;
+		vm.servicos = servicoGetList;
 		
 		vm.getServicos = getServicos;
-
+		
 		function getServicos(){
-			vm.escala.getList('servico').then(function(data){				
-				vm.servicos = data;
-				vm.eventSources = [servicoEvents(vm.servicos),vm.events];
-			});
-			//vm.servicos = vm.escala.getList('servico');
+			vm.servicos = vm.escala.getList('servico').$object
 		}
-  
-		function servicoEvents(servicoList) {
-			var events = [];
-			servicoList.forEach(function(servico){
-				var usuario = servico.usuario_escala.usuario;
-				events.push({
-					title: usuario.nome_guerra + " " + usuario.posto + " " + usuario.especialidade,
-					start: servico.data, 
-					allDay: true,
-					color: tipoServico[servico.tipo]
-				})
-			});
-			return events;
-		};
-
+		
 	}
-	
 })();
