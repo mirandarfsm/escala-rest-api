@@ -6,7 +6,7 @@ from . import api
 
 @api.route('/usuarios/me/afastamentos/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_afastamento():
     usuario = g.user
     return usuario.afastamentos

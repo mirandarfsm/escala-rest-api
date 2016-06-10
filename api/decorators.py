@@ -1,10 +1,10 @@
 import functools
 import hashlib
 from flask import jsonify, request, url_for, current_app, make_response, g
+from flask_sqlalchemy import BaseQuery
 from .models import Perfil
 from .rate_limit import RateLimit
 from .errors import too_many_requests, precondition_failed, not_modified,forbidden
-
 
 def json(f):
     @functools.wraps(f)
@@ -16,6 +16,8 @@ def json(f):
             rv, status_or_headers, headers = rv + (None,) * (3 - len(rv))
         if isinstance(status_or_headers, (dict, list)):
             headers, status_or_headers = status_or_headers, None
+        if isinstance(rv, BaseQuery):
+            rv = {'objects': [item.to_json() for item in rv.all()]}
         if not isinstance(rv, dict):
             rv = rv.to_json()
         rv = jsonify(rv)
@@ -50,7 +52,6 @@ def rate_limit(limit, per, scope_func=lambda: request.remote_addr):
         return wrapped
     return decorator
 
-
 def paginate(default_per_page=10,max_per_page=50):
     def decorator(f):
         @functools.wraps(f)
@@ -58,6 +59,7 @@ def paginate(default_per_page=10,max_per_page=50):
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', default_per_page,type=int), max_per_page)
             query = f(*args, **kwargs)
+            print type(query)
             p = query.paginate(page, per_page)
             pages = {'page': page, 'per_page': per_page,
                      'total': p.total, 'pages': p.pages}
@@ -79,12 +81,10 @@ def paginate(default_per_page=10,max_per_page=50):
             pages['last'] = url_for(request.endpoint, page=p.pages,
                                     per_page=per_page, _external=True,
                                     **kwargs)
-            json = {
+            return jsonify({
                 'objects': [item.to_json() for item in p.items],
                 'meta': pages
-            }
-            print json
-            return jsonify(json)
+            })
         return wrapped
     return decorator
 

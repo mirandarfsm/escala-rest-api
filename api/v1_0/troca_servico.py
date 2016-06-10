@@ -7,7 +7,7 @@ from . import api
 
 @api.route('/usuarios/me/troca-servico/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_troca_servico():
     usuario = g.user
     return TrocaServico.query.filter(UsuarioEscala.id_usuario == g.user.id) \
@@ -23,7 +23,7 @@ def get_usuario_troca_servico_detail(id):
 
 @api.route('/usuarios/me/troca-servico/pendentes/',methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_troca_servico_pedente():
     usuario = g.user
     troca_servicos = TrocaServico.query \

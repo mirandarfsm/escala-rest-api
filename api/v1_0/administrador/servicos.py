@@ -5,7 +5,7 @@ from . import api
 
 @api.route('/servicos/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_servicos():
     return Servico.query
 

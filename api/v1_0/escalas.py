@@ -6,7 +6,7 @@ from . import api
 
 @api.route('/usuarios/me/escalas/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_escala():
     usuario = g.user
     return usuario.escalas

@@ -6,7 +6,7 @@ from ...controller import UsuarioEscalaController
 
 @api.route('/usuarios/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuarios():
     return Usuario.query
 
@@ -18,7 +18,7 @@ def get_usuario(id):
 
 @api.route('/usuarios/<int:id>/escala/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_escala(id):
     usuario = Usuario.query.get_or_404(id)
     return usuario.escalas
@@ -26,7 +26,7 @@ def get_usuario_escala(id):
 
 @api.route('/usuarios/<int:id>/afastamento/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_afastamento(id):
     usuario = Usuario.query.get_or_404(id)
     return usuario.afastamentos

@@ -7,7 +7,7 @@ from ...controller import UsuarioEscalaController
 
 @api.route('/escalas/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_escalas():
     return Escala.query
 
@@ -19,14 +19,14 @@ def get_escala(id):
 
 @api.route('/escalas/<int:id>/usuario/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_escala_usuario(id):
     escala = Escala.query.get_or_404(id)
     return Usuario.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id, UsuarioEscala.data_fim == None)
 
 @api.route('/escalas/<int:id>/servico/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_escala_servico(id):
     escala = Escala.query.get_or_404(id)
     return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_escala == escala.id)

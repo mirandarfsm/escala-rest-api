@@ -6,7 +6,7 @@ from . import api
 
 @api.route('/usuarios/me/servicos/', methods=['GET'])
 @etag
-@paginate()
+@json
 def get_usuario_servico():
     usuario = g.user
     return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_usuario == usuario.id)
