@@ -1,4 +1,4 @@
-from models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento,UsuarioEscala
+from models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento,UsuarioEscala,Escala
 import datetime
 import calendar
 
@@ -24,7 +24,14 @@ def fazer_trocar_servico(troca_servico,substituto):
     servico = Servico.query.get(troca_servico.servico.id)
     servico.usuario = troca_servico.substituto
     db.session.commit()
-
+    
+def is_servico_exists(servico,escala):
+    servico = Servico.query.join(UsuarioEscala).join(Escala) \
+                .filter(Escala.id == escala.id) \
+                .filter(Servico.data == servico.data)
+    if servico:
+        return True
+    return False
 
 class ServicoDiarioService(object):
     
@@ -45,7 +52,10 @@ class ServicoDiarioService(object):
                 tipo =  TipoServico.VERMELHO
             if d in datas_roxas:
                 tipo = TipoServico.ROXA
-            servicos.append(Servico(data=d,tipo=tipo))
+            servico = Servico(data=d,tipo=tipo)
+            if is_servico_exists(servico,escala):
+                raise Exception("Servico existe no banco de dados")
+            servicos.append()
             d += delta
         return servicos
     
@@ -75,11 +85,13 @@ class ServicoDiarioService(object):
                     return usuario_escala
             lista_usuario_escala[0] = lista_usuario_escala[i+1]
             lista_usuario_escala[i+1] = usuario_escala
-        raise Exception("Nao existe militares para serem escalados na data: "+ str(servico.data))
+        raise Exception("Nao existem militares para serem escalados na data: "+ str(servico.data))
 
     
     def gerar_lista_militares_escalados(self,escala):
         lista_usuario_escala = escala.usuarios.all()
+        if not lista_usuario_escala:
+            raise Exception("Nao existem militares cadastrado na escala")
         hash = {}
         hash[TipoServico.VERMELHO] = sorted(lista_usuario_escala,key=UsuarioEscala.by_vermelha_key)
         hash[TipoServico.PRETO] = sorted(lista_usuario_escala,key=UsuarioEscala.by_preta_key)
