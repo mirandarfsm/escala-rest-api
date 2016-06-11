@@ -1,4 +1,5 @@
 from flask import request,jsonify,g
+from datetime import datetime
 from ..models import db,Servico,Escala,TrocaServico,UsuarioEscala
 from ..services import fazer_trocar_servico
 from werkzeug.exceptions import abort
@@ -10,7 +11,10 @@ from . import api
 @json
 def get_usuario_troca_servico():
     usuario = g.user
-    return TrocaServico.query.filter(UsuarioEscala.id_usuario == g.user.id) \
+    escala = Escala.query.join(UsuarioEscala) \
+                    .filter(UsuarioEscala.id_usuario == usuario.id) \
+                    .filter(UsuarioEscala.data_fim == None).first()
+    return TrocaServico.query.filter(UsuarioEscala.id_escala == escala.id) \
                             .filter(TrocaServico.data_troca_servico == None)
 
 @api.route('/usuarios/me/troca-servico/<int:id>/', methods=['GET'])
@@ -52,7 +56,8 @@ def get_usuario_troca_servico_pedente_detail(id):
 def new_troca_servico():
     usuario = g.user
     troca_servico = TrocaServico().from_json(request.json)
-    troca_servico.substituido = usuario
+    troca_servico.substituido = troca_servico.servico.usuario_escala
+    troca_servico.data_solicitacao = datetime.now()
     db.session.add(troca_servico)
     db.session.commit()
     return {}, 201, {'Location': usuario.get_url()}
@@ -68,14 +73,22 @@ def aceitar_troca_servico(id):
 @api.route('/usuarios/me/troca-servico/<int:id>/', methods=['PUT'])
 @json
 def edit_troca_servico():
-    #implementar
+    usuario = g.user
+    troca_servico = TrocaServico.query.join(Servico).join(UsuarioEscala)\
+                                .filter(UsuarioEscala.id_usuario == usuario.id) \
+                                .filter(TrocaServico.id == id).first() or abort(404)
+    troca_servico.from_json(request.json)
+    db.session.add(troca_servico)
+    db.session.commit()
     return {}
 
 @api.route('/usuarios/me/troca-servico/<int:id>/', methods=['DELETE'])
 @json
 def delete_troca_servico(id):
     usuario = g.user
-    troca_servico = usuario.troca_servico.filter(Servico.id==id).first() or abort(404)
+    troca_servico = TrocaServico.query.join(Servico).join(UsuarioEscala)\
+                                .filter(UsuarioEscala.id_usuario == usuario.id) \
+                                .filter(TrocaServico.id == id).first() or abort(404)
     db.session.delete(troca_servico)
     db.session.commit()
     return {}

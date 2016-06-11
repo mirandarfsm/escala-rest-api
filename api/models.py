@@ -396,7 +396,7 @@ class TrocaServico(db.Model):
         json = to_json(self, self.__class__)
         json['servico'] = self.servico.to_json()
         json['substituido'] = self.substituido.to_json()
-        json['substituto'] = self.substituto.to_json()
+        json['substituto'] = self.substituto.to_json() if self.substituto else None
         return json
 
     def from_json(self, json):
@@ -405,6 +405,8 @@ class TrocaServico(db.Model):
             self.servico = Servico.query.get_or_404(self.id_servico)
         except (KeyError, NotFound):
             raise ValidationError('Invalid servico ID')
-        self.substituido = self.servico.usuario_escala
-        self.data_solicitacao = datetime.now()
+        try:
+            self.motivo = json['motivo']
+        except KeyError as e:
+            raise ValidationError('Invalid servico: missing ' + e.args[0])
         return self

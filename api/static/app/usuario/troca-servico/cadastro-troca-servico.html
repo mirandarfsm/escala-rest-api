@@ -7,7 +7,7 @@
       <input type="checkbox" ng-model="vm.minhasTrocas"> Minhas Trocas
     </label>
   </div>
-	<table class="table table-striped table-bordered table-hover" ng-show="vm.minhasTrocas">
+	<table class="table table-striped table-bordered table-hover">
 	    <thead>
 		    <tr>
 		        <th data-field="operate">Excluir</th>
@@ -19,17 +19,18 @@
 	    </thead>
 	    <tbody>
 		    <tr ng-repeat="trocaServico in vm.trocaServicos">
-		    	<td><a class="remove ml10" ng-click="vm.deletar($index)" title="Delete">
+		    	<td><a ng-show="usuario.id = trocaServico.substituido.usuario.id" class="remove ml10" ng-click="vm.deletar($index)" title="Delete">
 		    			<i class="glyphicon glyphicon-remove text-danger"></i>
 		    		</a>
 		    	</td>
-		    	<td>{{ trocaServico.substituido.nome }}</td>
+		    	<td>{{ trocaServico.substituido.usuario.nome_guerra }}</td>
                 <td>{{ trocaServico.servico.data | date: 'dd/MM/yyyy' }}</td>
-		    	<td>{{ trocaServico.servico.escala.name }}</td>
+		    	<td>{{ trocaServico.servico.usuario_escala.escala.nome }}</td>
                 <td>{{ vm.tipos[trocaServico.servico.tipo] }}</td>
 		    </tr>
 	    </tbody>
 	</table>
+	<!--
 	<table class="table table-striped table-bordered table-hover" ng-show="!vm.minhasTrocas">
 	    <thead>
 		    <tr>
@@ -54,4 +55,5 @@
 		    </tr>
 	    </tbody>
 	</table>
+	-->
 </div>

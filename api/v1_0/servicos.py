@@ -16,4 +16,4 @@ def get_usuario_servico():
 @json
 def get_usuario_servico_detail(id):
     usuario = g.user
-    return usuario.servicos.filter(Servico.id==id).first() or abort(404)
+    return Servico.query.join(UsuarioEscala).filter(UsuarioEscala.id_usuario == usuario.id).filter(Servico.id == id).first()

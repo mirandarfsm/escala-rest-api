@@ -5,20 +5,23 @@
     .module('Escalante')
     .controller('CadastroTrocaServicoController',CadastroTrocaServicoController);
   
-  CadastroTrocaServicoController.$inject = [];
+  CadastroTrocaServicoController.$inject = ['trocaServicoGetList','trocaServicoPendenteGetList'];
 
-  function CadastroTrocaServicoController(AuthenticationService,usuarioService){
+  function CadastroTrocaServicoController(trocaServicoGetList,trocaServicoPendenteGetList){
     var vm = this;
 
     vm.tipos = ['Preta','Vermelha','Roxa'];
     vm.minhasTrocas = false;
-    vm.trocaServicos = [];
-    vm.trocaServicosPendentes = [];
+    vm.trocaServicos = trocaServicoGetList;
+	console.log(vm.trocaServicos[0])
+    vm.trocaServicosPendentes = trocaServicoPendenteGetList;
     
-    vm.aceitar = aceitar;
-    vm.deletar = deletar;
+   
 
-    function aceitar(index) {
+    /*
+	 vm.aceitar = aceitar;
+	 vm.deletar = deletar;
+	 function aceitar(index) {
         var trocaServico = vm.trocaServicosPendentes[index]
         usuarioService.acceptTrocaServico(trocaServico.id).success(function () {
             vm.trocaServicosPendentes.splice(index,1);
@@ -31,6 +34,7 @@
             vm.trocaServicos.splice(index,1);
         });
     }
+    */
   }
 
   

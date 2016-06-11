@@ -20,6 +20,7 @@ def json(f):
             rv = {'objects': [item.to_json() for item in rv.all()]}
         if not isinstance(rv, dict):
             rv = rv.to_json()
+        print rv
         rv = jsonify(rv)
         if status_or_headers is not None:
             rv.status_code = status_or_headers
