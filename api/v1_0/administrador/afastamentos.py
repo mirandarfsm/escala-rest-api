@@ -36,6 +36,8 @@ def edit_afastamento(id):
     afastamento.from_json(request.json)
     
     if 'ativo' in request.json:
+            if request.json['ativo']:
+                AfastamentoController().verificar_usuario_tem_servico(afastamento)
             afastamento.ativo = request.json['ativo']
             afastamento.data_revisao = datetime.now()
     

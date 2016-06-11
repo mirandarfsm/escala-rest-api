@@ -1,5 +1,6 @@
 from flask import request,g
 from ..models import db,Afastamento
+from ..controller import AfastamentoController
 from ..decorators import json, paginate, etag
 from werkzeug.exceptions import abort
 from . import api

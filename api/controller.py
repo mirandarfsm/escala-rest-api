@@ -1,5 +1,16 @@
-from models import db,Usuario,Escala,UsuarioEscala
+from models import db,Usuario,Escala,UsuarioEscala,Servico
 from datetime import datetime
+
+class AfastamentoController(object):
+    
+    def verificar_usuario_tem_servico(self,afastamento):
+        usuario = afastamento.usuario
+        servico = Servico.query.join(UsuarioEscala).join(Usuario) \
+                .filter(Servico.data.between(afastamento.data_inicio,afastamento.data_fim)) \
+                .filter(Usuario.id == usuario.id).first()
+        if servico:
+            raise Exception("Usuario ja esta de servico. ")
+
 
 class UsuarioEscalaController(object):
     

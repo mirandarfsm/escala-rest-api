@@ -259,10 +259,10 @@ class Escala(db.Model):
         return None
 
     def get_datas_vermelhas(self):
-        return self.datas_especiais.filter(DataEspecial.tipo == TipoServico.VERMELHO).all()
+        return [data_especial.data for data_especial in self.datas_especiais.filter(DataEspecial.tipo == TipoServico.VERMELHO).all()]
     
     def get_datas_roxas(self):
-        return self.datas_especiais.filter(DataEspecial.tipo == TipoServico.ROXA).all()
+        return [data_especial.data for data_especial in self.datas_especiais.filter(DataEspecial.tipo == TipoServico.ROXA).all()]
 
 class DataEspecial(db.Model):
     __tablename__ = 'data_especial'

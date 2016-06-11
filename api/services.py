@@ -26,11 +26,11 @@ def fazer_trocar_servico(troca_servico,substituto):
     db.session.commit()
     
 def is_servico_exists(servico,escala):
-    servico = Servico.query.join(UsuarioEscala).join(Escala) \
+    exist = Servico.query.join(UsuarioEscala).join(Escala) \
                 .filter(Escala.id == escala.id) \
-                .filter(Servico.data == servico.data)
-    if servico:
-        return True
+                .filter(Servico.data == servico.data).first()
+    if exist:
+        raise Exception("Servico existe no banco de dados")
     return False
 
 class ServicoDiarioService(object):
@@ -44,18 +44,27 @@ class ServicoDiarioService(object):
         datas_roxas = escala.get_datas_roxas()
         d = start_date
         delta = datetime.timedelta(days=1)
-        weekend = set([5,6])
+        weekend = set([4,5,6])
         servicos = []
+        jump = False
         while d <= end_date:
-            tipo = TipoServico.PRETO
-            if d.weekday() in weekend or d in datas_vermelhas:
-                tipo =  TipoServico.VERMELHO
             if d in datas_roxas:
                 tipo = TipoServico.ROXA
+                jump = True
+            elif d.weekday() in weekend or d in datas_vermelhas:
+                if jump:
+                    d += delta
+                    continue
+                tipo =  TipoServico.VERMELHO
+                jump = True
+            else:
+                tipo = TipoServico.PRETO    
             servico = Servico(data=d,tipo=tipo)
-            if is_servico_exists(servico,escala):
-                raise Exception("Servico existe no banco de dados")
-            servicos.append()
+            print servico
+            is_servico_exists(servico,escala)
+            servicos.append(servico)
+            if servico.tipo == TipoServico.PRETO:
+                jump = False
             d += delta
         return servicos
     

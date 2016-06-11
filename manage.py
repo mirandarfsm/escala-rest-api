@@ -34,7 +34,7 @@ def addadmin():
     """Register admin user."""
     user = Usuario(nome="admin",email="admin@admin",nome_guerra="admin",username="teste", password="teste")
     db.session.add(user)
-    user.add_perfis([Perfil.ADMINISTRADOR])
+    user.add_perfis([Perfil.ADMINISTRADOR,Perfil.ESCALANTE])
     db.session.commit()
     print('User {0} was registered successfully.'.format("teste"))    
 
