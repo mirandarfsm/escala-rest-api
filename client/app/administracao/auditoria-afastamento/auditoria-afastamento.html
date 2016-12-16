@@ -1,0 +1,31 @@
+<a class="pull-right btn btn-default btn-success" href="#/gerencia-afastamento/new" role="button">Novo Afastamento</a>
+<h3>Gerência de Afastamentos</h3>
+<hr/>
+<div >
+	<table class="table table-striped table-bordered table-hover">
+	    <thead>
+		    <tr>
+		        <th data-field="operate" class="text-center">Aceitar</th>
+		        <th data-field="operate" class="text-center">Rejeitar</th>
+		        <th data-field="name" data-sortable="true">Motivo</th>
+				<th data-field="name" data-sortable="true">Data Início</th>
+				<th data-field="name" data-sortable="true">Data Término</th>
+		        <th data-field="operate">Visualizar</th>
+		    </tr>
+	    </thead>
+	    <tbody>
+		    <tr ng-repeat="afastamento in vm.afastamentos">
+
+		    	<td ng-show="!afastamento.data_revisao" class="text-center"><a class="edit ml10" ng-click="vm.aceitar(afastamento)" title="Aceitar"><i class="glyphicon glyphicon-ok text-success"></i></a></td>
+				<td ng-show="!afastamento.data_revisao" class="text-center"><a class="remove ml10" ng-click="vm.rejeitar(afastamento)" title="Rejeitar"><i class="glyphicon glyphicon-ban-circle text-danger"></i></a></td>
+		    	<td ng-show="afastamento.data_revisao" class="text-center"><i ng-show="afastamento.ativo" class="glyphicon glyphicon-thumbs-up text-success"></i></td>
+				<td ng-show="afastamento.data_revisao" class="text-center"><i ng-show="!afastamento.ativo" class="glyphicon glyphicon-thumbs-down text-danger"></i></td>
+
+		    	<td>{{ afastamento.motivo }}</td>
+		    	<td>{{ afastamento.data_inicio | date: 'dd/MM/yyyy' }}</td>
+		    	<td>{{ afastamento.data_fim | date: 'dd/MM/yyyy' }}</td>
+		    	<td><a class="edit ml10" href="#/auditoria-afastamento/{{afastamento.id}}" title="Visualizar"><i class="glyphicon glyphicon-eye-open"></i></a></td>
+		    </tr>
+	    </tbody>
+	</table>
+</div>
