@@ -1,0 +1,30 @@
+server:
+  restart: always
+  build: ./server
+  expose:
+    - "8000"
+  links:
+    - postgres:postgres
+  env_file: ./server/.env
+  command: /usr/local/bin/gunicorn -w 2 -b :8000 wsgi
+
+client:
+  restart: always
+  build: ./client
+  links:
+    - server:server
+
+nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "80:80"
+  links:
+    - server:server
+    - client:client
+
+postgres:
+  restart: always
+  image: postgres:latest
+  ports:
+    - "5432:5432"

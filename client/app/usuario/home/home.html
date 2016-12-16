@@ -1,0 +1,11 @@
+<div>
+    <h1>Seja Bem Vindo, {{usuario.posto | uppercase}} {{usuario.nome_guerra | uppercase}}</h1>
+    <p ng-show="vm.menorServico">Seu próximo servico será {{vm.menorServico.data | date}}</p>
+    <br />
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div ui-calendar="vm.uiConfig.calendar" ng-model="vm.eventSources"></div>
+        </div>
+    </div>
+</div>

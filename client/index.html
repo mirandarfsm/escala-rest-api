@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Escalante</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <!-- CSS -->
+  <!-- build:css css/escalaer.min.css-->
+  <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="vendor/ui-select/dist/select.css">
+  <link rel="stylesheet" href="vendor/fullcalendar/dist/fullcalendar.css">
+  <!-- endbuild -->
+</head>
+
+<body ng-app="Escalante">
+  <div ng-show="isAuthenticated">
+    <header></header>
+    <div class="container-fluid">
+      <div class="row">
+        <sidebar></sidebar>
+        <!-- BODY -->
+        <div class="col-md-10">
+          <div ng-view=""></div>
+        </div>
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+	<div class="jumbotron" ng-hide="isAuthenticated">
+      <div class="container">
+        <div class="col-xs-offset-2 col-xs-8">
+          <div ng-view="" ng-hide="isAuthenticated"></div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- JS -->
+  <!-- build:js js/escalaer.min.js-->
+  <script src="vendor/jquery/dist/jquery.js"></script>
+  <script src="vendor/moment/moment.js"></script>
+  <script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="vendor/angular/angular.js"></script>
+  <script src="vendor/angular-route/angular-route.js"></script>
+  <script src="vendor/angular-sanitize/angular-sanitize.js"></script>
+  <script src="vendor/angular-animate/angular-animate.js"></script>
+  <script src="vendor/angular-bootstrap/ui-bootstrap.js"></script>
+  <script src="vendor/ui-select/dist/select.js"></script>
+  <script src="vendor/satellizer/dist/satellizer.js"></script>
+  <script src="vendor/lodash/lodash.js"></script>
+  <script src="vendor/restangular/dist/restangular.js"></script>
+  <script src="vendor/angular-ui-calendar/src/calendar.js"></script>
+  <script src="vendor/fullcalendar/dist/fullcalendar.js"></script>
+
+  <!-- ESCALANTE -->
+  <script src="app/app.module.js"></script>
+  <script src="app/app.config.js"></script>
+  <script src="app/app.run.js"></script>
+  <script src="app/constants.js"></script>
+
+  <script src="app/services/afastamento.service.js"></script>
+  <script src="app/services/autenticacao.service.js"></script>
+  <script src="app/services/escala.service.js"></script>
+  <script src="app/services/usuario.service.js"></script>
+  <script src="app/services/servico.service.js"></script>
+
+  <script src="app/components/check-list.directive.js"></script>
+
+  <script src="app/header/header.directive.js"></script>
+  <script src="app/header/sidebar/sidebar.directive.js"></script>
+
+  <script src="app/login/login.controller.js"></script>
+  <script src="app/login/login.route.js"></script>
+
+  <script src="app/administracao/auditoria-afastamento/auditoria-afastamento-detail.controller.js"></script>
+  <script src="app/administracao/auditoria-afastamento/auditoria-afastamento.controller.js"></script>
+  <script src="app/administracao/auditoria-afastamento/auditoria-afastamento.route.js"></script>
+
+  <script src="app/administracao/cadastro-escala/cadastro-escala.route.js"></script>
+  <script src="app/administracao/cadastro-escala/cadastro-escala.controller.js"></script>
+  <script src="app/administracao/cadastro-escala/cadastro-escala-detail.controller.js"></script>
+
+  <script src="app/administracao/cadastro-usuario/cadastro-usuario.route.js"></script>
+  <script src="app/administracao/cadastro-usuario/cadastro-usuario.controller.js"></script>
+  <script src="app/administracao/cadastro-usuario/cadastro-usuario-detail.controller.js"></script>
+
+  <script src="app/administracao/gerencia-servico/gerencia-servico.route.js"></script>
+  <script src="app/administracao/gerencia-servico/gerencia-servico.controller.js"></script>
+  <script src="app/administracao/gerencia-servico/gerencia-servico-detail.controller.js"></script>
+
+  <script src="app/administracao/calendario-servico/calendario-servico.route.js"></script>
+  <script src="app/administracao/calendario-servico/calendario-servico.controller.js"></script>
+
+  <script src="app/administracao/distribuicao-servico/distribuicao-servico.route.js"></script>
+  <script src="app/administracao/distribuicao-servico/distribuicao-servico.controller.js"></script>
+
+  <script src="app/usuario/afastamento/cadastro-afastamento.route.js"></script>
+  <script src="app/usuario/afastamento/cadastro-afastamento.controller.js"></script>
+  <script src="app/usuario/afastamento/cadastro-afastamento-detail.controller.js"></script>
+
+  <script src="app/usuario/troca-servico/cadastro-troca-servico.route.js"></script>
+  <script src="app/usuario/troca-servico/cadastro-troca-servico.controller.js"></script>
+  <script src="app/usuario/troca-servico/cadastro-troca-servico-detail.controller.js"></script>
+
+  <script src="app/usuario/home/home.route.js"></script>
+  <script src="app/usuario/home/home.controller.js"></script>
+
+  <script src="app/usuario/perfil/perfil.route.js"></script>
+  <script src="app/usuario/perfil/perfil.controller.js"></script>
+  <!-- endbuild -->
+
+</body>
+</html>

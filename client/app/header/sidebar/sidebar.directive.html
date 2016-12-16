@@ -1,0 +1,42 @@
+<!-- SIDEBAR -->
+<div ng-show="isAuthenticated" class="col-md-2">
+	<!-- Painel Solicitacao  -->
+	<div class="panel panel-default">
+		<div class="panel-heading">Usuário</div>
+		<div class="panel-body">
+			<nav>
+				<ul class="nav nav-pills nav-stacked">
+					<li><a href="#/cadastro-troca-servico"><i class="glyphicon glyphicon-transfer"></i> Trocar Serviço</a></li>
+					<li><a href="#/cadastro-afastamento"><i class="glyphicon glyphicon-minus-sign"></i> Afastamentos</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<!-- Painel Escalante  -->
+	<div ng-show="isEscalante" class="panel panel-default">
+		<div class="panel-heading">Escala</div>
+		<div class="panel-body">
+			<nav>
+				<ul class="nav nav-pills nav-stacked">
+					<li><a href="#/cadastro-escala"><i class="glyphicon glyphicon-th-large"></i> Cadastro de Escala</a></li>
+					<li><a href="#/distribuicao-servico"><i class="glyphicon glyphicon-calendar"></i> Distribuir Serviços</a></li>
+					<li><a href="#/gerencia-servico"><i class="glyphicon glyphicon-calendar"></i> Gerência de Serviço</a></li>
+					<li><a href="#/calendario-servico"><i class="glyphicon glyphicon-minus-sign"></i>  Calendário de Serviço</a></li>
+					<li><a href="#/auditoria-afastamento"><i class="glyphicon glyphicon-minus-sign"></i> Gerência de Afastamento</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<!-- Painel Admin  -->
+	<div ng-show="isAdmin" class="panel panel-default">
+		<div class="panel-heading">Administração</div>
+		<div class="panel-body">
+			<nav>
+				<ul class="nav nav-pills nav-stacked">
+					<li><a href="#/cadastro-usuario"><i class="glyphicon glyphicon-user"></i> Cadastro de Usuário</a></li>
+					<li><a href="#/cadastro-escala"><i class="glyphicon glyphicon-th-large"></i> Cadastro de Escala</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
