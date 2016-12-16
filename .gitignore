@@ -55,3 +55,5 @@ docs/_build/
 *komodoproject
 *sublime*
 cover/
+
+.settings/
