@@ -16,3 +16,9 @@ docker-compose build
 docker-compose up -d
 ```
 Access by 127.0.0.1 in your favorite browser
+
+## References
+
+[johnpapa/angular-styleguide](https://github.com/johnpapa/angular-styleguide/tree/master/a1)
+[miguelgrinberg/api-pycon2014](https://github.com/miguelgrinberg/api-pycon2014)
+[gomex/docker-para-desenvolvedores](https://github.com/gomex/docker-para-desenvolvedores)
