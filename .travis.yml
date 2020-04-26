@@ -22,6 +22,7 @@ jobs:
       script: python manage.py test
 
     - stage: build docker image
+      if: branch = master
       name: "escalaer server"
       before_script: cd server
       script:
@@ -32,6 +33,7 @@ jobs:
         - docker push $DOCKER_USERNAME/escalaer-server
 
     - stage: build docker image
+      if: branch = master
       name: "escalaer client"
       before_script: cd client
       script:
@@ -42,6 +44,7 @@ jobs:
         - docker push $DOCKER_USERNAME/escalaer-client
 
     - stage: deploy
+      if: branch = master
       script: echo two
 
 notifications:
