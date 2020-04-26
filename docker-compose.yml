@@ -1,6 +1,6 @@
 server:
   restart: always
-  build: ./server
+  image: mirandarfsm/escalaer-server:latest
   expose:
     - "8000"
   links:
@@ -10,7 +10,7 @@ server:
 
 client:
   restart: always
-  build: ./client
+  image: mirandarfsm/escalaer-client:latest
   links:
     - server:server
 

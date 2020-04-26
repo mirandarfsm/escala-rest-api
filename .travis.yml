@@ -1,8 +1,52 @@
-language: python
-#python:
-#  - "2.6"#
-#  - "2.7"
-# command to install dependencies
-#install: "pip install -r requirements.txt"
-# command to run tests
-#script: "nosetests --with-coverage --cover-package=api --cover-branches --cover-erase --cover-html --cover-html-dir=cover --exe"
+jobs:
+  include:
+    - stage: build
+      name: "Build client"
+      language: node_js
+      node_js: 7
+      before_install:
+        - cd client
+        - npm install -g bower
+        - npm install -g grunt-cli
+      install:
+        - npm install
+        - bower install --allow-root
+      script: grunt
+
+    - stage: tests
+      name: "Build and test server"
+      language: python
+      python: 2.7
+      before_install: cd server
+      install: pip install -r requirements.txt
+      script: python manage.py test
+
+    - stage: build docker image
+      if: branch = master
+      name: "escalaer server"
+      before_script: cd server
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t escalaer-server .
+        - docker images
+        - docker tag escalaer-server $DOCKER_USERNAME/escalaer-server
+        - docker push $DOCKER_USERNAME/escalaer-server
+
+    - stage: build docker image
+      if: branch = master
+      name: "escalaer client"
+      before_script: cd client
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t escalaer-client .
+        - docker images
+        - docker tag escalaer-client $DOCKER_USERNAME/escalaer-client
+        - docker push $DOCKER_USERNAME/escalaer-client
+
+    - stage: deploy
+      if: branch = master
+      script: echo two
+
+notifications:
+  email:
+    - harripobre@gmail.com
