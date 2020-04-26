@@ -5,8 +5,6 @@ matrix:
       before_install:
         - cd server
       install: pip install -r requirements.txt
-      before_script:
-        - cd server
       script:
         - python manage.py test
 
@@ -19,8 +17,6 @@ matrix:
       install:
         - npm install
         - bower install --allow-root
-      before_script:
-        - cd client
       script:
         - grunt
 
