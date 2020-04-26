@@ -21,6 +21,26 @@ jobs:
       install: pip install -r requirements.txt
       script: python manage.py test
 
+    - stage: build docker image
+      name: "escalaer server"
+      before_script: cd server
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t escalaer-server .
+        - docker images
+        - docker tag escalaer-server $DOCKER_USERNAME/escalaer-server
+        - docker push $DOCKER_USERNAME/escalaer-server
+
+    - stage: build docker image
+      name: "escalaer client"
+      before_script: cd client
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t escalaer-client .
+        - docker images
+        - docker tag escalaer-client $DOCKER_USERNAME/escalaer-client
+        - docker push $DOCKER_USERNAME/escalaer-client
+
     - stage: deploy
       script: echo two
 
