@@ -2,25 +2,26 @@ jobs:
   include:
     - stage: build
       script: echo one
-    - stage: unit tests
-      matrix:
-        include:
-          - language: python
-            python: 2.7
-            before_install: cd server
-            install: pip install -r requirements.txt
-            script: python manage.py test
 
-          - language: node_js
-            node_js: 7
-            before_install:
-              - cd client
-              - npm install -g bower
-              - npm install -g grunt-cli
-            install:
-              - npm install
-              - bower install --allow-root
-            script: grunt
+    - stage: tests
+      language: python
+      python: 2.7
+      before_install: cd server
+      install: pip install -r requirements.txt
+      script: python manage.py test
+
+    - stage: tests
+      language: node_js
+      node_js: 7
+      before_install:
+        - cd client
+        - npm install -g bower
+        - npm install -g grunt-cli
+      install:
+        - npm install
+        - bower install --allow-root
+      script: grunt
+
     - stage: deploy
       script: echo two
 
