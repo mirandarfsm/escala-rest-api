@@ -1,16 +1,6 @@
 jobs:
   include:
     - stage: build
-      script: echo one
-
-    - stage: tests
-      language: python
-      python: 2.7
-      before_install: cd server
-      install: pip install -r requirements.txt
-      script: python manage.py test
-
-    - stage: tests
       language: node_js
       node_js: 7
       before_install:
@@ -21,6 +11,20 @@ jobs:
         - npm install
         - bower install --allow-root
       script: grunt
+
+    - stage: build
+      language: python
+      python: 2.7
+      before_install: cd server
+      install: pip install -r requirements.txt
+      script: true
+
+    - stage: tests
+      language: python
+      python: 2.7
+      before_install: cd server
+      install: skip
+      script: python manage.py test
 
     - stage: deploy
       script: echo two
