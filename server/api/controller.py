@@ -1,4 +1,4 @@
-from models import db,Usuario,Escala,UsuarioEscala,Servico
+from .models import db,Usuario,Escala,UsuarioEscala,Servico
 from datetime import datetime
 
 class AfastamentoController(object):
@@ -33,7 +33,6 @@ class UsuarioEscalaController(object):
     def adicioar_usuario_escala(self,id_escala,id_usuario):
         usuario_escala = UsuarioEscala.query.filter_by(id_escala = id_escala, id_usuario = id_usuario, data_fim = None).first()
         if not usuario_escala:
-            print id_escala
             escala = Escala.query.get_or_404(id_escala)
             usuario = Usuario.query.get_or_404(id_usuario)
             data = datetime.now()

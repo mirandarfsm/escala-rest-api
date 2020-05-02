@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.exceptions import NotFound
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import url_for, current_app
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import types
 from .helpers import args_from_url
 from .errors import ValidationError
@@ -35,9 +35,7 @@ def to_json(inst, cls):
     return d
 
 def timestamp2date(timestamp):
-    #return datetime.fromtimestamp(timestamp/1e3)
     if timestamp:
-        #print type(timestamp)
         return datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
     return timestamp
 

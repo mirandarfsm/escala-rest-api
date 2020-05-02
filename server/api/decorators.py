@@ -20,7 +20,6 @@ def json(f):
             rv = {'objects': [item.to_json() for item in rv.all()]}
         if not isinstance(rv, dict):
             rv = rv.to_json()
-        print rv
         rv = jsonify(rv)
         if status_or_headers is not None:
             rv.status_code = status_or_headers
@@ -60,7 +59,6 @@ def paginate(default_per_page=10,max_per_page=50):
             page = request.args.get('page', 1, type=int)
             per_page = min(request.args.get('per_page', default_per_page,type=int), max_per_page)
             query = f(*args, **kwargs)
-            print type(query)
             p = query.paginate(page, per_page)
             pages = {'page': page, 'per_page': per_page,
                      'total': p.total, 'pages': p.pages}

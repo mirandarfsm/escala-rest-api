@@ -16,7 +16,7 @@ jobs:
     - stage: tests
       name: "Build and test server"
       language: python
-      python: 2.7
+      python: 3.6
       before_install: cd server
       install: pip install -r requirements.txt
       script: python manage.py test

@@ -1,5 +1,5 @@
 from flask import current_app, g
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 from .models import Usuario
 from .errors import unauthorized
 
@@ -10,7 +10,6 @@ def verify_password(username_or_token, password):
     if current_app.config['USE_TOKEN_AUTH']:
         # token authentication
         g.user = Usuario.verify_auth_token(username_or_token)
-        #print g.user
         return g.user is not None and g.user.ativo == True
     else:
         # username/password authentication
