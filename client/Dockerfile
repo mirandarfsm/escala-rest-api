@@ -1,5 +1,5 @@
 FROM node:7
-MAINTAINER Robson Miranda <mirandarfsm@gmail.com>
+LABEL MAINTAINER Robson Miranda <mirandarfsm@gmail.com>
 
 WORKDIR /tmp/siscalaer
 

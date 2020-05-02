@@ -1,4 +1,4 @@
-from models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento,UsuarioEscala,Escala
+from .models import db,TipoServico,Servico,Usuario,TipoEscala,Afastamento,UsuarioEscala,Escala
 import datetime
 import calendar
 
@@ -200,7 +200,6 @@ def get_next_military_old(milicos,servico):
         key = Usuario.by_preta_key
     if servico.tipo == TipoServico.ROXA:
         key = Usuario.by_roxa_key
-    print key
     milicos_sorted = sorted(milicos,key=key)
     for milico in milicos_sorted:
         if not is_afastado(milico,servico.data):

@@ -17,6 +17,43 @@ docker-compose up -d
 ```
 Access by 127.0.0.1 in your favorite browser
 
+## Development
+
+```
+docker-compose -f development.yml build
+docker-compose -f development.yml build
+```
+
+### Debug code
+
+Edit deployement.yml, uncomment debug code line
+
+```
+command: python -m ptvsd --host 0.0.0.0 --port 5678 --wait --multiprocess -m flask run -h 0.0.0.0 -p 5000 --no-debugger --no-reload
+```
+
+#### VS code
+
+Create a lauch.json with this configs
+
+```
+{
+            "type": "python",
+            "request": "attach",
+            "name": "Python Attach",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/server/",
+                    "remoteRoot": "/app/server"
+                }
+            ],
+            "port": 5678,
+            "host": "127.0.0.1",
+            "subProcess": true,
+        },
+```
+
+
 ## References
 
 [johnpapa/angular-styleguide](https://github.com/johnpapa/angular-styleguide/tree/master/a1)

@@ -1,10 +1,9 @@
 import os
-from flask import Flask
+from flask import Flask, Blueprint
 from .models import db
 
 
 def create_app(config_module=None):
-    #app = Flask(__name__,static_url_path="")
     app = Flask(__name__)
     app.config.from_object(config_module or
                            os.environ.get('FLASK_CONFIG') or
@@ -12,9 +11,12 @@ def create_app(config_module=None):
 
     db.init_app(app)
 
-    #@app.route('/')
-    #def root():
-    #    return app.send_static_file('index.html')
+    if (app.config['DEBUG']):
+        angular = Blueprint('angular', __name__, static_url_path='', static_folder='../../client')
+        @app.route('/')
+        def root():
+            return angular.send_static_file('index.html')
+        app.register_blueprint(angular)
 
     from api.v1_0 import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1.0')

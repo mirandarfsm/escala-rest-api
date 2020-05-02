@@ -515,7 +515,6 @@ class TestAPI(unittest.TestCase):
         # get collection
         rv, json = self.client.get('/api/v1.0/afastamentos/')
         self.assertTrue(rv.status_code == 200)
-        print json['urls']
         self.assertTrue(len(json['urls']) == 0)
     
     #Ignored

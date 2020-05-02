@@ -16,14 +16,14 @@ server {
     }
 
     location /auth/ {
-        proxy_pass http://server:8000/auth/;
+        proxy_pass http://server:5000/auth/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     location /api {
-        proxy_pass http://server:8000/api;
+        proxy_pass http://server:5000/api;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

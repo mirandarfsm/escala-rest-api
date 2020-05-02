@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, g,request
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 from .models import Usuario
 from .errors import unauthorized
 from .decorators import no_cache, json
@@ -25,5 +25,4 @@ def unauthorized_error():
 @json
 def request_token():
     teste = {'token': g.user.generate_auth_token(),'usuario': g.user.to_json()}
-    #print teste
     return teste
