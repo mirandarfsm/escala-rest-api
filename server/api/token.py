@@ -16,7 +16,9 @@ def verify_password(username_or_token, password):
 
 @token_auth.error_handler
 def unauthorized_error():
-    return unauthorized('Please authenticate to access this API')
+    res = unauthorized('Please authenticate to access this token API')
+    res.headers['WWW-Authenticate'] = 'x' + token_auth.authenticate_header()
+    return res
 
 
 @token.route('/request-token')
