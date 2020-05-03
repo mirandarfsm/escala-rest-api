@@ -1,24 +1,23 @@
-(function(){
-	'use strict';
+(function() {
+    'use strict';
 
-  angular
-    .module('Escalante')
-    .controller('CadastroTrocaServicoController',CadastroTrocaServicoController);
-  
-  CadastroTrocaServicoController.$inject = ['trocaServicoGetList','trocaServicoPendenteGetList'];
+    angular
+        .module('Escalante')
+        .controller('CadastroTrocaServicoController', CadastroTrocaServicoController);
 
-  function CadastroTrocaServicoController(trocaServicoGetList,trocaServicoPendenteGetList){
-    var vm = this;
+    CadastroTrocaServicoController.$inject = ['trocaServicoGetList', 'trocaServicoPendenteGetList'];
 
-    vm.tipos = ['Preta','Vermelha','Roxa'];
-    vm.minhasTrocas = false;
-    vm.trocaServicos = trocaServicoGetList;
-	console.log(vm.trocaServicos[0])
-    vm.trocaServicosPendentes = trocaServicoPendenteGetList;
-    
-   
+    function CadastroTrocaServicoController(trocaServicoGetList, trocaServicoPendenteGetList) {
+        var vm = this;
 
-    /*
+        vm.tipos = ['Preta', 'Vermelha', 'Roxa'];
+        vm.minhasTrocas = false;
+        vm.trocaServicos = trocaServicoGetList;
+        vm.trocaServicosPendentes = trocaServicoPendenteGetList;
+
+
+
+        /*
 	 vm.aceitar = aceitar;
 	 vm.deletar = deletar;
 	 function aceitar(index) {
@@ -35,7 +34,7 @@
         });
     }
     */
-  }
+    }
 
-  
+
 })();
