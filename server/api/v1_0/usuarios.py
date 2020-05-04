@@ -20,7 +20,7 @@ def edit_usuario():
     except KeyError as e:
         raise ValidationError('Invalid usuario: missing ' + e.args[0])
     if (not usuario.verify_password(old_password)):
-            raise ValidationError("Incorrect password!")
+        raise ValidationError("Incorrect password!")
     if (new_password == old_password):
         raise ValidationError("Password is the same!")    
     usuario.password = new_password
