@@ -1,40 +1,40 @@
 <div>
-	<!-- Modal Troca Senha -->
-	<script type="text/ng-template" id="troca-senha-modal.html">
+    <!-- Modal Troca Senha -->
+    <script type="text/ng-template" id="troca-senha-modal.html">
         <div class="modal-header">
             <h3 class="modal-title">Trocar Senha</h3>
         </div>
-		<div class="modal-body">
-			<form role="form" id="trocaSenhaForm">
-				<div class="form-group">
-					<label>Senha Atual:</label>
-					<input type="password" class="form-control">
-				</div>
-				<div class="form-group">
-					<label>Nova Senha:</label>
-					<input type="password" class="form-control">
-				</div>
-				<div class="form-group" >
-					<label>Confirmar Nova Senha:</label>
-					<input type="password" class="form-control">
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<button type="submit" class="btn btn-warning" ng-click="vm.salvar()">Trocar Senha</button>
-			<button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancelar</button>
-		</div>			
+        <div class="modal-body">
+            <form role="form" id="trocaSenhaForm">
+                <div class="form-group">
+                    <label>Senha Atual:</label>
+                    <input type="password" class="form-control" ng-model="vm.password.old" name="motivo">
+                </div>
+                <div class="form-group">
+                    <label>Nova Senha:</label>
+                    <input type="password" class="form-control" ng-model="vm.password.new" name="motivo">
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Nova Senha:</label>
+                    <input type="password" class="form-control">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-warning" ng-click="vm.salvar()">Trocar Senha</button>
+            <button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancelar</button>
+        </div>
     </script>
-	
-	<h3>Preferências</h3>
-	<hr/>
-	<form>
-		<div class="checkbox">
-		    <label>
+
+    <h3>Preferências</h3>
+    <hr/>
+    <form>
+        <div class="checkbox">
+            <label>
 		    	<input type="checkbox" ng-model="vm.email" disabled> Receber notificações no e-mail:
 		    </label>
-	    </div>
-		<button type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Salvar</button>
-		<button type="button" class="btn btn-default" ng-click="vm.show()">Trocar Senha</button>
-	</form>
+        </div>
+        <button type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Salvar</button>
+        <button type="button" class="btn btn-default" ng-click="vm.show()">Trocar Senha</button>
+    </form>
 </div>
