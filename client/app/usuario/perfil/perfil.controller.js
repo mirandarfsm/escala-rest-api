@@ -23,7 +23,6 @@
                 }
             });
         }
-
     }
 
     function TrocaSenhaModalController($uibModalInstance, passwordChangeOne) {

@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import types
 from .helpers import args_from_url
 from .errors import ValidationError
+from functools import reduce
 
 db = SQLAlchemy()
 
