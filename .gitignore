@@ -64,6 +64,7 @@ vendor/
 
 # Python
 venv/
+*.sqlite
 
 # VS code
 .vscode/

@@ -48,7 +48,7 @@ def populatedb():
             Usuario(nome="juliana",nome_guerra="juliana" ,email="juliana@intranet",username="juliana", password="juliana"), \
             Usuario(nome="marta",nome_guerra="marta" ,email="marta@intranet",username="marta", password="marta"), \
             Usuario(nome="renata",nome_guerra="renata" ,email="renata@intranet",username="renata", password="renata"), \
-            Usuario(nome="ornelas",nome_guerra="ornelas" ,email="ornelas@intranet",username="ornelas", password="ornelas")]
+            Usuario(nome="ana",nome_guerra="ana" ,email="ana@intranet",username="ana", password="ana")]
     db.session.add_all(users)
     db.session.commit()
     print('Users were registered successfully.')
