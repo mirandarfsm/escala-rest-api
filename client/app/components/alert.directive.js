@@ -7,7 +7,7 @@
 
     function alert() {
         var directive = {
-            template: `<div uib-alert ng-repeat="alert in vm.alerts" ng-class="'alert-' + (alert.type || 'warning')" dismiss-on-timeout="{{alert.timeout}}" close="vm.closeAlert($index)">{{alert.msg}}</div>`,
+            template: '<div uib-alert ng-repeat="alert in vm.alerts" ng-class="\'alert-\' + (alert.type || \'warning\')" dismiss-on-timeout="{{alert.timeout}}" close="vm.closeAlert($index)">{{alert.msg}}</div>',
             restrict: 'EA',
             scope: {},
             controller: AlertController,
