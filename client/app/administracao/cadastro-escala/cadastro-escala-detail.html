@@ -1,67 +1,68 @@
 <h3>Cadastro de Escala</h3>
 <hr/>
+<alert></alert>
 <div>
-	<form role="form">
-		<div class="row">
-			<div class="col-md-6 form-group">
-			 	<label>Nome:</label>
-				<input class="form-control" type="text" placeholder="Nome Escala" ng-model="vm.escala.nome" name="nome" ></input>
-			</div>
-			<div class="col-md-6 form-group">
-				<label>Tipo:</label>
-				<div>
-				 	<label class="radio-inline">
+    <form role="form">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Nome:</label>
+                <input class="form-control" type="text" placeholder="Nome Escala" ng-model="vm.escala.nome" name="nome"></input>
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Tipo:</label>
+                <div>
+                    <label class="radio-inline">
 						<input type="radio" ng-model="vm.escala.tipo" name="tipo" value="0" checked></input>
 						Diario
 					</label>
-					<label class="radio-inline">
+                    <label class="radio-inline">
 						<input type="radio" ng-model="vm.escala.tipo" name="tipo" value="1"></input>
 						Semanal
 					</label>
-				</div>
-			</div>
-			<div class="col-md-12 form-group" >
-				<label>Militares:</label>
-				<ui-select multiple="" ng-model="vm.escala.usuarios" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
-					<ui-select-match placeholder="Selecione Militares...">{{$item.nome_guerra}} {{$item.posto}} {{$item.especialidade}}</ui-select-match>
-					<ui-select-choices repeat="usuario in vm.usuarios">
-						<div ng-bind-html="usuario.nome_guerra "></div>
-						<small>
+                </div>
+            </div>
+            <div class="col-md-12 form-group">
+                <label>Militares:</label>
+                <ui-select multiple="" ng-model="vm.escala.usuarios" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
+                    <ui-select-match placeholder="Selecione Militares...">{{$item.nome_guerra}} {{$item.posto}} {{$item.especialidade}}</ui-select-match>
+                    <ui-select-choices repeat="usuario in vm.usuarios">
+                        <div ng-bind-html="usuario.nome_guerra "></div>
+                        <small>
 							{{usuario.posto}} {{usuario.especialidade}}
 						</small>
-					</ui-select-choices>
-				</ui-select>
-			</div>
-			<div class="col-md-6 form-group" >
-		 		<div class="form-inline" >
-				 	<label>Vermelha:</label>
-					<a ng-show="!vm.dataVermelha" ng-click="vm.novaDataVermelha()" class="btn btn-default btn-xs"><i  class="glyphicon glyphicon-plus"></i></a>
-					<input ng-show="vm.dataVermelha" ng-model="vm.dataVermelha" type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" is-open="vm.popupVermelha" ng-click="vm.openVermelha()" close-text="Close" />
-					<a ng-click="vm.adicionarDataVermelha()"><i ng-show="vm.dataVermelha" class="glyphicon glyphicon-ok text-success"></i></a>
-				</div>
-		 		<ui-select style="margin-top: 5px;"  multiple="" ng-model="vm.escala.vermelhas" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
-					<ui-select-match placeholder="Lista de Datas Vermelhas...">{{$item.data | date: 'dd/MM/yyyy'}}</ui-select-match>
-					<ui-select-choices repeat="data_especial in vm.escala.vermelhas">
-						<div ng-bind-html="data_especial.data | date"></div>
-					</ui-select-choices>
-				</ui-select>
-			</div>
-			<div class="col-md-6 form-group" >
-				<div class="form-inline">
-				 	<label>Roxa:</label>
-					<a ng-show="!vm.dataRoxa" ng-click="vm.novaDataRoxa()" class="btn btn-default btn-xs"><i  class="glyphicon glyphicon-plus"></i></a>
-					<input ng-show="vm.dataRoxa" type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.dataRoxa" is-open="vm.popupRoxa" ng-click="vm.openRoxa()" close-text="Close" />
-					<a ng-click="vm.adicionarDataRoxa()"><i ng-show="vm.dataRoxa" class="glyphicon glyphicon-ok text-success"></i></a>
-				</div>
-		 		<ui-select style="margin-top: 5px;" multiple="" ng-model="vm.escala.roxas" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false" >
-					<ui-select-match placeholder="Lista de Datas Roxas...">{{$item.data | date: 'dd/MM/yyyy'}}</ui-select-match>
-					<ui-select-choices repeat="data_especial in vm.escala.roxas">
-						<div ng-bind-html="data_especial.data | date"></div>
-					</ui-select-choices>
-				</ui-select>
-			</div>
-		</div>
-		<button type="submit" ng-click="vm.salvar()" class="btn btn-default btn-success">Salvar</button>
-		<a class="btn btn-default" href="#/cadastro-escala" role="button">Voltar</a>
-	</form>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-6 form-group">
+                <div class="form-inline">
+                    <label>Vermelha:</label>
+                    <a ng-show="!vm.dataVermelha" ng-click="vm.novaDataVermelha()" class="btn btn-default btn-xs"><i  class="glyphicon glyphicon-plus"></i></a>
+                    <input ng-show="vm.dataVermelha" ng-model="vm.dataVermelha" type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" is-open="vm.popupVermelha" ng-click="vm.openVermelha()" close-text="Close" />
+                    <a ng-click="vm.adicionarDataVermelha()"><i ng-show="vm.dataVermelha" class="glyphicon glyphicon-ok text-success"></i></a>
+                </div>
+                <ui-select style="margin-top: 5px;" multiple="" ng-model="vm.escala.vermelhas" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
+                    <ui-select-match placeholder="Lista de Datas Vermelhas...">{{$item.data | date: 'dd/MM/yyyy'}}</ui-select-match>
+                    <ui-select-choices repeat="data_especial in vm.escala.vermelhas">
+                        <div ng-bind-html="data_especial.data | date"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-6 form-group">
+                <div class="form-inline">
+                    <label>Roxa:</label>
+                    <a ng-show="!vm.dataRoxa" ng-click="vm.novaDataRoxa()" class="btn btn-default btn-xs"><i  class="glyphicon glyphicon-plus"></i></a>
+                    <input ng-show="vm.dataRoxa" type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.dataRoxa" is-open="vm.popupRoxa" ng-click="vm.openRoxa()" close-text="Close" />
+                    <a ng-click="vm.adicionarDataRoxa()"><i ng-show="vm.dataRoxa" class="glyphicon glyphicon-ok text-success"></i></a>
+                </div>
+                <ui-select style="margin-top: 5px;" multiple="" ng-model="vm.escala.roxas" theme="bootstrap" ng-disabled="disabled" sortable="true" close-on-select="false">
+                    <ui-select-match placeholder="Lista de Datas Roxas...">{{$item.data | date: 'dd/MM/yyyy'}}</ui-select-match>
+                    <ui-select-choices repeat="data_especial in vm.escala.roxas">
+                        <div ng-bind-html="data_especial.data | date"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <button type="submit" ng-click="vm.salvar()" class="btn btn-default btn-success">Salvar</button>
+        <a class="btn btn-default" href="#/cadastro-escala" role="button">Voltar</a>
+    </form>
 </div>

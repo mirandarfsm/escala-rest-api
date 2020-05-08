@@ -1,35 +1,36 @@
 <h3>Gerencia de Afastamentos</h3>
 <hr/>
+<alert></alert>
 <div>
-	<form role="form">
-		<div class="form-group">
-		 	<label>Nome:</label>
-			<p>{{vm.afastamento.usuario.nome_guerra}}</p>
-		</div>
-		<div class="form-group">
-		 	<label>Motivo:</label>
-		 	<p>{{vm.afastamento.motivo}}</p>
-		</div>
-		<div class="form-group" >
-	 		<label>Data Início:</label>
-			<p>{{vm.afastamento.data_inicio | date}}</p>
-		</div>
-		<div class="form-group" >
-	 		<label>Data Termino:</label>
-			<p>{{vm.afastamento.data_fim | date}}</p>
-		</div>
-		<div class="form-group">
-		 	<label>Observações:</label>
-			<p>{{vm.afastamento.observacao}}</p>
-		</div>
-		<div class="form-group">
-		 	<label>Situação:</label>
-			<p ng-show="!vm.afastamento.data_revisao">Pendente</p>
-			<p ng-show="vm.afastamento.data_revisao && vm.afastamento.ativo">Aprovado</p>
-			<p ng-show="vm.afastamento.data_revisao && !vm.afastamento.ativo">Reprovado</p>
-		</div>
-		<button ng-show="!vm.afastamento.data_revisao" type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Aceitar</button>
-		<button ng-show="!vm.afastamento.data_revisao" type="submit" ng-click="vm.rejeitar()" class="btn btn-default btn-danger">Rejeitar</button>
-		<a class="btn btn-default" href="#/auditoria-afastamento" role="button">Voltar</a>
-	</form>
+    <form role="form">
+        <div class="form-group">
+            <label>Nome:</label>
+            <p>{{vm.afastamento.usuario.nome_guerra}}</p>
+        </div>
+        <div class="form-group">
+            <label>Motivo:</label>
+            <p>{{vm.afastamento.motivo}}</p>
+        </div>
+        <div class="form-group">
+            <label>Data Início:</label>
+            <p>{{vm.afastamento.data_inicio | date}}</p>
+        </div>
+        <div class="form-group">
+            <label>Data Termino:</label>
+            <p>{{vm.afastamento.data_fim | date}}</p>
+        </div>
+        <div class="form-group">
+            <label>Observações:</label>
+            <p>{{vm.afastamento.observacao}}</p>
+        </div>
+        <div class="form-group">
+            <label>Situação:</label>
+            <p ng-show="!vm.afastamento.data_revisao">Pendente</p>
+            <p ng-show="vm.afastamento.data_revisao && vm.afastamento.ativo">Aprovado</p>
+            <p ng-show="vm.afastamento.data_revisao && !vm.afastamento.ativo">Reprovado</p>
+        </div>
+        <button ng-show="!vm.afastamento.data_revisao" type="submit" ng-click="vm.aceitar()" class="btn btn-default btn-success">Aceitar</button>
+        <button ng-show="!vm.afastamento.data_revisao" type="submit" ng-click="vm.rejeitar()" class="btn btn-default btn-danger">Rejeitar</button>
+        <a class="btn btn-default" href="#/auditoria-afastamento" role="button">Voltar</a>
+    </form>
 </div>

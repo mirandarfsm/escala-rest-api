@@ -1,5 +1,4 @@
 server:
-  restart: always
   build: .
   environment:
     - FLASK_APP=/app/server/manage.py

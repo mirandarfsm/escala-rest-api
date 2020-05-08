@@ -36,7 +36,7 @@
         }
 
         function salvar() {
-            vm.servico.tipo = vm.servico.tipo.id
+            vm.servico.tipo = vm.servico.tipo ? vm.servico.tipo.id : undefined
             vm.servico.data = new Date(vm.servico.data);
             vm.servico.save().then(function() {
                 $location.path('/gerencia-servico');
