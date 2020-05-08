@@ -11,20 +11,16 @@
 
         $rootScope.alerts = [];
 
-        let id = 0;
-
         var service = {
             add: add,
             addError: addError,
             addSuccess: addSuccess,
             getAlerts: getAlerts,
-            close: close,
             closeByIndex: closeByIndex
         };
 
         function add(type, msg, params, timeout) {
-            $rootScope.alerts.push({ id: id, type: type, msg: msg, params: params, timeout: timeout });
-            id++;
+            $rootScope.alerts.push({ type: type, msg: msg, params: params, timeout: timeout });
         }
 
         function addSuccess(msg, params) {
@@ -37,10 +33,6 @@
 
         function getAlerts() {
             return $rootScope.alerts;
-        }
-
-        function close(id) {
-            $rootScope.alerts = $rootScope.alerts.filter(alert => alert.id !== id);
         }
 
         function closeByIndex(index) {
