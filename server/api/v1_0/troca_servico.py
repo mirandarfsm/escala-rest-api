@@ -14,7 +14,7 @@ def get_usuario_troca_servico():
     escala = Escala.query.join(UsuarioEscala) \
                     .filter(UsuarioEscala.id_usuario == usuario.id) \
                     .filter(UsuarioEscala.data_fim == None).first()
-    return TrocaServico.query.filter(UsuarioEscala.id_escala == escala.id) \
+    return TrocaServico.query.filter(UsuarioEscala.escala == escala) \
                             .filter(TrocaServico.data_troca_servico == None)
 
 @api.route('/usuarios/me/troca-servico/<int:id>/', methods=['GET'])

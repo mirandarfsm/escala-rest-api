@@ -1,51 +1,52 @@
 <h3>Cadastro de Usuário</h3>
 <hr/>
-<div >
-	<form role="form">
-		<div class="row">
-			<div class="col-md-4 form-group">
-			 	<label>Nome:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.nome" name="name" ></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Nome de Guerra:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.nome_guerra" name="nome_guerra" ></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Email:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.email" name="email" ></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Login:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.username" name="username"></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Saram:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.saram" name="saram"></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Posto:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.posto" name="posto"></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Especialidade:</label>
-				<input class="form-control" type="text" ng-model="vm.usuario.especialidade" name="especialidade"></input>
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Data Promação:</label>
-				<input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.usuario.data_promocao" is-open="vm.popup" ng-click="vm.open()" close-text="Close" />
-			</div>
-			<div class="col-md-4 form-group">
-			 	<label>Perfil:</label>
-				<div>
-					<label ng-repeat="perfil in vm.perfis" class="checkbox-inline">
+<alert></alert>
+<div>
+    <form role="form">
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label>Nome:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.nome" name="name"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Nome de Guerra:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.nome_guerra" name="nome_guerra"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Email:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.email" name="email"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Login:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.username" name="username"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Saram:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.saram" name="saram"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Posto:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.posto" name="posto"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Especialidade:</label>
+                <input class="form-control" type="text" ng-model="vm.usuario.especialidade" name="especialidade"></input>
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Data Promação:</label>
+                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.usuario.data_promocao" is-open="vm.popup" ng-click="vm.open()" close-text="Close" />
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Perfil:</label>
+                <div>
+                    <label ng-repeat="perfil in vm.perfis" class="checkbox-inline">
 						<input type="checkbox" check-list="vm.usuario.perfis" value="perfil.valor">
 						{{perfil.nome}}
 					</label>
-				</div>
-			</div>
-		</div>
-		<button type="submit" ng-click="vm.salvar()" class="btn btn-default btn-success">Salvar</button>
-		<a class="btn btn-default" href="#/cadastro-usuario" role="button">Voltar</a>
-	</form>
+                </div>
+            </div>
+        </div>
+        <button type="submit" ng-click="vm.salvar()" class="btn btn-default btn-success">Salvar</button>
+        <a class="btn btn-default" href="#/cadastro-usuario" role="button">Voltar</a>
+    </form>
 </div>

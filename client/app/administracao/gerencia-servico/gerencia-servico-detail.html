@@ -1,32 +1,33 @@
 <h3>Cadastro de Serviço</h3>
 <hr/>
+<alert></alert>
 <div>
-	<form role="form">
-		<div class="form-group">
-		 	<label>Escala:</label>
-			<p>{{vm.servico.usuario_escala.escala.nome}}</p>
-		</div>
-		<div class="form-group">
-		 	<label>Data do Serviço:</label>
-			<p>{{vm.servico.data | date: 'dd/MM/yyyy'}}</p>
-		</div>
-		<div class="form-group">
-		 	<label>Substituído:</label>
-			<p>{{vm.servico.usuario_escala.usuario.nome_guerra}}</p>
-		</div>
-		<div class="form-group">
-			<label>Substituto:</label>
-			<ui-select ng-model="vm.substituto" theme="bootstrap">
-				<ui-select-match placeholder="Usuário">{{$select.selected.usuario.nome_guerra}} </ui-select-match>
+    <form role="form">
+        <div class="form-group">
+            <label>Escala:</label>
+            <p>{{vm.servico.usuario_escala.escala.nome}}</p>
+        </div>
+        <div class="form-group">
+            <label>Data do Serviço:</label>
+            <p>{{vm.servico.data | date: 'dd/MM/yyyy'}}</p>
+        </div>
+        <div class="form-group">
+            <label>Substituído:</label>
+            <p>{{vm.servico.usuario_escala.usuario.nome_guerra}}</p>
+        </div>
+        <div class="form-group">
+            <label>Substituto:</label>
+            <ui-select ng-model="vm.substituto" theme="bootstrap">
+                <ui-select-match placeholder="Usuário">{{$select.selected.usuario.nome_guerra}} </ui-select-match>
                 <ui-select-choices repeat="usuario_escala in (vm.listUsuarioEscala| filter: $select.search)">
                     <span ng-bind-html="usuario_escala.usuario.nome_guerra"></span>
                     <small>
 						{{usuario.posto}} {{usuario.especialidade}}
 					</small>
                 </ui-select-choices>
-			</ui-select>
-		</div>
-		<button type="submit" ng-click="vm.salvar()" class="btn btn-default">Salvar</button>
-		<a class="btn btn-default" href="#/gerencia-servico" role="button">Voltar</a>
-	</form>
+            </ui-select>
+        </div>
+        <button type="submit" ng-click="vm.salvar()" class="btn btn-default">Salvar</button>
+        <a class="btn btn-default" href="#/gerencia-servico" role="button">Voltar</a>
+    </form>
 </div>
