@@ -14,7 +14,7 @@
         }
 
         function responseError(response) {
-            const httpErrorResponse = response.data;
+            var httpErrorResponse = response.data;
             switch (httpErrorResponse.status) {
                 case 0:
                     alertService.addError('Server not reachable');
