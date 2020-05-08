@@ -14,7 +14,7 @@
         }
 
         function responseError(response) {
-            let httpErrorResponse = response.data;
+            const httpErrorResponse = response.data;
             switch (httpErrorResponse.status) {
                 case 0:
                     alertService.addError('Server not reachable');
@@ -39,7 +39,7 @@
                         alertService.addError(httpErrorResponse.error);
                     }
             }
-            return $q.reject(httpErrorResponse)
+            return $q.reject(response)
         }
 
         return service;
